@@ -9,6 +9,8 @@ Lucian Murdock
 Brandon Ball
 
 > (bhball22)
+
+I'm Brandon Ball. I am currently a Junior in Software Engineering.
   
 Kyle Dobbs
 
@@ -23,6 +25,7 @@ Natalie Albritton
 
 The goal of this project is to develop a twitter like web application.
 This application is initially designed to have three core features:
+
     * Post a tweet
     * Like a tweet
     * Follow another user
