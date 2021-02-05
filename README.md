@@ -14,6 +14,8 @@ I'm Brandon Ball. I am currently a Junior in Software Engineering.
 **Kyle Dobbs**
 
 > (kd766)
+
+I am a Computer Science major from Atlanta, GA. 
   
 **Natalie Albritton**
 
