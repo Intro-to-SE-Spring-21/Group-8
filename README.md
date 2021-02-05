@@ -1,21 +1,21 @@
 # Group-8
 ## Leader
-** Lucian Murdock
+**Lucian Murdock**
 
 > (lmurdock12)
   
 
 ## Members
-** Brandon Ball
+**Brandon Ball**
 > (bhball22)
 
 I'm Brandon Ball. I am currently a Junior in Software Engineering.
   
-** Kyle Dobbs
+**Kyle Dobbs**
 
 > (kd766)
   
-** Natalie Albritton
+**Natalie Albritton**
 
 >(natalie2by4)
 
