@@ -4,6 +4,7 @@
 
 > (lmurdock12)
   
+I am currently a senior Computer Science major at MSU. I am originially from Memphis, Tennessee.
 
 ## Members
 **Brandon Ball**
