@@ -76,7 +76,7 @@ WSGI_APPLICATION = 'src.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'Twitter',
+        'NAME': 'Twitter_DB.sqlite3',
     }
 }
 
