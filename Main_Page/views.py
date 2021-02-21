@@ -1,5 +1,14 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
+# Create your views here.
+from django.contrib.auth.forms import UserCreationForm
 
 def index(request):
-    return HttpResponse("This will become the Home Page of Tweets")
+
+    context = {'validSession':False}
+
+    if(request.user.is_authenticated):
+        context['validSession'] = True
+
+    return render(request,'mainSite/index.html',context)
+    #return HttpResponse("Hello world.")
