@@ -29,4 +29,4 @@ def profile(request, username):
     
     user = get_object_or_404(User,username=username)
 
-    return render(request,'accounts/profile.html',{'user':user})
+    return render(request,'Account/profile.html',{'user':user})

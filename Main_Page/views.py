@@ -10,5 +10,5 @@ def index(request):
     if(request.user.is_authenticated):
         context['validSession'] = True
 
-    return render(request,'mainSite/index.html',context)
+    return render(request,'Main_Page/index.html',context)
     #return HttpResponse("Hello world.")
