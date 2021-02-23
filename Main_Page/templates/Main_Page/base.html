@@ -2,6 +2,7 @@
 <html>
 <head>
 
+<title>Twitter</title>
 
 <style>
 * {
@@ -11,14 +12,13 @@
 body {
   font-family: Arial;
   padding: 10px;
-  background: #f1f1f1;
+  background: black;
 }
 
 /* Header/Blog Title */
 .header {
   padding: 5px;
   text-align: center;
-  background: white;
 }
 
 .header h1 {
@@ -28,14 +28,17 @@ body {
 /* Style the top navigation bar */
 .topnav {
   overflow: hidden;
-  background-color: #333;
+  background-color: black;
+  border-color: rgb(47, 51, 54);
+  border-style: solid;
+  border-width: 1px;
 }
 
 /* Style the topnav links */
 .topnav a {
   float: left;
   display: block;
-  color: #f2f2f2;
+  color: ghostwhite;
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
@@ -43,13 +46,14 @@ body {
 
 /* Change color on hover */
 .topnav a:hover {
-  background-color: #ddd;
-  color: black;
+  background-color: rgb(29,161,242,0.15);
+  color: rgb(29,161,242,1.00);
 }
 
 /* Create two unequal columns that floats next to each other */
 /* Left column */
-.leftcolumn {   
+.leftcolumn {  
+  background-color: rgb(21,24,28); 
   float: left;
   width: 75%;
 }
@@ -58,22 +62,81 @@ body {
 .rightcolumn {
   float: left;
   width: 25%;
-  background-color: #f1f1f1;
+  background-color: black;
   padding-left: 20px;
 }
 
 /* Fake image */
 .fakeimg {
-  background-color: #aaa;
+  background-color: black;
   width: 100%;
   padding: 20px;
 }
 
+/* Text display for links */
+.link {
+  color: rgb(29,161,242,1.00);
+}
+
 /* Add a card effect for articles */
 .card {
-  background-color: white;
+  background-color: rgb(21,24,28);
+  color: ghostwhite;
+  border-radius: 16px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin-top: 15px;
+}
+
+/* Following_button */
+.follow_button {
+  border-color: rgb(29,161,242,0.50);
+  border-style: solid;
+  border-radius: 32px;
+  padding: 10px;
+  background-color: rgba(0,0,0,0);
+  color: rgb(29,161,242,2.00);
+  text-align: center;
+  font-size: 15px;
+  font-weight: bolder;
+}
+
+.follow_button:hover {
+  background-color: rgba(29, 160, 242, 0.15);
+}
+
+/* Add a banner for when showing accounts */
+.foreignaccount {
+  border-bottom-color: rgb(58, 63, 66);
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-top-color: rgb(58, 63, 66);
+  border-top-width: 1px;
+  border-top-style: solid;
+  padding: 10px;
+  padding-left: 20px;
+  padding-top: 15px;
+}
+
+.foreignaccount:hover {
+  background-color: rgba(58, 63, 66, 0.15);
+}
+
+/* Add a post effect for post */
+.post {
+  background-color: black;
+  color: ghostwhite;
+  border-width: 1px;
+  border-style: solid;
+  border-color: rgb(47, 51, 54);
   padding: 20px;
   margin-top: 20px;
+}
+
+.post:hover {
+  background-color: rgba(3, 3, 3, 0.1);
 }
 
 /* Clear floats after the columns */
@@ -85,9 +148,13 @@ body {
 
 /* Footer */
 .footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
   padding: 20px;
   text-align: center;
-  background: #ddd;
+  background: black;
   margin-top: 20px;
 }
 
@@ -108,12 +175,11 @@ body {
 }
 </style>
 
-
 </head>
 <body>
 
 <div class="header">
-  <h1>Twitter</h1>  
+  <h1 style="color: ghostwhite;">Twitter</h1>  
 </div>
 
 {% block navbar %}
@@ -128,14 +194,14 @@ body {
 
 <div class="row">
   <div class="leftcolumn">
-    <div class="card">
+    <div class="post">
       <h2>Tweet #1</h2>
       <h5>Title description, Dec 7, 2017</h5>
       <div class="fakeimg" style="height:60px;">Image</div>
       <p>Some text..</p>
       <p>Sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.</p>
     </div>
-    <div class="card">
+    <div class="post">
       <h2>Tweet #2</h2>
       <h5>Title description, Sep 2, 2017</h5>
       <div class="fakeimg" style="height:60px;">Image</div>
@@ -149,17 +215,11 @@ body {
       <div class="fakeimg" style="height:75px;width:100px">Profile pic.</div>
       <p>Please log in before you can view your profile information</p>
     </div>
-    <div class="card">
-      <h3>Other User's on the network</h3>
-      <div class=""><p>Lucian</p></div>
-      <div class=""><p>Brandon</p></div>
-      <div class=""><p>Natalie</p></div>
-      <div class=""><p>Kyle</p></div>
-
-      <div class=""><p>Click here to view all users</p></div>
-
-
+    {% block User_List %}
+    <div class="card" style="background-color: gray;">
+      <div class="link"><p>Show More</p></div>
     </div>
+    {% endblock %}
     <div class="card">
       <h3>Follow Me</h3>
       <p>Some text..</p>
@@ -168,7 +228,7 @@ body {
 </div>
 
 <div class="footer">
-  <h2>Footer</h2>
+  <h2 style="color: ghostwhite;">Footer</h2>
 </div>
 
 </body>
