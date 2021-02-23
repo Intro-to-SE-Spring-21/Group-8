@@ -90,6 +90,29 @@ body {
   margin-top: 15px;
 }
 
+/* Search Bar */
+.search input[type=text] {
+  margin-top: 15px;
+  padding: 20px;
+  border-style: solid;
+  border-radius: 35px;
+  border-color: rgb(21,24,28);
+  width: 100%;
+  height: 100%;
+  font-size: 20px;
+  background-color: rgb(21,24,28);
+  color: rgb(47, 51, 54);
+}
+
+.search input[type=text]:focus {
+  background-color: black;
+  color: ghostwhite;
+  border-style: solid;
+  border-radius: 35px;
+  border-color: rgb(29,161,242,1.00);
+  outline: none;
+}
+
 /* Following_button */
 .follow_button {
   border-color: rgb(29,161,242,0.50);
@@ -102,6 +125,7 @@ body {
   font-size: 15px;
   font-weight: bolder;
   cursor: pointer;
+  outline: none;
 }
 
 .follow_button:hover {
@@ -151,6 +175,7 @@ body {
   font-size: 16px;
   color: ghostwhite;
   background-color: rgba(0,0,0,0);
+  outline: none
 }
 
 .like:hover {
@@ -167,6 +192,21 @@ body {
   padding: 20px;
 }
 
+.tweet input[type=text] {
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  color: rgb(21,24,28);
+  border: none;
+  outline: none;
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+.tweet input[type=text]:focus {
+  color: ghostwhite;
+}
+
 .tweet_button {
   border-radius: 32px;
   padding: 10px;
@@ -179,6 +219,7 @@ body {
   border-style: solid;
   float: right;
   cursor: pointer;
+  outline: none
 }
 
 /* Clear floats after the columns */
@@ -237,7 +278,7 @@ body {
 <div class="row">
   <div class="leftcolumn">
     <div class="tweet">
-      <h2>What's Happening?</h2>
+      <input type="text" placeholder="What's happening?">
       <div style="border-top-color:rgb(58, 63, 66);
       border-top-style: solid; 
       border-top-width: 1px;
@@ -251,6 +292,9 @@ body {
     {% endblock %}
   </div>
   <div class="rightcolumn">
+    <div class="search" style="border-radius: 35px;">
+      <input type="text" placeholder="Search Twitter">
+    </div>
     <div class="card">
       <h2>My Profile</h2>
       <div class="fakeimg" style="height:75px;width:100px">Profile pic.</div>
