@@ -4,7 +4,6 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
-
 def register(request):
 
     if request.method == 'POST':
@@ -24,9 +23,14 @@ def register(request):
     return render(request,'registration/register.html',context)  
 
 
-def profile(request, username):
+def native_profile(request, username):
 
     
     user = get_object_or_404(User,username=username)
 
-    return render(request,'Account/profile.html',{'user':user})
+    return render(request,'Account/native_profile.html',{'user':user})
+
+
+def foreign_profile(request):
+
+    return render(request,'Account/foreign_profile.html',{'user':user})
