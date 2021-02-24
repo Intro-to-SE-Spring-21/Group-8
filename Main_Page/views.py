@@ -9,12 +9,17 @@ import random
 
 def index(request):
 
+    ## Creating a Tweet through the webpage
     if request.method == "POST":
         print('Hello')#Create Tweet Button
 
-    AllTweets = Tweet.objects.order_by('-pub_date')
+    ## Explore Page Scroll
+    AllTweets = Tweet.objects.order_by('-pub_date') 
 
+    # List of all users
     AllUsers = User.objects.all()
+
+    ## Random 3 Users selected for 'Who to Follow'
     rand_three = []
     for i in range(3):
         temp = random.choice(AllUsers)
@@ -23,13 +28,15 @@ def index(request):
         rand_three.append(temp)
         
 
+    ### Variable declared to pass all information to webpage
     context = {'validSession':False, 'username':request.user.username, 'userdic':AllUsers, 
     'userlist':rand_three, 'explorescroll':AllTweets}
 
+    ## Check if a user is logged in
     if(request.user.is_authenticated):
         context['validSession'] = True
 
+    ### Render the webpage
     return render(request,'Main_Page/index.html', context)
-    #return HttpResponse("Hello world.")
 
 
