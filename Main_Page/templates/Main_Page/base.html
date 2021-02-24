@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 
 <title>Home / Twitter</title>
@@ -44,8 +44,21 @@ body {
   text-decoration: none;
 }
 
+.topnav button {
+  float: left;
+  display: block;
+  color: ghostwhite;
+  background-color: black;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  border: none;
+  font: inherit;
+  outline: none;
+}
+
 /* Change color on hover */
-.topnav a:hover {
+.topnav a:hover, button:hover {
   background-color: rgb(29,161,242,0.15);
   color: rgb(29,161,242,1.00);
 }
@@ -148,6 +161,14 @@ body {
 
 .foreignaccount:hover {
   background-color: rgba(58, 63, 66, 0.15);
+}
+
+.foreignaccount a {
+  text-decoration: none;
+  outline: none;
+  display: block;
+  color: ghostwhite;
+
 }
 
 /* Add a post effect for post */
@@ -267,11 +288,6 @@ body {
 
 {% block navbar %}
 <div class="topnav">
-  <a href="#">Link</a>
-  <a href="#">Link</a>
-  <a href="#">Link</a>
-  <a href="#" style="float:right">Join</a>
-  <a href="#" style="float:right">Login</a>
 </div>
 {% endblock %}
 
@@ -295,22 +311,18 @@ body {
     <div class="search" style="border-radius: 35px;">
       <input type="text" placeholder="Search Twitter">
     </div>
-    <div class="card">
-      <h2>My Profile</h2>
+    {% block Profile_Card %}
+      
       <div class="fakeimg" style="height:75px;width:100px">Profile pic.</div>
       <p>Please log in before you can view your profile information</p>
-    </div>
-  {% block User_List %}
-  {% endblock %}
+    {% endblock %}
+    {% block User_List %}
+    {% endblock %}
     <div class="card">
       <h3>Follow Me</h3>
       <p>Some text..</p>
     </div>
   </div>
-</div>
-
-<div class="footer">
-  <h2 style="color: ghostwhite;">Footer</h2>
 </div>
 
 </body>

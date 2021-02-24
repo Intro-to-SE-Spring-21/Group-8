@@ -7,16 +7,33 @@
 <div class="topnav">
   <a href="#">Followers ###</a>
   <a href="#">Following ###</a>
-  <a href=".">Refresh</a>
-  <a href="{% url 'Account:register' %}" style="float:right">Register</a>
+  <a href=".">Refresh</a>  
 
   {% if validSession %}
   <a href="{% url 'Account:logout' %}" style="float:right">Logout</a>
   {% else %}
+  <a href="{% url 'Account:register' %}" style="float:right">Register</a>
   <a href="{% url 'Account:login' %}" style="float:right">Login</a>
+
   {% endif %}
 
 </div>
+{% endblock %}
+
+{% block Profile_Card %}
+
+  <a href="{% url 'Account:profile' user %}" style="text-decoration: none;
+  outline: none;">
+    <div class="card">
+      <div class="fakeimg" style="width: 30%; float: left;">Profile pic.</div>
+      <div style="text-align: right; width: 70%; float: left;">
+        <h2>{{user.first_name}} {{user.last_name}}</h2>
+        <h3 style="color: rgb(99, 99, 99);">@{{user.username}}</h3>
+      </div>
+      <div style="clear: both;"></div>
+    </div>
+  </a>
+
 {% endblock %}
 
 {% block User_List %}
@@ -24,33 +41,20 @@
 <div class="card" style="padding-left: 0%; padding-right: 0%;">
   <div class="header" style="text-align: left; padding-left: 20px;"><h3>Who to Follow</h3></div>
   
-  <div class="foreignaccount">
-    <div style="width: 70%; float: left;">
-      <p>Account #1</p>
-    </div> 
-    <div style="width: 30%; float: right;"> 
-      <button class="follow_button">Follow</button>
+  {% for user in userlist %}
+    {% if forloop.counter0 < 3 %}
+    <div class="foreignaccount">
+      <a href="/profile/{{user.username}}/" style="width: 70%; float: left;">
+        <h2>{{user.first_name}} {{user.last_name}}</h2>
+        <h3 style="color: rgb(99, 99, 99);">@{{user.username}}</h3>
+      </a>
+      <div style="width: 30%; float: left;">
+        <button class="follow_button">Follow</button>
+      </div>
+      <div style="clear: both;"></div>
     </div>
-    <div style="clear: both;"></div>
-  </div>
-  <div class="foreignaccount">
-    <div style="width: 70%; float: left;">  
-      <p>Account #2</p>
-    </div>
-    <div style="width: 30%; float: left;">
-      <button class="follow_button">Follow</button>
-    </div>
-    <div style="clear: both;"></div>
-  </div>
-  <div class="foreignaccount">
-    <div style="width: 70%; float: left;">
-      <p>Account #3</p>
-    </div>
-    <div style="width: 30%; float: left;">
-      <button class="follow_button">Follow</button>
-    </div>
-    <div style="clear: both;"></div>
-  </div>
+    {% endif %}
+  {% endfor %}
   
   <div class="link" style="padding-left: 20px;"><p>Show More</p></div>
 
@@ -80,3 +84,5 @@
 </div>
 
 {% endblock %}
+
+
