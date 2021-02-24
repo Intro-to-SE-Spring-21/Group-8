@@ -6,3 +6,57 @@
 
 {% endblock %}
 
+{% block Personal_Scroll %}
+<div class="post">
+    <h2>Tweet #1</h2>
+    <h5>Title description, Jun 18, 2013</h5>
+    <div class="fakeimg" style="height:60ps;">Image</div>
+    <p>Guhday M8</p>
+    <button class="like">like</button>
+</div>
+<div class="post">
+    <h2>Tweet #1</h2>
+    <h5>Title description, Jun 19, 2013</h5>
+    <div class="fakeimg" style="height:60ps;">Image</div>
+    <p>U Wot M8</p>
+    <button class="like">like</button>
+</div>
+{% endblock %}
+
+{% block Profile_User_List %}
+<div class="card" style="padding-left: 0%; padding-right: 0%;">
+    <div class="header" style="text-align: left; padding-left: 20px;"><h3>Who to Follow</h3></div>
+    
+    <div class="foreignaccount">
+      <div style="width: 70%; float: left;">
+        <p>Account #1</p>
+      </div> 
+      <div style="width: 30%; float: right;"> 
+        <button class="follow_button">Follow</button>
+      </div>
+      <div style="clear: both;"></div>
+    </div>
+    <div class="foreignaccount">
+      <div style="width: 70%; float: left;">  
+        <p>Account #2</p>
+      </div>
+      <div style="width: 30%; float: left;">
+        <button class="follow_button">Follow</button>
+      </div>
+      <div style="clear: both;"></div>
+    </div>
+    <div class="foreignaccount">
+      <div style="width: 70%; float: left;">
+        <p>Account #3</p>
+      </div>
+      <div style="width: 30%; float: left;">
+        <button class="follow_button">Follow</button>
+      </div>
+      <div style="clear: both;"></div>
+    </div>
+    
+    <div class="link" style="padding-left: 20px;"><p>Show More</p></div>
+  
+  
+  </div>
+{% endblock %}
