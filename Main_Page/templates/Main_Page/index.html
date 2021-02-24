@@ -14,6 +14,7 @@
   {% else %}
   <a href="{% url 'Account:register' %}" style="float:right">Register</a>
   <a href="{% url 'Account:login' %}" style="float:right">Login</a>
+  <button style="float: right;">Login</button><!-- https://www.w3schools.com/howto/howto_css_modals.asp Code for making a modal popup window -->
 
   {% endif %}
 
@@ -21,7 +22,7 @@
 {% endblock %}
 
 {% block Profile_Card %}
-
+  {% if validSession %}
   <a href="{% url 'Account:profile' user %}" style="text-decoration: none;
   outline: none;">
     <div class="card">
@@ -33,7 +34,7 @@
       <div style="clear: both;"></div>
     </div>
   </a>
-
+  {% endif %}
 {% endblock %}
 
 {% block User_List %}
