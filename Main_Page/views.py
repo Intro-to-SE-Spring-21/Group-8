@@ -16,7 +16,7 @@ def index(request):
     ## Explore Page Scroll
     AllTweets = Tweet.objects.order_by('-pub_date') 
 
-    # List of all users
+    # List of all users (Helpful for many functions)
     AllUsers = User.objects.all()
 
     ## Random 3 Users selected for 'Who to Follow'

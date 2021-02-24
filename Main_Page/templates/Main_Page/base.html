@@ -108,7 +108,6 @@ body {
 
 /* Right column */
 .rightcolumn {
-  position: sticky;
   float: right;
   width: 25%;
   background-color: black;
@@ -209,6 +208,7 @@ body {
 .slab {
   position: fixed;
   top: 0;
+  width: 25%;
 }
 
 /* Add a post effect for post */
@@ -327,15 +327,16 @@ body {
 </div>
 
 {% block navbar %}
-<div class="topnav">
-</div>
+<!-- Navbar 
+This holds the links for the home webpage 
+Navbar -->
 {% endblock %}
 
 <div class="row">
   <div class="leftcolumn">
-    <form class="tweet" method="POST" action="{% url 'Main_Page:index' %}">
+    <form class="tweet" name="generate_tweet" method="POST" action="{% url 'Main_Page:index' %}">
       {% csrf_token %}
-      <input type="text" placeholder="What's happening?" name="Tweet_box">
+      <input type="text" maxlength="280" placeholder="What's happening?" name="Tweet_box">
       <div style="border-top-color:rgb(58, 63, 66);
       border-top-style: solid; 
       border-top-width: 1px;
@@ -346,6 +347,9 @@ body {
       <div style="clear: both;"></div>
     </form>
     {% block Live_Scroll %}
+    <!-- Live Scroll
+    This holds the information for the Tweets that populate the page
+    Live Scroll -->
     {% endblock %}
   </div>
   <div class="rightcolumn">
@@ -353,11 +357,14 @@ body {
       <input type="text" placeholder="Search Twitter">
     </div>
     {% block Profile_Card %}
-      
-      <div class="fakeimg" style="height:75px;width:100px">Profile pic.</div>
-      <p>Please log in before you can view your profile information</p>
+    <!-- Profile_Card
+    This holds the personal information of the user that is logged in
+    Profile_Card -->  
     {% endblock %}
     {% block User_List %}
+    <!-- User_List
+    The card holding the users that are being displayed to follow
+    User_List -->
     {% endblock %}
     <div class="card">
       <h3>Follow Me</h3>
@@ -372,11 +379,12 @@ body {
 
   <script>
     window.onscroll = function() {Right_Slab()};
+
     var rightcolumn = document.getElementById("rightcolumn");
-    var sticky_slab = rightcolumn.offsetLeft;
+    var sticky_slab = rightcolumn.offsetTop;
 
     function Right_Slab() {
-      if (window.pageYOffset >= stickyslab) {
+      if (window.pageYOffset >= sticky_slab) {
         rightcolumn.classList.add("slab");
       } else {
         rightcolumn.classList.remove("slab");

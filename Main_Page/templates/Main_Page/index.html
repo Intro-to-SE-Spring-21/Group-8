@@ -2,7 +2,7 @@
 
 {% extends "Main_Page/base.html" %}
 
-
+<!-- Navbar -->
 {% block navbar %}
 <div class="topnav">
   <a href="#">Followers ###</a>
@@ -21,6 +21,9 @@
 </div>
 {% endblock %}
 
+
+<!-- Right Column -->
+<!-- Card that holds Profile information -->
 {% block Profile_Card %}
   {% if validSession %}
   <a href="{% url 'Account:profile' user %}" style="text-decoration: none;
@@ -37,6 +40,7 @@
   {% endif %}
 {% endblock %}
 
+<!-- Card showing 'Who to Follow' -->
 {% block User_List %}
 
 <div class="card" style="padding-left: 0%; padding-right: 0%;">
@@ -64,7 +68,15 @@
 
 {% endblock %}
 
+<!-- Left Column -->
+<!-- Creating a Tweet -->
+{% block Create_Tweet %}
 
+
+
+{% endblock %}
+
+<!-- Tweets that are being shown to screen -->
 {% block Live_Scroll %}
 
   {% for post in explorescroll %}
