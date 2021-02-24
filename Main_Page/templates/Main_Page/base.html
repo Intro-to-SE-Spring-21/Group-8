@@ -303,24 +303,18 @@ body {
     <div class="search" style="border-radius: 35px;">
       <input type="text" placeholder="Search Twitter">
     </div>
-    <div class="card">
-      {% block Profile_Card %}
+    {% block Profile_Card %}
       
       <div class="fakeimg" style="height:75px;width:100px">Profile pic.</div>
       <p>Please log in before you can view your profile information</p>
-      {% endblock %}
-    </div>
-  {% block User_List %}
-  {% endblock %}
+    {% endblock %}
+    {% block User_List %}
+    {% endblock %}
     <div class="card">
       <h3>Follow Me</h3>
       <p>Some text..</p>
     </div>
   </div>
-</div>
-
-<div class="footer">
-  <h2 style="color: ghostwhite;">Footer</h2>
 </div>
 
 </body>

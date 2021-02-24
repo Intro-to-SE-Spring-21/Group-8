@@ -22,9 +22,17 @@
 
 {% block Profile_Card %}
 
-  <a href="{% url 'Account:profile' auth_user.username %}" style="float: inherit">My Profile</a>
-  <div class="fakeimg" style="height:75px;width:100px">Profile pic.</div>
-  <p>Please log in before you can view your profile information</p>
+  <a href="{% url 'Account:profile' user %}" style="text-decoration: none;
+  outline: none;">
+    <div class="card">
+      <div class="fakeimg" style="width: 30%; float: left;">Profile pic.</div>
+      <div style="text-align: right; width: 70%; float: left;">
+        <h2>{{user.first_name}} {{user.last_name}}</h2>
+        <h3 style="color: rgb(99, 99, 99);">@{{user.username}}</h3>
+      </div>
+      <div style="clear: both;"></div>
+    </div>
+  </a>
 
 {% endblock %}
 

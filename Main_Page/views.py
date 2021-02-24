@@ -5,7 +5,7 @@ from django.contrib.auth.forms import UserCreationForm
 
 def index(request):
 
-    context = {'validSession':False}
+    context = {'validSession':False, 'username':request.user.username}
 
     if(request.user.is_authenticated):
         context['validSession'] = True
