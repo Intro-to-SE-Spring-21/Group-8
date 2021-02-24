@@ -293,17 +293,18 @@ body {
 
 <div class="row">
   <div class="leftcolumn">
-    <div class="tweet">
-      <input type="text" placeholder="What's happening?">
+    <form class="tweet" method="POST" action="{% url 'Main_Page:index' %}">
+      {% csrf_token %}
+      <input type="text" placeholder="What's happening?" name="Tweet_box">
       <div style="border-top-color:rgb(58, 63, 66);
       border-top-style: solid; 
       border-top-width: 1px;
       padding-top: 15px;
       clear: both;">
-        <button class="tweet_button">Tweet</button>
+        <button class="tweet_button" name="submit_tweet" type="submit">Tweet</button>
       </div>
       <div style="clear: both;"></div>
-    </div>
+    </form>
     {% block Live_Scroll %}
     {% endblock %}
   </div>

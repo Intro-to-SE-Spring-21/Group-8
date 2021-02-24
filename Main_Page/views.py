@@ -8,6 +8,9 @@ import random
 
 def index(request):
 
+    if request.method == "POST":
+        print('Hello')#Create Tweet Button
+
     AllUsers = User.objects.all()
     rand_three = []
     for i in range(3):
