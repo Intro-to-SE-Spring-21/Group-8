@@ -3,6 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 # Create your views here.
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from Account.models import Tweet
 import random
 
 
@@ -25,5 +26,12 @@ def index(request):
     if(request.user.is_authenticated):
         context['validSession'] = True
 
-    return render(request,'Main_Page/index.html',context)
+    return render(request,'Main_Page/index.html', context)
     #return HttpResponse("Hello world.")
+
+
+def partial_post(request):
+
+
+
+    return render(request, 'Main_Page/Partials/post.html')

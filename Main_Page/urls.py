@@ -4,4 +4,6 @@ from . import views
 app_name = 'Main_Page'
 urlpatterns = [
     path('',views.index,name='index'),
+    path('', views.partial_post, name='partial_post')
 ]
+
