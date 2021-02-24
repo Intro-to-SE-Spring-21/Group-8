@@ -5,9 +5,9 @@
 
 {% block navbar %}
 <div class="topnav">
-  <a href="#">Link</a>
-  <a href="#">Link 2</a>
-  <a href="#">Link 3</a>
+  <a href="#">Followers ###</a>
+  <a href="#">Following ###</a>
+  <a href=".">Refresh</a>
   <a href="{% url 'Account:register' %}" style="float:right">Register</a>
 
   {% if validSession %}
@@ -17,4 +17,66 @@
   {% endif %}
 
 </div>
+{% endblock %}
+
+{% block User_List %}
+
+<div class="card" style="padding-left: 0%; padding-right: 0%;">
+  <div class="header" style="text-align: left; padding-left: 20px;"><h3>Who to Follow</h3></div>
+  
+  <div class="foreignaccount">
+    <div style="width: 70%; float: left;">
+      <p>Account #1</p>
+    </div> 
+    <div style="width: 30%; float: right;"> 
+      <button class="follow_button">Follow</button>
+    </div>
+    <div style="clear: both;"></div>
+  </div>
+  <div class="foreignaccount">
+    <div style="width: 70%; float: left;">  
+      <p>Account #2</p>
+    </div>
+    <div style="width: 30%; float: left;">
+      <button class="follow_button">Follow</button>
+    </div>
+    <div style="clear: both;"></div>
+  </div>
+  <div class="foreignaccount">
+    <div style="width: 70%; float: left;">
+      <p>Account #3</p>
+    </div>
+    <div style="width: 30%; float: left;">
+      <button class="follow_button">Follow</button>
+    </div>
+    <div style="clear: both;"></div>
+  </div>
+  
+  <div class="link" style="padding-left: 20px;"><p>Show More</p></div>
+
+
+</div>
+
+{% endblock %}
+
+
+{% block Live_Scroll %}
+
+<div class="post">
+  <h2>Tweet #1</h2>
+  <h5>Title description, Dec 7, 2017</h5>
+  <div class="fakeimg" style="height:60px;">Image</div>
+  <p>Some text..</p>
+  <p>Sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.</p>
+  <button class="like">Like</button>
+</div>
+<div class="post">
+  <h2>Tweet #2</h2>
+  <h5>Title description, Sep 2, 2017</h5>
+  <div class="fakeimg" style="height:60px;">Image</div>
+  <p>Some text..</p>
+  <p>Sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.</p>
+  <button class="like">Like</button>
+</div>
+
 {% endblock %}

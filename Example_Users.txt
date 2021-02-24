@@ -1,0 +1,26 @@
+Username: bhball22
+Password: Django11
+
+Username: natalie2by4
+Password: Django22
+
+Username: lmurdock12
+Password: Django33
+
+Username: kd766
+Password: Django44
+
+Username: Samsung
+Password: Testofficial
+
+Username: Msstate
+Password: Testofficial2
+
+Username: Twitter
+Password: TestAdmin
+
+Username: Github
+Password: Testofficial3
+
+Username: Bagley
+Password: EngineeringSchool
