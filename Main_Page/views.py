@@ -12,6 +12,8 @@ def index(request):
     if request.method == "POST":
         print('Hello')#Create Tweet Button
 
+    AllTweets = Tweet.objects.order_by('-pub_date')
+
     AllUsers = User.objects.all()
     rand_three = []
     for i in range(3):
@@ -21,7 +23,8 @@ def index(request):
         rand_three.append(temp)
         
 
-    context = {'validSession':False, 'username':request.user.username, 'userdic':AllUsers, 'userlist':rand_three}
+    context = {'validSession':False, 'username':request.user.username, 'userdic':AllUsers, 
+    'userlist':rand_three, 'explorescroll':AllTweets}
 
     if(request.user.is_authenticated):
         context['validSession'] = True
@@ -30,8 +33,3 @@ def index(request):
     #return HttpResponse("Hello world.")
 
 
-def partial_post(request):
-
-
-
-    return render(request, 'Main_Page/Partials/post.html')

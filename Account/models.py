@@ -12,4 +12,9 @@ class Tweet(models.Model):
         return "{} - Post id - {}".format(self.tweet_creator, self.pk)
     def was_published_recently(self):
         return self.pub_date >= timezone.now() - datetime.timedelta(days=1)
+
+    def visible_info(self):
+        if not self.tweet_text:
+            return
+        return self.tweet_text
     

@@ -204,7 +204,11 @@ body {
   outline: none;
   display: block;
   color: ghostwhite;
+}
 
+.slab {
+  position: fixed;
+  top: 0;
 }
 
 /* Add a post effect for post */
@@ -360,6 +364,25 @@ body {
       <p>Some text..</p>
     </div>
   </div>
+
+
+
+
+
+
+  <script>
+    window.onscroll = function() {Right_Slab()};
+    var rightcolumn = document.getElementById("rightcolumn");
+    var sticky_slab = rightcolumn.offsetLeft;
+
+    function Right_Slab() {
+      if (window.pageYOffset >= stickyslab) {
+        rightcolumn.classList.add("slab");
+      } else {
+        rightcolumn.classList.remove("slab");
+      }
+    }
+  </script>
 </div>
 
 </body>
