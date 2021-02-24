@@ -3,6 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 # Create your views here.
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from Account.models import Follow
 
 def register(request):
 
@@ -27,5 +28,5 @@ def profile(request, username):
 
     
     user = get_object_or_404(User,username=username)
-
-    return render(request,'Account/profile.html',{'user':user})
+    following = len(Follow.objects.filter(following = user))
+    return render(request,'Account/profile.html',{'user':user, 'following_count':following})
