@@ -62,5 +62,5 @@ Main Languages used:
     * HTML
     * CSS
 
-Our backend database will also be powered through MySQL.
+Our backend database will also be powered through sqlite3.
 
