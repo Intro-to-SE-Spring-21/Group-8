@@ -1,10 +1,22 @@
 {% extends "Account/base_profile.html" %}
 
-{% block home_page %}
-<p>Hello: {{user.username}}</p>
-<p>Welcome to your profile page</p>
+{% block profile_header %}
+    <div class="header_pic">
+        <div class="fakeimg" style="height:100%;width:100%;color:white;text-align: center;">Image.</div>
+        
+        <!--<img src = "https://simplyilm.com/wp-content/uploads/2017/08/temporary-profile-placeholder-1.jpg" alt="DefaultPic" width = "250" height = "100"-->
 
-{% endblock %}
+    </div> 
+    <div class="header_name" style = "background-color: black; color: white;  text-align: center;">
+        <h1>{{user.first_name}} {{user.last_name}}</h1>
+        <p>{{user.username}}
+        <button style="float:right" class="follow_button">Follow</button></p>
+    </div>
+    <div class="header_bio" style = "background-color: black; color: white; text-align: center;"> 
+        <h1>Bio</h1>
+        <p>Birthdate</p>
+    </div>
+    {% endblock %}
 
 {% block Personal_Scroll %}
 <div class="post">
