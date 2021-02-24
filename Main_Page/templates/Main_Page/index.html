@@ -7,16 +7,25 @@
 <div class="topnav">
   <a href="#">Followers ###</a>
   <a href="#">Following ###</a>
-  <a href=".">Refresh</a>
-  <a href="{% url 'Account:register' %}" style="float:right">Register</a>
+  <a href=".">Refresh</a>  
 
   {% if validSession %}
   <a href="{% url 'Account:logout' %}" style="float:right">Logout</a>
   {% else %}
+  <a href="{% url 'Account:register' %}" style="float:right">Register</a>
   <a href="{% url 'Account:login' %}" style="float:right">Login</a>
+
   {% endif %}
 
 </div>
+{% endblock %}
+
+{% block Profile_Card %}
+
+  <a href="{% url 'Account:profile' auth_user.username %}" style="float: inherit">My Profile</a>
+  <div class="fakeimg" style="height:75px;width:100px">Profile pic.</div>
+  <p>Please log in before you can view your profile information</p>
+
 {% endblock %}
 
 {% block User_List %}
@@ -80,3 +89,5 @@
 </div>
 
 {% endblock %}
+
+
