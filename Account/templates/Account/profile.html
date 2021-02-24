@@ -10,7 +10,10 @@
     <div class="header_name" style = "background-color: black; color: white;  text-align: center;">
         <h1>{{user.first_name}} {{user.last_name}}</h1>
         <p>{{user.username}}
-        <button style="float:right" class="follow_button">Follow</button></p>
+        <form method="post" action="{% url 'Account:profile' user.username %}">
+          {% csrf_token %}
+          <button name="followProfileSubmit" type="submit" style="float:right" value={{user.username}} class="follow_button">Follow</button></p>
+        </form>
     </div>
     <div class="header_bio" style = "background-color: black; color: white; text-align: center;"> 
         <h1>Bio</h1>
