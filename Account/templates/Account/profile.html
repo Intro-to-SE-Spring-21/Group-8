@@ -1,5 +1,9 @@
 {% extends "Account/base_profile.html" %}
 
+{% block title %}
+<title>{{user.first_name}} {{user.last_name}} (@{{user.username}})</title>
+{% endblock %}
+
 {% block profile_header %}
     <div class="header_pic">
         <div class="fakeimg" style="height:100%;width:100%;color:white;text-align: center;">Image.</div>
