@@ -21,8 +21,8 @@ class Command(BaseCommand):
 
         User.objects.create_superuser('admin','admin@msstate.edu','admin')
 
-        user_5 = User(username='bagely',first_name='Bagley',last_name='School',email='bagely@msstate.edu')
-        user_5.set_password('bagely')
+        user_5 = User(username='bagley',first_name='Bagley',last_name='School',email='bagely@msstate.edu')
+        user_5.set_password('bagley')
 
         user_6 = User(username='github',first_name='Git',last_name='Hub',email='github@msstate.edu')
         user_6.set_password('github')
@@ -57,7 +57,7 @@ class Command(BaseCommand):
             'natalie2by4':[user_7,user_2,user_8,user_4,user_3],
             'kd766':[user_8,user_1,user_5,user_3,user_7,user_6],
             'admin':[user_4,user_1],
-            'bagely':[user_3,user_9,user_5],
+            'bagley':[user_3,user_9,user_5],
             'github':[user_3],
             'bobross':[user_2,user_3,user_5,user_9,user_10],
             'drake':[user_6,user_7],
