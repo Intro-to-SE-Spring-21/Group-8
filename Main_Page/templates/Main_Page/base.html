@@ -205,12 +205,6 @@ body {
   color: ghostwhite;
 }
 
-.slab {
-  position: fixed;
-  top: 0;
-  width: 25%;
-}
-
 /* Add a post effect for post */
 .post {
   background-color: black;
@@ -352,7 +346,7 @@ Navbar -->
     Live Scroll -->
     {% endblock %}
   </div>
-  <div class="rightcolumn">
+  <div class="rightcolumn" style="position: -webkit-sticky; position: sticky; top:0">
     <div class="search" style="border-radius: 35px;">
       <input type="text" placeholder="Search Twitter">
     </div>
@@ -371,26 +365,6 @@ Navbar -->
       <p>Some text..</p>
     </div>
   </div>
-
-
-
-
-
-
-  <script>
-    window.onscroll = function() {Right_Slab()};
-
-    var rightcolumn = document.getElementById("rightcolumn");
-    var sticky_slab = rightcolumn.offsetTop;
-
-    function Right_Slab() {
-      if (window.pageYOffset >= sticky_slab) {
-        rightcolumn.classList.add("slab");
-      } else {
-        rightcolumn.classList.remove("slab");
-      }
-    }
-  </script>
 </div>
 
 </body>
