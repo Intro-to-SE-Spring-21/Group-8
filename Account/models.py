@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 
 class Tweet(models.Model):
-    tweet_creator = models.ForeignKey(User, on_delete=models.PROTECT)
+    tweet_creator = models.ForeignKey(User, on_delete=models.CASCADE)
     tweet_text = models.TextField(max_length=280)
     pub_date = models.DateTimeField('date published')
     def __str__(self):
