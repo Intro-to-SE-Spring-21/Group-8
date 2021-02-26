@@ -247,7 +247,7 @@ body {
   padding: 20px;
 }
 
-.tweet input[type=text] {
+.tweet textarea {
   width: 100%;
   height: 100%;
   background-color: black;
@@ -258,7 +258,7 @@ body {
   margin-bottom: 20px;
 }
 
-.tweet input[type=text]:focus {
+.tweet textarea:focus, .tweet textarea{
   color: ghostwhite;
 }
 
@@ -330,7 +330,7 @@ Navbar -->
   <div class="leftcolumn">
     <form class="tweet" name="generate_tweet" method="POST" action="{% url 'Main_Page:index' %}">
       {% csrf_token %}
-      <input type="text" maxlength="280" placeholder="What's happening?" name="Tweet_box">
+      {{ tweet }}
       <div style="border-top-color:rgb(58, 63, 66);
       border-top-style: solid; 
       border-top-width: 1px;

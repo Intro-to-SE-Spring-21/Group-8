@@ -1,9 +1,11 @@
-from django.shortcuts import render
+import datetime
+from django.utils import timezone
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
-# Create your views here.
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from Account.models import Tweet
+from .forms import Generate_Tweet
 import random
 
 
@@ -11,7 +13,13 @@ def index(request):
 
     ## Creating a Tweet through the webpage
     if request.method == "POST":
-        print('Hello')#Create Tweet Button
+        tweet = Generate_Tweet(request.POST)
+        if tweet.is_valid():
+            new_tweet = Tweet.objects.create(tweet_creator=request.user, tweet_text=tweet.cleaned_data['tweet_text'], pub_date=datetime.datetime.now())
+            pass
+    else:
+        tweet = Generate_Tweet()
+
 
     ## Explore Page Scroll
     AllTweets = Tweet.objects.order_by('-pub_date') 
@@ -30,7 +38,7 @@ def index(request):
 
     ### Variable declared to pass all information to webpage
     context = {'validSession':False, 'username':request.user.username, 'userdic':AllUsers, 
-    'userlist':rand_three, 'explorescroll':AllTweets}
+    'userlist':rand_three, 'explorescroll':AllTweets, 'tweet':tweet}
 
     ## Check if a user is logged in
     if(request.user.is_authenticated):

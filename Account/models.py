@@ -1,5 +1,5 @@
 import datetime
-
+from django.forms import ModelForm
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
@@ -9,7 +9,7 @@ class Tweet(models.Model):
     tweet_text = models.CharField(max_length=280)
     pub_date = models.DateTimeField('date published')
     def __str__(self):
-        return "{} - Post id - {}".format(self.tweet_creator, self.pk)
+        return "{} - Post - {}".format(self.tweet_creator, self.pk)
     def was_published_recently(self):
         return self.pub_date >= timezone.now() - datetime.timedelta(days=1)
 
@@ -18,3 +18,7 @@ class Tweet(models.Model):
             return
         return self.tweet_text
     
+class Generate_Tweet(ModelForm):
+    class Meta:
+        model = Tweet
+        fields =['tweet_text']
