@@ -64,3 +64,12 @@ Main Languages used:
 
 Our backend database will also be powered through sqlite3.
 
+
+## Running the website for the first time
+
+1. Ensure that Django is installed  with version >= 3.0
+2. Create and populate the database
+  a. Run the command "python manage.py makemigrations Account"
+  b. Then migrate using: "python manage.py migrate"
+  c. Finally, populate the database using: "python manage.py populateDatabase"
+  d. Start the server: "python manage.py runserver"

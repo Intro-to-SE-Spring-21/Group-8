@@ -12,9 +12,18 @@
 
     </div> 
     <div class="header_name" style = "background-color: black; color: white;  text-align: center;">
-        <h1>{{user.first_name}} {{user.last_name}}</h1>
-        <p>{{user.username}}
-        <button style="float:right" class="follow_button">Follow</button></p>
+        <h1>{{profile_user.first_name}} {{profile_user.last_name}}</h1>
+        <p>{{profile_user.username}}
+        <form method="post" action="{% url 'Account:profile' profile_user.username %}">
+          {% csrf_token %}
+          {% if not isNative %}
+                  {% if not auth_follow %}
+                  <button name="followProfileSubmit" type="submit" style="float:right" value={{profile_user.username}} class="follow_button">Follow</button>
+                  {% else %}
+                  <button name="unfollowProfileSubmit" type="submit" style="float:right" value={{profile_user.username}} class="follow_button">Unfollow</button>
+                  {% endif %}
+          {% endif %}
+          </form>
     </div>
     <div class="header_bio" style = "background-color: black; color: white; text-align: center;"> 
         <h1>Bio</h1>
@@ -75,4 +84,17 @@
   
   
   </div>
+{% endblock %}
+
+{% block navbar %}
+      <div class="topnav">
+        <a href="#">Home</a>
+        <a href="#">Followers {{followed_by_len}}</a>
+        <a href="#">Following {{following_len}}</a>
+        <a href="#">Likes</a>
+        <a href="#">Refresh</a>
+        <a href="#">Edit</a>
+        <a href="#" style="float:right">Join</a>
+        <a href="#" style="float:right">Login</a>
+      </div>
 {% endblock %}
