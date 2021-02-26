@@ -89,11 +89,8 @@ def profile(request, username):
         for followed in followed_by:
             if request.user == followed.user:
                 auth_follow = True
-    
-    return render(request,'Account/profile.html',{'profile_user':profile_user,'auth_follow':auth_follow, 'following_len':len(following),'followed_by_len':len(followed_by),'isNative':isNative})
 
-def index(request):
-    
+
     AllUsers = User.objects.all()
     rand_three = []
     for i in range (3):
@@ -102,9 +99,12 @@ def index(request):
             temp = random.choice(AllUsers)
         rand_three.append(temp)
 
-    context = {'validSession':False, 'username':request.user.username, 'userdic':AllUsers, 'userlist':rand_three}
+    context = {'validSession':False, 'username':request.user.username, 'userdic':AllUsers, 'userlist':rand_three, 
+    'profile_user':profile_user,'auth_follow':auth_follow, 'following_len':len(following),'followed_by_len':len(followed_by),
+    'isNative':isNative}
     
     if(request.user.is_authenticated):
         context['validSession'] = True
+    
+    return render(request,'Account/profile.html', context)
 
-    return render(request, 'Account/profile.html', context)
