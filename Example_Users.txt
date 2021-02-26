@@ -1,26 +1,37 @@
+
+Super Users:
+
+Username: admin 
+Password: admin
+
+Regular users:
+
 Username: bhball22
-Password: Django11
+Password: bhball22
 
 Username: natalie2by4
-Password: Django22
+Password: natalie2by4
 
 Username: lmurdock12
-Password: Django33
+Password: lmurdock12
 
 Username: kd766
-Password: Django44
+Password: kd766
 
-Username: Samsung
-Password: Testofficial
+Username: bagley
+Password: bagley
 
-Username: Msstate
-Password: Testofficial2
+Username: github
+Password: github
 
-Username: Twitter
-Password: TestAdmin
+Username: bobross
+Password: bobross
 
-Username: Github
-Password: Testofficial3
+Username: drake
+Password: drake
 
-Username: Bagley
-Password: EngineeringSchool
+Username: oprahwinfrey
+Password: oprahwinfrey
+
+Username: billgates
+Password: billgates
