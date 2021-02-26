@@ -12,7 +12,7 @@
 <html lang="en">
 <head>
 
-    <title>{{user.first_name}} {{user.last_name}} (@{{user.username}})</title>
+    <title>{{user.first_name}} {{user.last_name}} @{{user.username}}</title>
     <style>
         * {
           box-sizing: border-box;
@@ -320,8 +320,13 @@
         <a href="#">Likes</a>
         <a href="#">Refresh</a>
         <a href="#">Edit</a>
-        <a href="#" style="float:right">Join</a>
-        <a href="#" style="float:right">Login</a>
+        {% if validSession %}
+        <a href="{% url 'Account:logout' %}" style="float:right">Logout</a>
+        {% else %}
+        <a href="{% url 'Account:register' %}" style="float:right">Register</a>
+        <a href="{% url 'Account:login' %}" style="float:right">Login</a>
+
+         {% endif %}
       </div>
       {% endblock %}
       
