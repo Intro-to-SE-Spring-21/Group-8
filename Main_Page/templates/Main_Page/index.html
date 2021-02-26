@@ -69,14 +69,6 @@
 
 {% endblock %}
 
-<!-- Left Column -->
-<!-- Creating a Tweet -->
-{% block Create_Tweet %}
-
-
-
-{% endblock %}
-
 <!-- Tweets that are being shown to screen -->
 {% block Live_Scroll %}
 
@@ -89,7 +81,7 @@
         <span style="font-size: 20px; font-weight: bold;">{{post.tweet_creator.first_name}} {{post.tweet_creator.last_name}}</span>
         <span style="font-size: 20px; color: rgb(99, 99, 99);">@{{post.tweet_creator.username}}</span>
         <span style="font-size: 20px; color: rgb(99, 99, 99);"> - {{post.pub_date}}</span>
-        <div style="padding-top: 5px; line-height: 130%;">{{ post.visible_info | linebreaksbr | nbsp }}</div>
+        <div style="word-wrap: break-word; padding-top: 5px; line-height: 130%;">{{ post.visible_info | linebreaksbr | nbsp }}</div>
         <div class="fakeimg" style="height:60px;">Image</div>
       </div>
       <button class="like">Like</button>
