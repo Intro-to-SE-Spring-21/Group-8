@@ -1,5 +1,4 @@
 import datetime
-from django.forms import ModelForm
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
@@ -18,11 +17,6 @@ class Tweet(models.Model):
             return
         return self.tweet_text
     
-class Generate_Tweet(ModelForm):
-    class Meta:
-        model = Tweet
-        fields =['tweet_text']
-
 
 class Follow(models.Model):
     user = models.ForeignKey(User, related_name = "user", on_delete=models.CASCADE)
