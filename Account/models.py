@@ -6,7 +6,7 @@ from django.utils import timezone
 
 class Tweet(models.Model):
     tweet_creator = models.ForeignKey(User, on_delete=models.PROTECT)
-    tweet_text = models.CharField(max_length=280)
+    tweet_text = models.TextField(max_length=280)
     pub_date = models.DateTimeField('date published')
     def __str__(self):
         return "{} - Post - {}".format(self.tweet_creator, self.pk)
