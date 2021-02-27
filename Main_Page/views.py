@@ -16,9 +16,11 @@ def index(request):
         tweet = Generate_Tweet(request.POST)
         if tweet.is_valid():
             new_tweet = Tweet.objects.create(tweet_creator=request.user, tweet_text=tweet.cleaned_data['tweet_text'], pub_date=datetime.datetime.now())
+            tweet = Generate_Tweet()
             pass
     else:
         tweet = Generate_Tweet()
+
 
 
     ## Explore Page Scroll
