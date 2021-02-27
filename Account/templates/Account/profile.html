@@ -12,20 +12,23 @@
 
     </div> 
     <div class="header_name" style = "background-color: black; color: white;  text-align: center;">
+<!--
       <div style="width: 70%; float: left;">
         <h1>{{profile_user.first_name}} {{profile_user.last_name}} </h1>
         <p>{{profile_user.username}}</p>
-      </div>
+-->
+        <h1>{{profile_user.first_name}} {{profile_user.last_name}}</h1>
+        <p>@{{profile_user.username}}
         <form method="post" action="{% url 'Account:profile' profile_user.username %}">
           {% csrf_token %}
           {% if not isNative %}
-                  {% if not auth_follow %}
-                  <button name="followProfileSubmit" type="submit" style="float: left; width: 30%; margin-top: 30px;" value={{profile_user.username}} class="follow_button">Follow</button>
-                  {% else %}
-                  <button name="unfollowProfileSubmit" type="submit" style="float: left; width: 30%; margin-top: 30px;" value={{profile_user.username}} class="follow_button">Unfollow</button>
-                  {% endif %}
+            {% if not auth_follow %}
+              <button name="follow{{profile_user.username}}" type="submit" style="float:right" value={{profile_user.username}} class="follow_button">Follow</button>
+            {% else %}
+              <button name="unfollow{{profile_user.username}}" type="submit" style="float:right" value={{profile_user.username}} class="follow_button">Unfollow</button>
+            {% endif %}
           {% endif %}
-          </form>
+        </form>
     </div>
     <div class="header_bio" style = "background-color: black; color: white; text-align: center;"> 
       <h1>Bio</h1>
@@ -34,6 +37,7 @@
     {% endblock %}
 
 {% block Personal_Scroll %}
+
 
   {% for post in personalscroll %}
   {% if forloop.counter0 < 25 %}
@@ -53,47 +57,47 @@
   {% endif %}
   {% endfor %}
 
+
 {% endblock %}
+
+
 
 {% block Profile_User_List %}
 <div class="card" style="padding-left: 0%; padding-right: 0%;">
-    <div class="header" style="text-align: left; padding-left: 20px;"><h3>Who to Follow</h3></div>
-    
+  <div class="header" style="text-align: left; padding-left: 20px;"><h3>Who to Follow</h3></div>
+  {% for user in userlist %}
+    {% if forloop.counter0 < 3 %}
     <div class="foreignaccount">
-      <div style="width: 70%; float: left;">
-        <p>Account #1</p>
-      </div> 
+      <a href="/profile/{{user.username}}/" style="width: 70%; float: left;">
+        <h2>{{user.first_name}} {{user.last_name}}</h2>
+        <h3 style="color: rgb(99, 99, 99);">@{{user.username}}</h3>
+      </a>
       <div style="width: 30%; float: right;"> 
-        <button class="follow_button">Follow</button>
+        <form method="post" action="{% url 'Account:profile' user.username %}">
+          {% csrf_token %}
+          {% if not isNative %}
+          {% with j=forloop.counter0 %}
+          {% endwith %}
+            {% if not list_follow.j %}
+            <button name="follow{{user.username}}" type="submit" style="float:right" value={{user.username}} class="follow_button">Follow{{ list_follow.j }}</button>
+            {% else %}
+            <button name="unfollow{{user.username}}" type="submit" style="float:right" value={{user.username}} class="follow_button">Unfollow</button>
+            {% endif %}        
+          {% endif %}
+        </form>
       </div>
       <div style="clear: both;"></div>
     </div>
-    <div class="foreignaccount">
-      <div style="width: 70%; float: left;">  
-        <p>Account #2</p>
-      </div>
-      <div style="width: 30%; float: left;">
-        <button class="follow_button">Follow</button>
-      </div>
-      <div style="clear: both;"></div>
-    </div>
-    <div class="foreignaccount">
-      <div style="width: 70%; float: left;">
-        <p>Account #3</p>
-      </div>
-      <div style="width: 30%; float: left;">
-        <button class="follow_button">Follow</button>
-      </div>
-      <div style="clear: both;"></div>
-    </div>
-    
-    <div class="link" style="padding-left: 20px;"><p>Show More</p></div>
+    {% endif %}
+  {% endfor %}
+
+  <div class="link" style="padding-left: 20px;"><p>Show More</p></div>
   
-  
-  </div>
+</div>
 {% endblock %}
 
 {% block navbar %}
+
       <div class="topnav">
         <a href="{% url 'Main_Page:index' %}">Home</a>
         <a href="#">Followers {{followed_by_len}}</a>
@@ -110,4 +114,5 @@
 
   {% endif %}
       </div>
+
 {% endblock %}
