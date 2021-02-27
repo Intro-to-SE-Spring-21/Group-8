@@ -93,9 +93,8 @@ def profile(request, username):
             if request.user == followed.user:
                 auth_follow = True
 
-
-    UserTweets = Tweet.objects.order_by('-pub_date').filter(tweet_creator=request.user.pk)
-    print(request.user.pk)
+    
+    UserTweets = Tweet.objects.order_by('-pub_date').filter(tweet_creator=profile_user.pk)
 
 
     AllUsers = User.objects.all()
