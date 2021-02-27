@@ -4,6 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from Account.models import Follow
+from Account.models import Tweet
 from django.urls import reverse
 
 def register(request):
@@ -86,5 +87,11 @@ def profile(request, username):
         for followed in followed_by:
             if request.user == followed.user:
                 auth_follow = True
-    
-    return render(request,'Account/profile.html',{'profile_user':profile_user,'auth_follow':auth_follow, 'following_len':len(following),'followed_by_len':len(followed_by),'isNative':isNative})
+
+    UserTweets = Tweet.objects.order_by('-pub_date').filter(tweet_creator=request.user.pk)
+    print(request.user.pk)
+
+    context = {'profile_user':profile_user,'auth_follow':auth_follow, 'following_len':len(following),
+   'followed_by_len':len(followed_by), 'isNative':isNative, 'personalscroll':UserTweets}
+
+    return render(request,'Account/profile.html', context)
