@@ -2,7 +2,7 @@
 
 {% extends "Main_Page/base.html" %}
 
-
+<!-- Navbar -->
 {% block navbar %}
 <div class="topnav">
   <a href="#">Followers ###</a>
@@ -14,14 +14,19 @@
   {% else %}
   <a href="{% url 'Account:register' %}" style="float:right">Register</a>
   <a href="{% url 'Account:login' %}" style="float:right">Login</a>
+  <!--Commenting out the modal button for now -->
+  <!--<button style="float: right;">Login</button>--><!-- https://www.w3schools.com/howto/howto_css_modals.asp Code for making a modal popup window -->
 
   {% endif %}
 
 </div>
 {% endblock %}
 
-{% block Profile_Card %}
 
+<!-- Right Column -->
+<!-- Card that holds Profile information -->
+{% block Profile_Card %}
+  {% if validSession %}
   <a href="{% url 'Account:profile' user %}" style="text-decoration: none;
   outline: none;">
     <div class="card">
@@ -33,9 +38,10 @@
       <div style="clear: both;"></div>
     </div>
   </a>
-
+  {% endif %}
 {% endblock %}
 
+<!-- Card showing 'Who to Follow' -->
 {% block User_List %}
 
 <div class="card" style="padding-left: 0%; padding-right: 0%;">
@@ -63,25 +69,26 @@
 
 {% endblock %}
 
-
+<!-- Tweets that are being shown to screen -->
 {% block Live_Scroll %}
 
-<div class="post">
-  <h2>Tweet #1</h2>
-  <h5>Title description, Dec 7, 2017</h5>
-  <div class="fakeimg" style="height:60px;">Image</div>
-  <p>Some text..</p>
-  <p>Sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.</p>
-  <button class="like">Like</button>
-</div>
-<div class="post">
-  <h2>Tweet #2</h2>
-  <h5>Title description, Sep 2, 2017</h5>
-  <div class="fakeimg" style="height:60px;">Image</div>
-  <p>Some text..</p>
-  <p>Sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.</p>
-  <button class="like">Like</button>
-</div>
+  {% for post in explorescroll %}
+  {% if forloop.counter0 < 25 %}
+  {% load nbsp %}
+    <div class="post">
+      <div class="fakeimg" style="width: 10%; height: 100%; float: left;">Place Holder</div>
+      <div style="float: left; width: 90%; padding-left: 10px;">
+        <span style="font-size: 20px; font-weight: bold;">{{post.tweet_creator.first_name}} {{post.tweet_creator.last_name}}</span>
+        <span style="font-size: 20px; color: rgb(99, 99, 99);">@{{post.tweet_creator.username}}</span>
+        <span style="font-size: 20px; color: rgb(99, 99, 99);"> - {{post.pub_date}}</span>
+        <div style="word-wrap: break-word; padding-top: 5px; line-height: 130%;">{{ post.visible_info | linebreaksbr | nbsp }}</div>
+        <div class="fakeimg" style="height:60px;">Image</div>
+      </div>
+      <button class="like">Like</button>
+      <div style="clear: both;"></div>
+    </div>
+  {% endif %}
+  {% endfor %}
 
 {% endblock %}
 

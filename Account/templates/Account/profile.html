@@ -1,5 +1,9 @@
 {% extends "Account/base_profile.html" %}
 
+{% block title %}
+<title>{{user.first_name}} {{user.last_name}} (@{{user.username}})</title>
+{% endblock %}
+
 {% block profile_header %}
     <div class="header_pic">
         <div class="fakeimg" style="height:100%;width:100%;color:white;text-align: center;">Image.</div>
@@ -8,6 +12,11 @@
 
     </div> 
     <div class="header_name" style = "background-color: black; color: white;  text-align: center;">
+<!--
+      <div style="width: 70%; float: left;">
+        <h1>{{profile_user.first_name}} {{profile_user.last_name}} </h1>
+        <p>{{profile_user.username}}</p>
+-->
         <h1>{{profile_user.first_name}} {{profile_user.last_name}}</h1>
         <p>@{{profile_user.username}}
         <form method="post" action="{% url 'Account:profile' profile_user.username %}">
@@ -22,9 +31,9 @@
         </form>
     </div>
     <div class="header_bio" style = "background-color: black; color: white; text-align: center;"> 
-        <h1>Bio</h1>
-        <p>Birthdate</p>
-    </div>
+      <h1>Bio</h1>
+      <p>Birthdate</p>
+  </div>
     {% endblock %}
 
 {% block Personal_Scroll %}
@@ -74,21 +83,22 @@
 {% endblock %}
 
 {% block navbar %}
-<div class="topnav">
-  <a href="#">Home</a>
-  <a href="#">Followers {{followed_by_len}}</a>
-  <a href="#">Following {{following_len}}</a>
-  <a href="#">Likes</a>
-  <a href="#">Refresh</a>
-  <a href="#">Edit</a>
-  {% if validSession %}
-  <a href="{% url 'Account:logout' %}" style="float:right">Logout</a>
-  {% else %}
-  <a href="{% url 'Account:register' %}" style="float:right">Register</a>
-  <a href="{% url 'Account:login' %}" style="float:right">Login</a>
+
+      <div class="topnav">
+        <a href="{% url 'Main_Page:index' %}">Home</a>
+        <a href="#">Followers {{followed_by_len}}</a>
+        <a href="#">Following {{following_len}}</a>
+        <a href="#">Likes</a>
+        <a href="#">Refresh</a>
+        <a href="#">Edit</a>
+
+        {% if validSession %}
+        <a href="{% url 'Account:logout' %}" style="float:right">Logout</a>
+        {% else %}
+        <a href="{% url 'Account:register' %}" style="float:right">Register</a>
+        <a href="{% url 'Account:login' %}" style="float:right">Login</a>
 
   {% endif %}
-  <!--<a href="#" style="float:right">Join</a>
-  <a href="#" style="float:right">Login</a>-->
-</div>
+      </div>
+
 {% endblock %}

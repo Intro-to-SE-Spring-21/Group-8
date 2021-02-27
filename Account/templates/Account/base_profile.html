@@ -12,7 +12,9 @@
 <html lang="en">
 <head>
 
-    <title>{{user.first_name}} {{user.last_name}} @{{user.username}}</title>
+    {% block title %}
+    {% endblock %}
+
     <style>
         * {
           box-sizing: border-box;
@@ -91,7 +93,8 @@
         
         /* Right column */
         .rightcolumn {
-          float: left;
+          position: sticky;
+          float: right;
           width: 25%;
           background-color: black;
           padding-left: 20px;

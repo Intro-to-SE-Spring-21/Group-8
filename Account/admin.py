@@ -1,5 +1,7 @@
 from django.contrib import admin
-from Account.models import Follow
-# Register your models here.
 
+from .models import Follow
+from .models import Tweet
+
+admin.site.register(Tweet)
 admin.site.register(Follow)

@@ -55,12 +55,47 @@ body {
   border: none;
   font: inherit;
   outline: none;
+  cursor: pointer;
 }
 
 /* Change color on hover */
 .topnav a:hover, button:hover {
   background-color: rgb(29,161,242,0.15);
   color: rgb(29,161,242,1.00);
+}
+
+/* POPUP Information */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0,0,0,0.4);
+}
+
+.modal-content {
+  background-color: black;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid rgb(29,161,242,1.00);
+  width: 80%;
+}
+
+.close {
+  color: rgb(29,161,242,1.00);
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover {
+  color: #aaa;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 /* Create two unequal columns that floats next to each other */
@@ -73,7 +108,7 @@ body {
 
 /* Right column */
 .rightcolumn {
-  float: left;
+  float: right;
   width: 25%;
   background-color: black;
   padding-left: 20px;
@@ -168,7 +203,6 @@ body {
   outline: none;
   display: block;
   color: ghostwhite;
-
 }
 
 /* Add a post effect for post */
@@ -213,7 +247,7 @@ body {
   padding: 20px;
 }
 
-.tweet input[type=text] {
+.tweet textarea {
   width: 100%;
   height: 100%;
   background-color: black;
@@ -224,7 +258,7 @@ body {
   margin-bottom: 20px;
 }
 
-.tweet input[type=text]:focus {
+.tweet textarea:focus, .tweet textarea{
   color: ghostwhite;
 }
 
@@ -287,36 +321,44 @@ body {
 </div>
 
 {% block navbar %}
-<div class="topnav">
-</div>
+<!-- Navbar 
+This holds the links for the home webpage 
+Navbar -->
 {% endblock %}
 
 <div class="row">
   <div class="leftcolumn">
-    <div class="tweet">
-      <input type="text" placeholder="What's happening?">
+    <form class="tweet" name="generate_tweet" method="POST" action="{% url 'Main_Page:index' %}">
+      {% csrf_token %}
+      {{ tweet }}
       <div style="border-top-color:rgb(58, 63, 66);
       border-top-style: solid; 
       border-top-width: 1px;
       padding-top: 15px;
       clear: both;">
-        <button class="tweet_button">Tweet</button>
+        <button class="tweet_button" name="submit_tweet" type="submit">Tweet</button>
       </div>
       <div style="clear: both;"></div>
-    </div>
+    </form>
     {% block Live_Scroll %}
+    <!-- Live Scroll
+    This holds the information for the Tweets that populate the page
+    Live Scroll -->
     {% endblock %}
   </div>
-  <div class="rightcolumn">
+  <div class="rightcolumn" style="position: -webkit-sticky; position: sticky; top:0">
     <div class="search" style="border-radius: 35px;">
       <input type="text" placeholder="Search Twitter">
     </div>
     {% block Profile_Card %}
-      
-      <div class="fakeimg" style="height:75px;width:100px">Profile pic.</div>
-      <p>Please log in before you can view your profile information</p>
+    <!-- Profile_Card
+    This holds the personal information of the user that is logged in
+    Profile_Card -->  
     {% endblock %}
     {% block User_List %}
+    <!-- User_List
+    The card holding the users that are being displayed to follow
+    User_List -->
     {% endblock %}
     <div class="card">
       <h3>Follow Me</h3>
