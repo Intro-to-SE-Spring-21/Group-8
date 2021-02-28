@@ -1,4 +1,19 @@
 # Group-8
+
+## Useful Sections:
+
+[Team Members](#Leader)
+
+[Project Goals](#Project-Goal)
+
+[Objectives](#Objectives)
+
+[Languages Used](#Languages-and-Techniques)
+
+[Travis CI](#Testing-Webpage)
+
+[Installing and running the website](#Running-the-website-for-the-first-time)
+
 ## Leader
 **Lucian Murdock**
 
@@ -71,9 +86,18 @@ https://travis-ci.com/github/Intro-to-SE-Spring-21/Group-8
 
 ## Running the website for the first time
 
-1. Ensure that Django is installed  with version >= 3.0
-2. Create and populate the database</br>
-  a. Run the command "python manage.py makemigrations Account"</br>
-  b. Then migrate using: "python manage.py migrate"</br>
-  c. Finally, populate the database using: "python manage.py populateDatabase"</br>
-  d. Start the server: "python manage.py runserver"</br>
+Use the main branch to test the latest implementation of the website.
+The develop branch is for experimental new features for the website and is subject to breaking.
+
+1. Install python with a version >= 3.6
+2. Install Django using pip `pip3 install django`
+3. Install git
+4. Clone the with git using `git clone https://github.com/Intro-to-SE-Spring-21/Group-8.git`
+5. Running the Django website:
+  * On the main branch:
+    1. Start the server using: `python manage.py runserver`
+  * On the develop branch:
+    1. Run the command: `python manage.py makemigrations Account`
+    2. Then migrate using: `python manage.py migrate`
+    3. Finally, populate the database using: `python manage.py populateDatabase`
+    4. Start the server: `python manage.py runserver`
