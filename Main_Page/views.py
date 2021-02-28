@@ -28,20 +28,36 @@ def index(request):
     ## Explore Page Scroll
     AllTweets = Tweet.objects.order_by('-pub_date') 
 
-    # List of all users (Helpful for many functions)
     AllUsers = User.objects.all()
-
-    ## Random 3 Users selected for 'Who to Follow'
+    #If user currently authenticated...remove from QuerySet since we do not want their own profile displayed in 'WhoToFollow'
+    if request.user.is_authenticated:
+        AllUsers.exclude(username=request.user.username)
+    
     rand_three = []
-    for i in range(3):
+    #####
+    # We are temporarily showing accounts a user already follows or does not follow...until additional website functionaility is added
+    #####
+    #Keep looping until we either gather 3 new users to follow or run out of options with who to follow (Since the user follows everyone)
+    AllUsers = AllUsers.exclude(username=request.user.username)
+    while len(rand_three) < 3 and len(AllUsers) > 0:
+        #Grab random user
         temp = random.choice(AllUsers)
-        while temp in rand_three or temp.username == request.user.username:
-            temp = random.choice(AllUsers)
-        rand_three.append(temp)
+        tmp_dict = {temp:False}
+        #If we have an authenticated user currently logged in...check to see if we already follow this temp user
+        if request.user.is_authenticated and Follow.objects.filter(user=request.user, following=temp):
+            #Temporarily allow users we already follow.
+            tmp_dict[temp] = True
+            rand_three.append(tmp_dict)
+            #Remove temp usery from Queryset if we already do
+            AllUsers = AllUsers.exclude(username=temp.username)
+            continue
+        #If temp is a correct user that we can follow..remove it from QuerySet and add it to the rand_three list
+        AllUsers = AllUsers.exclude(username=temp.username)
+        rand_three.append(tmp_dict)
 
     ### Variable declared to pass all information to webpage
-    context = {'validSession':False, 'username':request.user.username, 'userdic':AllUsers, 
-    'userlist':rand_three, 'explorescroll':AllTweets, 'tweet':tweet}
+    context = {'validSession':False, 'username':request.user.username, 'whoToFollow':rand_three,
+     'explorescroll':AllTweets, 'tweet':tweet}
 
     if request.user.is_authenticated:
         profile_user = get_object_or_404(User,username=request.user.username)

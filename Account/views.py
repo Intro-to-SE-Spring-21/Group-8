@@ -45,12 +45,12 @@ def profile(request, username):
             #action once they are logged in
             return HttpResponseRedirect(reverse('Account:login'))
 
-        if request.POST.get('follow' + profile_user.username):
+        if request.POST.get('follow'):
 
             #Create query
             #user = current session user
             #following: is the user profile
-            userToFollow = User.objects.get(username=request.POST['follow' + profile_user.username])
+            userToFollow = User.objects.get(username=request.POST['follow'])
             
             
             #make sure relationship does not already exist
@@ -62,11 +62,11 @@ def profile(request, username):
                 query.save()
                 #save the query
 
-            return HttpResponseRedirect(reverse('Account:profile', args=[request.POST['follow' + profile_user.username]]))
+            return HttpResponseRedirect(reverse('Account:profile', args=[request.POST['follow']]))
 
-        if request.POST.get('unfollow' + profile_user.username):
+        if request.POST.get('unfollow'):
             
-            userToUnfollow = User.objects.get(username=request.POST['unfollow' + profile_user.username])
+            userToUnfollow = User.objects.get(username=request.POST['unfollow'])
 
             #Relationship should already exist.
             unfollow = Follow.objects.filter(user=request.user,following=userToUnfollow)
@@ -74,13 +74,13 @@ def profile(request, username):
        
             #reload the page and make sure an follow button shows back up
 
-            return HttpResponseRedirect(reverse('Account:profile', args=[request.POST['unfollow' + profile_user.username]]))
+            return HttpResponseRedirect(reverse('Account:profile', args=[request.POST['unfollow']]))
 
     
     #if current_user is in followed_by...show unfollow
-
     #Check to see if we are on the users native profile if they are logged in
     isNative = False
+    #Stores whether or not the authenticated user is following the current profile user
     auth_follow = False
     if request.user.is_authenticated:
         if request.user.username == profile_user.username:
@@ -91,36 +91,40 @@ def profile(request, username):
             if request.user == followed.user:
                 auth_follow = True
 
-    
     UserTweets = Tweet.objects.order_by('-pub_date').filter(tweet_creator=profile_user.pk)
 
-
     AllUsers = User.objects.all()
-    rand_three = []
-    for i in range (3):
-        temp = random.choice(AllUsers)
-        while temp in rand_three or temp.username == request.user.username:
-            temp = random.choice(AllUsers)
-        rand_three.append(temp)
-
-
-    list_follow = [False, False, False]
+    #If user currently authenticated...remove from QuerySet since we do not want their own profile displayed in 'WhoToFollow'
     if request.user.is_authenticated:
+        AllUsers.exclude(username=request.user.username)
+    
+    rand_three = []
+    #####
+    # We are temporarily showing accounts a user already follows or does not follow...until additional website functionaility is added
+    #####
+    #Keep looping until we either gather 3 new users to follow or run out of options with who to follow (Since the user follows everyone)
+    AllUsers = AllUsers.exclude(username=request.user.username)
+    AllUsers = AllUsers.exclude(username=profile_user.username)
+    while len(rand_three) < 3 and len(AllUsers) > 0:
+        #Grab random user
+        temp = random.choice(AllUsers)
+        tmp_dict = {temp:False}
+        #If we have an authenticated user currently logged in...check to see if we already follow this temp user
+        if request.user.is_authenticated and Follow.objects.filter(user=request.user, following=temp):
+            #Temporarily allow users we already follow.
+            tmp_dict[temp] = True
+            rand_three.append(tmp_dict)
+            #Remove temp usery from Queryset if we already do
+            AllUsers = AllUsers.exclude(username=temp.username)
+            continue
+        #If temp is a correct user that we can follow..remove it from QuerySet and add it to the rand_three list
+        AllUsers = AllUsers.exclude(username=temp.username)
+        rand_three.append(tmp_dict)
 
 
-        #Check to see if the authenticated user is already following the user
-        for i, listed_user in enumerate(rand_three, start=0):
-            temp_followed = Follow.objects.filter(following=listed_user)
-            for j in temp_followed:
-                if request.user == j.user:
-                    list_follow[i] = True
-
-    userlist = zip(rand_three, list_follow)
-
-
-    context = {'validSession':False, 'username':request.user.username, 'userdic':AllUsers, 'userlist':userlist, 
+    context = {'validSession':False, 'username':request.user.username, 'whoToFollow':rand_three, 
     'profile_user':profile_user,'auth_follow':auth_follow, 'following_len':len(following),'followed_by_len':len(followed_by),
-    'isNative':isNative, 'list_follow':list_follow, 'personalscroll':UserTweets}
+    'isNative':isNative, 'personalscroll':UserTweets}
     
     if(request.user.is_authenticated):
         context['validSession'] = True
