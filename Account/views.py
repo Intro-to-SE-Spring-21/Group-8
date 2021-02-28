@@ -5,6 +5,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 import random
 from Account.models import Follow
+from Account.models import Tweet
 from django.urls import reverse
 
 
@@ -92,6 +93,9 @@ def profile(request, username):
             if request.user == followed.user:
                 auth_follow = True
 
+    
+    UserTweets = Tweet.objects.order_by('-pub_date').filter(tweet_creator=profile_user.pk)
+
 
     AllUsers = User.objects.all()
     rand_three = []
@@ -117,7 +121,7 @@ def profile(request, username):
 
     context = {'validSession':False, 'username':request.user.username, 'userdic':AllUsers, 'userlist':rand_three, 
     'profile_user':profile_user,'auth_follow':auth_follow, 'following_len':len(following),'followed_by_len':len(followed_by),
-    'isNative':isNative, 'list_follow':list_follow}
+    'isNative':isNative, 'list_follow':list_follow, 'personalscroll':UserTweets}
     
     if(request.user.is_authenticated):
         context['validSession'] = True
@@ -131,3 +135,4 @@ def profile(request, username):
 #        return l[i]
 #    except:
 #        return None
+
