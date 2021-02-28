@@ -99,18 +99,25 @@ def profile(request, username):
         AllUsers.exclude(username=request.user.username)
     
     rand_three = []
+    #####
+    # We are temporarily showing accounts a user already follows or does not follow...until additional website functionaility is added
+    #####
     #Keep looping until we either gather 3 new users to follow or run out of options with who to follow (Since the user follows everyone)
     while len(rand_three) < 3 and len(AllUsers) > 0:
         #Grab random user
         temp = random.choice(AllUsers)
+        tmp_dict = {temp:False}
         #If we have an authenticated user currently logged in...check to see if we already follow this temp user
         if request.user.is_authenticated and Follow.objects.filter(user=request.user, following=temp):
+            #Temporarily allow users we already follow.
+            tmp_dict[temp] = True
+            rand_three.append(tmp_dict)
             #Remove temp usery from Queryset if we already do
             AllUsers = AllUsers.exclude(username=temp.username)
             continue
         #If temp is a correct user that we can follow..remove it from QuerySet and add it to the rand_three list
         AllUsers = AllUsers.exclude(username=temp.username)
-        rand_three.append(temp)
+        rand_three.append(tmp_dict)
 
 
     context = {'validSession':False, 'username':request.user.username, 'whoToFollow':rand_three, 
