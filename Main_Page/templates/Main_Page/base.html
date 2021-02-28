@@ -336,7 +336,9 @@ Navbar -->
       border-top-width: 1px;
       padding-top: 15px;
       clear: both;">
-        <button class="tweet_button" name="submit_tweet" type="submit">Tweet</button>
+        {% block TweetButton %}
+        <button class="tweet_button" name="submit_tweet" type="submit" disabled>Tweet</button>
+        {% endblock %}
       </div>
       <div style="clear: both;"></div>
     </form>
@@ -361,8 +363,8 @@ Navbar -->
     User_List -->
     {% endblock %}
     <div class="card">
-      <h3>Follow Me</h3>
-      <p>Some text..</p>
+      <h3>Popular Hashtags</h3>
+      <p>#Confusion</p>
     </div>
   </div>
 </div>

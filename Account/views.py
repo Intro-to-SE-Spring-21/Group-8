@@ -5,6 +5,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 import random
 from Account.models import Follow
+from Account.models import Tweet
 from django.urls import reverse
 
 
@@ -26,7 +27,6 @@ def register(request):
 
     context = {'form':form}
     return render(request,'registration/register.html',context)  
-
 
 def profile(request, username):
 
@@ -73,9 +73,8 @@ def profile(request, username):
             unfollow.delete()
        
             #reload the page and make sure an follow button shows back up
+
             return HttpResponseRedirect(reverse('Account:profile', args=[request.POST['unfollow' + profile_user.username]]))
-        
-            
 
     
     #if current_user is in followed_by...show unfollow
@@ -86,11 +85,14 @@ def profile(request, username):
     if request.user.is_authenticated:
         if request.user.username == profile_user.username:
             isNative = True
-
+            
         #Check to see if the authenticated user is already following the user
         for followed in followed_by:
             if request.user == followed.user:
                 auth_follow = True
+
+    
+    UserTweets = Tweet.objects.order_by('-pub_date').filter(tweet_creator=profile_user.pk)
 
 
     AllUsers = User.objects.all()
@@ -118,7 +120,7 @@ def profile(request, username):
 
     context = {'validSession':False, 'username':request.user.username, 'userdic':AllUsers, 'userlist':userlist, 
     'profile_user':profile_user,'auth_follow':auth_follow, 'following_len':len(following),'followed_by_len':len(followed_by),
-    'isNative':isNative}
+    'isNative':isNative, 'list_follow':list_follow, 'personalscroll':UserTweets}
     
     if(request.user.is_authenticated):
         context['validSession'] = True
@@ -132,3 +134,4 @@ def profile(request, username):
 #        return l[i]
 #    except:
 #        return None
+
