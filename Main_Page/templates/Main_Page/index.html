@@ -55,30 +55,28 @@
 
 <!-- Card showing 'Who to Follow' -->
 {% block User_List %}
-
 <div class="card" style="padding-left: 0%; padding-right: 0%;">
   <div class="header" style="text-align: left; padding-left: 20px;"><h3>Who to Follow</h3></div>
-  
-  {% for user in userlist %}
-    {% if forloop.counter0 < 3 %}
+  {% for user in whoToFollow %}
     <div class="foreignaccount">
       <a href="/profile/{{user.username}}/" style="width: 70%; float: left;">
         <h2>{{user.first_name}} {{user.last_name}}</h2>
         <h3 style="color: rgb(99, 99, 99);">@{{user.username}}</h3>
       </a>
-      <div style="width: 30%; float: left;">
-        <button class="follow_button">Follow</button>
+      <div style="width: 30%; float: right;"> 
+        <form method="post" action="{% url 'Account:profile' user.username %}">
+          {% csrf_token %}
+            <button name="follow" type="submit" style="float:right" value={{user.username}} class="follow_button">Follow</button>
+        </form>
       </div>
       <div style="clear: both;"></div>
     </div>
-    {% endif %}
+
   {% endfor %}
-  
+
   <div class="link" style="padding-left: 20px;"><p>Show More</p></div>
-
-
+  
 </div>
-
 {% endblock %}
 
 <!-- Tweets that are being shown to screen -->
