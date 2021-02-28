@@ -5,8 +5,8 @@
 <!-- Navbar -->
 {% block navbar %}
 <div class="topnav">
-  <a href="#">Followers ###</a>
-  <a href="#">Following ###</a>
+  <a href="#">Followers {{followed_by_len}}</a>
+  <a href="#">Following {{following_len}}</a>
   <a href=".">Refresh</a>  
 
   {% if validSession %}

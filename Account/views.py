@@ -28,7 +28,6 @@ def register(request):
     context = {'form':form}
     return render(request,'registration/register.html',context)  
 
-
 def profile(request, username):
 
     profile_user = get_object_or_404(User,username=username)
@@ -74,9 +73,8 @@ def profile(request, username):
             unfollow.delete()
        
             #reload the page and make sure an follow button shows back up
+
             return HttpResponseRedirect(reverse('Account:profile', args=[request.POST['unfollow' + profile_user.username]]))
-        
-            
 
     
     #if current_user is in followed_by...show unfollow
@@ -87,7 +85,7 @@ def profile(request, username):
     if request.user.is_authenticated:
         if request.user.username == profile_user.username:
             isNative = True
-
+            
         #Check to see if the authenticated user is already following the user
         for followed in followed_by:
             if request.user == followed.user:
