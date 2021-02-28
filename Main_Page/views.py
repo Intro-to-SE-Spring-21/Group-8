@@ -63,9 +63,9 @@ def index(request):
     #{'profile_user':profile_user, 'following_len':len(following), 'followed_by_len':len(followed_by)})
     #, {'following_len':len(following),'followed_by_len':len(followed_by)})
 
-def main(request, username):
+def profile(request, username):
 
-     if request.method == "POST":
+    if request.method == "POST":
         
         if not request.user.is_authenticated:
             #If the user tries to POST anything and they are not logged in, redirect them to the login page
@@ -102,26 +102,26 @@ def main(request, username):
        
             #reload the page and make sure an follow button shows back up
             return HttpResponseRedirect(reverse('Main_Page:index', args=[request.POST['unfollowProfileSubmit']]))
-    
-        profile_user = get_object_or_404(User,username=username)
-        #How many users is the profile user following
-        following = Follow.objects.filter(user = profile_user)
-        #how many people are following the profile user
-        followed_by = Follow.objects.filter(following=profile_user)
 
-        #if current_user is in followed_by...show unfollow
+    profile_user = get_object_or_404(User,username=username)
+    #How many users is the profile user following
+    following = Follow.objects.filter(user = profile_user)
+    #how many people are following the profile user
+    followed_by = Follow.objects.filter(following=profile_user)
 
-        #Check to see if we are on the users native profile if they are logged in
-        isNative = False
-        auth_follow = False
-        if request.user.is_authenticated:
-            if request.user.username == profile_user.username:
-                isNative = True
+    #if current_user is in followed_by...show unfollow
 
-                #Check to see if the authenticated user is already following the user
-                for followed in followed_by:
-                    if request.user == followed.user:
-                        auth_follow = True
-        return render(request,'Main_Page/index.html',{'profile_user':profile_user,'auth_follow':auth_follow, 'following_len':len(following),'followed_by_len':len(followed_by),'isNative':isNative})
+    #Check to see if we are on the users native profile if they are logged in
+    isNative = False
+    auth_follow = False
+    if request.user.is_authenticated:
+        if request.user.username == profile_user.username:
+            isNative = True
+
+            #Check to see if the authenticated user is already following the user
+            for followed in followed_by:
+                if request.user == followed.user:
+                    auth_follow = True
+    return render(request,'Main_Page:index.html',{'profile_user':profile_user,'auth_follow':auth_follow, 'following_len':len(following),'followed_by_len':len(followed_by),'isNative':isNative})
 
 
