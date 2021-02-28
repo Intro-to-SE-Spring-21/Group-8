@@ -38,6 +38,7 @@ def index(request):
     # We are temporarily showing accounts a user already follows or does not follow...until additional website functionaility is added
     #####
     #Keep looping until we either gather 3 new users to follow or run out of options with who to follow (Since the user follows everyone)
+    AllUsers = AllUsers.exclude(username=request.user.username)
     while len(rand_three) < 3 and len(AllUsers) > 0:
         #Grab random user
         temp = random.choice(AllUsers)
