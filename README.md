@@ -65,6 +65,10 @@ Main Languages used:
 Our backend database will also be powered through sqlite3.
 
 
+## Testing Webpage
+Follow this link to view TravisCI to see if the webpage is verified and which version
+https://travis-ci.com/github/Intro-to-SE-Spring-21/Group-8
+
 ## Running the website for the first time
 
 1. Ensure that Django is installed  with version >= 3.0
