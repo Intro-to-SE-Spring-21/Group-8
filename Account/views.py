@@ -35,8 +35,8 @@ def profile(request, username):
     following = Follow.objects.filter(user = profile_user)
     #how many people are following the profile user
     followed_by = Follow.objects.filter(following=profile_user)
-
-
+    
+    
     if request.method == "POST":
         
         if not request.user.is_authenticated:
@@ -104,20 +104,21 @@ def profile(request, username):
         rand_three.append(temp)
 
 
-    list_follow = [False, True, True]
+    list_follow = [False, False, False]
     if request.user.is_authenticated:
 
+
         #Check to see if the authenticated user is already following the user
-        for followed in followed_by:
-            if request.user == followed.user and followed.user == rand_three[0]:
-                list_follow[0] = True
-            if request.user == followed.user and followed.user == rand_three[1]:
-                list_follow[1] = True
-            if request.user == followed.user and followed.user == rand_three[2]:
-                list_follow[2] = True
+        for i, listed_user in enumerate(rand_three, start=0):
+            temp_followed = Follow.objects.filter(following=listed_user)
+            for j in temp_followed:
+                if request.user == j.user:
+                    list_follow[i] = True
+
+    userlist = zip(rand_three, list_follow)
 
 
-    context = {'validSession':False, 'username':request.user.username, 'userdic':AllUsers, 'userlist':rand_three, 
+    context = {'validSession':False, 'username':request.user.username, 'userdic':AllUsers, 'userlist':userlist, 
     'profile_user':profile_user,'auth_follow':auth_follow, 'following_len':len(following),'followed_by_len':len(followed_by),
     'isNative':isNative, 'list_follow':list_follow, 'personalscroll':UserTweets}
     

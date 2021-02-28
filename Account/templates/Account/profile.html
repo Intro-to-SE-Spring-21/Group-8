@@ -66,7 +66,7 @@
 {% block Profile_User_List %}
 <div class="card" style="padding-left: 0%; padding-right: 0%;">
   <div class="header" style="text-align: left; padding-left: 20px;"><h3>Who to Follow</h3></div>
-  {% for user in userlist %}
+  {% for user, index in userlist %}
     {% if forloop.counter0 < 3 %}
     <div class="foreignaccount">
       <a href="/profile/{{user.username}}/" style="width: 70%; float: left;">
@@ -76,15 +76,11 @@
       <div style="width: 30%; float: right;"> 
         <form method="post" action="{% url 'Account:profile' user.username %}">
           {% csrf_token %}
-          {% if not isNative %}
-          {% with j=forloop.counter0 %}
-          {% endwith %}
-            {% if not list_follow.j %}
+            {% if not index %}
             <button name="follow{{user.username}}" type="submit" style="float:right" value={{user.username}} class="follow_button">Follow{{ list_follow.j }}</button>
             {% else %}
             <button name="unfollow{{user.username}}" type="submit" style="float:right" value={{user.username}} class="follow_button">Unfollow</button>
             {% endif %}        
-          {% endif %}
         </form>
       </div>
       <div style="clear: both;"></div>
@@ -104,7 +100,7 @@
         <a href="#">Followers {{followed_by_len}}</a>
         <a href="#">Following {{following_len}}</a>
         <a href="#">Likes</a>
-        <a href="#">Refresh</a>
+        <a href=".">Refresh</a>
         <a href="#">Edit</a>
 
         {% if validSession %}
