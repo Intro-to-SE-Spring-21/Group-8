@@ -2,7 +2,7 @@
 
 ## Useful Sections:
 
-[Custom foo description](## Leader)
+[Custom foo description](#Leader)
 
 ## Leader
 **Lucian Murdock**
