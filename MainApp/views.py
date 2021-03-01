@@ -62,7 +62,7 @@ class GenericPage(TemplateView):
         pass
 
 
-    def getFollowRecommendations(self,request):
+    def getFollowRecommendations(self,profile_user,request):
         """
         This function currently grabs three follower recommendations from the database.
         Normally this function would return three NEW people to follow, but currently
@@ -84,6 +84,7 @@ class GenericPage(TemplateView):
         # We are temporarily showing accounts a user already follows or does not follow...until additional website functionaility is added
         #####
         #Keep looping until we either gather 3 new users to follow or run out of options with who to follow (Since the user follows everyone)
+        AllUsers = AllUsers.exclude(username=profile_user.username)
         AllUsers = AllUsers.exclude(username=request.user.username)
         while len(rand_three) < 3 and len(AllUsers) > 0:
             #Grab random user
@@ -195,9 +196,6 @@ class MainPage(GenericPage):
         
         tweetFeed = self.getFeed()
 
-        rand_three = self.getFollowRecommendations(request)
-
-
         ### Variable declared to pass all information to webpage
         context = {'validSession':False, 'username':request.user.username, 'whoToFollow':rand_three,
         'tweetFeed':tweetFeed, 'tweet':tweet_form}
@@ -208,7 +206,7 @@ class MainPage(GenericPage):
             self.getFollowCounts(profile_user,context)
             context['validSession'] = True
         
-            
+        rand_three = self.getFollowRecommendations(profile_user, request)    
 
         ### Render the webpage
         return render(request,'MainApp/homepage.html', context)
@@ -273,7 +271,7 @@ class ProfilePage(GenericPage):
 
         UserTweets = self.getUserTweets(profile_user)
 
-        rand_three = self.getFollowRecommendations(request)
+        rand_three = self.getFollowRecommendations(profile_user, request)
         
         self.getFollowCounts(profile_user,context)
 
