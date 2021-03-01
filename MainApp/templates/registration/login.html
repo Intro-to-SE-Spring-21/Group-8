@@ -26,7 +26,7 @@
 <p>Invalid Page Access...please login first</p>
 {% endif %}
 
-<form method="post" action="{% url 'Account:login' %}">
+<form method="post" action="{% url 'MainApp:login' %}">
 
 {% csrf_token %}
 

@@ -328,20 +328,19 @@ Navbar -->
 
 <div class="row">
   <div class="leftcolumn">
-    <form class="tweet" name="generate_tweet" method="POST" action="{% url 'Main_Page:index' %}">
-      {% csrf_token %}
-      {{ tweet }}
+    {% block TweetForm %}
+    <form class="tweet" name="generate_tweet" method="POST" action="">
       <div style="border-top-color:rgb(58, 63, 66);
       border-top-style: solid; 
       border-top-width: 1px;
       padding-top: 15px;
       clear: both;">
-        {% block TweetButton %}
         <button class="tweet_button" name="submit_tweet" type="submit" disabled>Tweet</button>
-        {% endblock %}
       </div>
       <div style="clear: both;"></div>
     </form>
+    {% endblock %}
+
     {% block Live_Scroll %}
     <!-- Live Scroll
     This holds the information for the Tweets that populate the page
