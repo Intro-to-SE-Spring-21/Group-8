@@ -1,3 +1,4 @@
+https://travis-ci.com/Intro-to-SE-Spring-21/Group-8.svg?branch=main
 # Group-8
 
 ## Useful Sections:
@@ -53,7 +54,7 @@ Two additional features will be developed later on.
 
 By the end of this project we will developed a functional web app using modern agile principles.
 We hope to learn more about software development practices in a team based agile environment. 
-
+![Build check](https://travis-ci.com/Intro-to-SE-Spring-21/Group-8.svg?branch=main)
 ## Objectives 
 
 The objective of this project is to learn the development methodoligiies of the agile system.
