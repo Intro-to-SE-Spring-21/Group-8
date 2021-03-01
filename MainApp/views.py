@@ -37,18 +37,43 @@ class GenericPage(TemplateView):
 
 
     def createTweet(self,request):
-        
+        """
+        This function creates and saves a Tweet object into the database.
+        Inputs:
+        - request: Django request output
+        Returns:
+        - None
+        """
         tweet = Generate_Tweet(request.POST)
         if tweet.is_valid():
             new_tweet = Tweet.objects.create(tweet_creator=request.user, tweet_text=tweet.cleaned_data['tweet_text'], pub_date=datetime.datetime.now())
+            new_tweet.save()
 
 
     def deleteTweet(self,request):
+        """
+        #TODO
+        This function deletes a tweet object from the database
+        Inputs:
+        - 
+        Returns:
+        - 
+        """
         pass
 
 
     def getFollowRecommendations(self,request):
-
+        """
+        This function currently grabs three follower recommendations from the database.
+        Normally this function would return three NEW people to follow, but currently
+        this function just returns three new or currently followed people while we wait
+        for additional website functionality to be implemented
+        #TODO: Reset to regular functionality once follower tabs built
+        Inputs:
+        - request: Django request output
+        Returns:
+        - rand_three: dictionary containing three user objects as keys and whether or not the authenticated user folllows them as values
+        """
         AllUsers = User.objects.all()
         #If user currently authenticated...remove from QuerySet since we do not want their own profile displayed in 'WhoToFollow'
         if request.user.is_authenticated:
@@ -89,23 +114,82 @@ class GenericPage(TemplateView):
         context['followed_by_len'] = len(followed_by)
 
 
+    def addFollower(self,request):
+        """
+        This function adds a Follower for the given authenticated user
+        Inputs:
+        - request: Django request output
+        Returns:
+        - HttpResponseRedirect with the profile to be rendered
+        """
+        #Create query
+        #user = current session user
+        #following: is the user profile
+        userToFollow = User.objects.get(username=request.POST['follow'])
+        
+        
+        #make sure relationship does not already exist
+        old_follow = Follow.objects.filter(user=request.user,following=userToFollow)
+        #Check to make sure they are not equal
+        if(userToFollow.username != request.user.username and not old_follow):
+            print("Successfully meet criteria to follow")
+            query = Follow(user=request.user,following=userToFollow)
+            query.save()
+            #save the query
+
+        return HttpResponseRedirect(reverse('MainApp:profile', args=[request.POST['follow']]))       
+
+
+    def removeFollower(self,request):
+        """
+        This function removes a Follower for the given authenticated user
+        Inputs:
+        - request: Django request output
+        Returns:
+        - HttpResponseRedirect with the profile to be rendered
+        """       
+        userToUnfollow = User.objects.get(username=request.POST['unfollow'])
+        #Relationship should already exist.
+        unfollow = Follow.objects.filter(user=request.user,following=userToUnfollow)
+        unfollow.delete()
+
+        #reload the page and make sure an follow button shows back up
+        return HttpResponseRedirect(reverse('MainApp:profile', args=[request.POST['unfollow']]))
+
     def getFeed(self):
-        #Will be more advanced in future updates 
+        """
+        This function returns a feed of tweets to display to a page.
+        Currently just gets all the tweets and sorts them by publication date.
+        Will add more complex capabilities in future.
+        Inputs:
+        - None
+        Returns:
+        - QuerySet of tweets
+        """
 
         return Tweet.objects.order_by('-pub_date') 
 
+
     def addLike(self):
+        #TODO
         pass
 
     
     def removeLike(self):
+        #TODO
         pass
 
 
 class MainPage(GenericPage):
 
     def get(self,request):
-
+        """
+        This function handles a get request for the homepage
+        Inputs:
+        - request: Django request output
+        Returns:
+        - render() function call with the page to be rendered
+        """
 
         tweet_form = Generate_Tweet()
         
@@ -131,22 +215,41 @@ class MainPage(GenericPage):
     
 
     def post(self,request):
-
+        """
+        This function handles a post request for the homepage
+        Inputs:
+        - request: Django request output
+        Returns:
+        - self.get() which renders the rest of the page
+        """
         #Creating a Tweet through the webpage
         if request.method == "POST":
             self.createTweet(request)
 
         return self.get(request)
 
+
 class ProfilePage(GenericPage):
 
     def getUserTweets(self,profile_user):
-        
+        """ 
+        This function grabs all the tweets from a specific user
+        Inputs:
+        - profile_user: The desired User object
+        Returns:
+        - QuerySet with all the User's tweets
+        """
         return Tweet.objects.order_by('-pub_date').filter(tweet_creator=profile_user.pk)
         
 
     def get(self,request,username):
-
+        """
+        This function handles a get request for the profile page
+        Inputs:
+        - request: Django request output
+        Returns:
+        - render() function call with the page to be rendered
+        """
         context = {}
         profile_user = get_object_or_404(User,username=username)
         #How many users is the profile user following
@@ -183,8 +286,16 @@ class ProfilePage(GenericPage):
         
         return render(request,'MainApp/profile.html', context)
 
-    def post(self,request,username):
 
+    def post(self,request,username):
+        """
+        This function handles a post request for the homepage
+        Inputs:
+        - request: Django request output
+        - username: the 'username' found in profile/<username/ in the url
+        Returns:
+        - self.get() which renders the rest of the page
+        """
         
         if not request.user.is_authenticated:
             #If the user tries to POST anything and they are not logged in, redirect them to the login page
@@ -194,33 +305,10 @@ class ProfilePage(GenericPage):
 
         if request.POST.get('follow'):
 
-            #Create query
-            #user = current session user
-            #following: is the user profile
-            userToFollow = User.objects.get(username=request.POST['follow'])
-            
-            
-            #make sure relationship does not already exist
-            old_follow = Follow.objects.filter(user=request.user,following=userToFollow)
-            #Check to make sure they are not equal
-            if(userToFollow.username != request.user.username and not old_follow):
-                print("Successfully meet criteria to follow")
-                query = Follow(user=request.user,following=userToFollow)
-                query.save()
-                #save the query
-
-            return HttpResponseRedirect(reverse('MainApp:profile', args=[request.POST['follow']]))
+            return self.addFollower(request)
 
         if request.POST.get('unfollow'):
             
-            userToUnfollow = User.objects.get(username=request.POST['unfollow'])
-
-            #Relationship should already exist.
-            unfollow = Follow.objects.filter(user=request.user,following=userToUnfollow)
-            unfollow.delete()
-       
-            #reload the page and make sure an follow button shows back up
-
-            return HttpResponseRedirect(reverse('MainApp:profile', args=[request.POST['unfollow']]))
+            return self.removeFollower(request)
 
         return self.get(request)

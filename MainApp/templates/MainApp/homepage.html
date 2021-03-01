@@ -30,7 +30,7 @@
 <!-- Tweet button to only work if user is logged in -->
 
 {% block TweetForm %}
-<form class="tweet" name="generate_tweet" method="POST" action="{% url 'MainApp:MainPage' %}">
+<form class="tweet" name="generate_tweet" method="POST" action="{% url 'MainApp:homepage' %}">
   {% csrf_token %}
   {{ tweet }}
   <div style="border-top-color:rgb(58, 63, 66);
