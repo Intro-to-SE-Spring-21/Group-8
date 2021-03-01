@@ -1,4 +1,4 @@
-https://travis-ci.com/Intro-to-SE-Spring-21/Group-8.svg?branch=main
+[![Build Status](https://travis-ci.com/Intro-to-SE-Spring-21/Group-8.svg?branch=main)](https://travis-ci.com/Intro-to-SE-Spring-21/Group-8)
 # Group-8
 
 ## Useful Sections:
