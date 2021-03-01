@@ -1,4 +1,19 @@
 # Group-8
+
+## Useful Sections:
+
+[Team Members](#Leader)
+
+[Project Goals](#Project-Goal)
+
+[Objectives](#Objectives)
+
+[Languages Used](#Languages-and-Techniques)
+
+[Travis CI](#Testing-Webpage)
+
+[Installing and running the website](#Running-the-website-for-the-first-time)
+
 ## Leader
 **Lucian Murdock**
 
@@ -62,5 +77,27 @@ Main Languages used:
     * HTML
     * CSS
 
-Our backend database will also be powered through MySQL.
+Our backend database will also be powered through sqlite3.
 
+
+## Testing Webpage
+Follow this link to view TravisCI to see if the webpage is verified and which version
+https://travis-ci.com/github/Intro-to-SE-Spring-21/Group-8
+
+## Running the website for the first time
+
+Use the main branch to test the latest implementation of the website.
+The develop branch is for experimental new features for the website and is subject to breaking.
+
+1. Install python with a version >= 3.6
+2. Install Django using pip `pip3 install django`
+3. Install git
+4. Clone the with git using `git clone https://github.com/Intro-to-SE-Spring-21/Group-8.git`
+5. Running the Django website:
+  * On the main branch:
+    1. Start the server using: `python manage.py runserver`
+  * On the develop branch:
+    1. Run the command: `python manage.py makemigrations Account`
+    2. Then migrate using: `python manage.py migrate`
+    3. Finally, populate the database using: `python manage.py populateDatabase`
+    4. Start the server: `python manage.py runserver`

@@ -1,0 +1,37 @@
+
+Super Users:
+
+Username: admin 
+Password: admin
+
+Regular users:
+
+Username: bhball22
+Password: bhball22
+
+Username: natalie2by4
+Password: natalie2by4
+
+Username: lmurdock12
+Password: lmurdock12
+
+Username: kd766
+Password: kd766
+
+Username: bagley
+Password: bagley
+
+Username: github
+Password: github
+
+Username: bobross
+Password: bobross
+
+Username: drake
+Password: drake
+
+Username: oprahwinfrey
+Password: oprahwinfrey
+
+Username: billgates
+Password: billgates

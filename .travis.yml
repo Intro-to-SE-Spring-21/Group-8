@@ -1,0 +1,15 @@
+os: linux 
+dist: xenal
+language: python 
+python:
+  - 3.8
+  - 3.7
+  - 3.6
+env: 
+  - DJANGO=3.1 DB=sqlite
+before_install:
+  - python -m pip install --upgrade pip
+install: 
+  - pip install -r requirements.txt
+script: 
+  - python manage.py test

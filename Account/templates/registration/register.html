@@ -1,0 +1,33 @@
+
+
+
+<!--
+    Will either throw a 'form.errors.username error' or a 'form.errors.password2' related error
+     (there might be multiple password2 errors in one instance..will need to display them all)
+
+     Todo: This needs to be made much prettier and use a template
+-->
+
+<div>
+
+
+
+<form method="post" action="{% url 'Account:register' %}">
+
+    {% csrf_token %}
+
+    {% if form.errors %}
+    <p>There was an issue</p>
+    <p>{{form.errors}}</p>
+    {% endif %}
+
+    {{form}}
+
+    <input type="Submit" value="Register">
+
+</form>
+
+
+</div>
+
+
