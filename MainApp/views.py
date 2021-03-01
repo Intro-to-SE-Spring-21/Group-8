@@ -62,7 +62,7 @@ class GenericPage(TemplateView):
         pass
 
 
-    def getFollowRecommendations(self,profile_user,request):
+    def getFollowRecommendations(self,request):
         """
         This function currently grabs three follower recommendations from the database.
         Normally this function would return three NEW people to follow, but currently
@@ -84,7 +84,8 @@ class GenericPage(TemplateView):
         # We are temporarily showing accounts a user already follows or does not follow...until additional website functionaility is added
         #####
         #Keep looping until we either gather 3 new users to follow or run out of options with who to follow (Since the user follows everyone)
-        AllUsers = AllUsers.exclude(username=profile_user.username)
+        if request.user.is_authenticated:
+            AllUsers = AllUsers.exclude(username=request.user.username)
         AllUsers = AllUsers.exclude(username=request.user.username)
         while len(rand_three) < 3 and len(AllUsers) > 0:
             #Grab random user
@@ -195,7 +196,7 @@ class MainPage(GenericPage):
         tweet_form = Generate_Tweet()
         
         tweetFeed = self.getFeed()
-
+        rand_three = self.getFollowRecommendations(request)  
         ### Variable declared to pass all information to webpage
         context = {'validSession':False, 'username':request.user.username, 'whoToFollow':rand_three,
         'tweetFeed':tweetFeed, 'tweet':tweet_form}
@@ -205,8 +206,7 @@ class MainPage(GenericPage):
             #How many users is the profile user following
             self.getFollowCounts(profile_user,context)
             context['validSession'] = True
-        
-        rand_three = self.getFollowRecommendations(profile_user, request)    
+
 
         ### Render the webpage
         return render(request,'MainApp/homepage.html', context)
@@ -271,14 +271,15 @@ class ProfilePage(GenericPage):
 
         UserTweets = self.getUserTweets(profile_user)
 
-        rand_three = self.getFollowRecommendations(profile_user, request)
+        rand_three = self.getFollowRecommendations(request)
         
+        context = {'validSession':False, 'username':request.user.username, 'whoToFollow':rand_three, 
+            'profile_user':profile_user,'auth_follow':auth_follow,
+            'isNative':isNative, 'personalscroll':UserTweets}
+           
         self.getFollowCounts(profile_user,context)
 
-        context = {'validSession':False, 'username':request.user.username, 'whoToFollow':rand_three, 
-        'profile_user':profile_user,'auth_follow':auth_follow,
-        'isNative':isNative, 'personalscroll':UserTweets}
-        
+
         if(request.user.is_authenticated):
             context['validSession'] = True
         
