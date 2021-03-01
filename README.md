@@ -97,7 +97,7 @@ The develop branch is for experimental new features for the website and is subje
   * On the main branch:
     1. Start the server using: `python manage.py runserver`
   * On the develop branch:
-    1. Run the command: `python manage.py makemigrations Account`
+    1. Run the command: `python manage.py makemigrations MainApp`
     2. Then migrate using: `python manage.py migrate`
     3. Finally, populate the database using: `python manage.py populateDatabase`
     4. Start the server: `python manage.py runserver`
