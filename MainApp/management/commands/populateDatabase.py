@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand, CommandError
 from django.contrib.auth.models import User
-from Account.models import Follow
-from Account.models import Tweet
+from MainApp.models import Follow
+from MainApp.models import Tweet
 import os
 
 

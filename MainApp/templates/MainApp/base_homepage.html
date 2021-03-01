@@ -328,7 +328,7 @@ Navbar -->
 
 <div class="row">
   <div class="leftcolumn">
-    <form class="tweet" name="generate_tweet" method="POST" action="{% url 'Account:index' %}">
+    <form class="tweet" name="generate_tweet" method="POST" action="{% url 'MainApp:index' %}">
       {% csrf_token %}
       {{ tweet }}
       <div style="border-top-color:rgb(58, 63, 66);

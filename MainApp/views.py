@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from .models import Tweet
 from .forms import Generate_Tweet
 import random
-from Account.models import Follow
+from MainApp.models import Follow
 from django.urls import reverse
 
 
@@ -44,7 +44,7 @@ def profile(request, username):
             #If the user tries to POST anything and they are not logged in, redirect them to the login page
             #at some point look at the thing that will redirect them back to the same page and complete the previous
             #action once they are logged in
-            return HttpResponseRedirect(reverse('Account:login'))
+            return HttpResponseRedirect(reverse('MainApp:login'))
 
         if request.POST.get('follow'):
 
@@ -63,7 +63,7 @@ def profile(request, username):
                 query.save()
                 #save the query
 
-            return HttpResponseRedirect(reverse('Account:profile', args=[request.POST['follow']]))
+            return HttpResponseRedirect(reverse('MainApp:profile', args=[request.POST['follow']]))
 
         if request.POST.get('unfollow'):
             
@@ -75,7 +75,7 @@ def profile(request, username):
        
             #reload the page and make sure an follow button shows back up
 
-            return HttpResponseRedirect(reverse('Account:profile', args=[request.POST['unfollow']]))
+            return HttpResponseRedirect(reverse('MainApp:profile', args=[request.POST['unfollow']]))
 
     
     #if current_user is in followed_by...show unfollow
@@ -130,7 +130,7 @@ def profile(request, username):
     if(request.user.is_authenticated):
         context['validSession'] = True
     
-    return render(request,'Account/profile.html', context)
+    return render(request,'MainApp/profile.html', context)
 
 
 #@register.filter(name='return_item')
@@ -202,4 +202,4 @@ def index(request):
         context['validSession'] = True
 
     ### Render the webpage
-    return render(request,'Account/homepage.html', context) 
+    return render(request,'MainApp/homepage.html', context) 
