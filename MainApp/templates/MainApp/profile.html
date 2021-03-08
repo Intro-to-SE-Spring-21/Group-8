@@ -125,11 +125,14 @@
 
       <div class="topnav">
         <a href="{% url 'MainApp:homepage' %}">Home</a>
-        <a href="#">Followers {{followed_by_len}}</a>
-        <a href="#">Following {{following_len}}</a>
-        <a href="#">Likes</a>
         <a href=".">Refresh</a>
-        <a href="#">Edit</a>
+        <form method="POST">
+        <button name="Followers" type="button">Followers {{followed_by_len}}</button>
+        <button name="Following" type="button">Following {{following_len}}</button>
+        {% if isNative %}
+        <button name="Settings" type="button">Settings</button>
+        {% endif %}
+        </form>
 
         {% if validSession %}
         <a href="{% url 'MainApp:logout' %}" style="float:right">Logout</a>

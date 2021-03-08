@@ -68,17 +68,22 @@
         }
         
         /* Style the topnav links */
-        .topnav a {
+        .topnav a, .topnav button {
           float: left;
+          background-color: black;
+          border: none;
           display: block;
           color: ghostwhite;
           text-align: center;
           padding: 14px 16px;
           text-decoration: none;
+          cursor: pointer;
+          outline: none;
+          font-size: 15px;
         }
         
         /* Change color on hover */
-        .topnav a:hover {
+        .topnav a:hover, .topnav button:hover{
           background-color: rgb(29,161,242,0.15);
           color: rgb(29,161,242,1.00);
         }
@@ -329,7 +334,7 @@
         <a href="#">Following ###</a>
         <a href="#">Likes</a>
         <a href="#">Refresh</a>
-        <a href="#">Edit</a>
+        <a href="#">Settings</a>
         {% if validSession %}
         <a href="{% url 'MainApp:logout' %}" style="float:right">Logout</a>
         {% else %}
