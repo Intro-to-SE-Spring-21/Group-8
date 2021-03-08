@@ -115,6 +115,10 @@ class GenericPage(TemplateView):
         followed_by = Follow.objects.filter(following=profile_user)
         context['followed_by_len'] = len(followed_by)
 
+    def navbartab(self,profile_user,context):
+        
+        #Which button was clicked to show pages
+        context['clickedtab'] = 1
 
     def addFollower(self,request):
         """
@@ -249,6 +253,9 @@ class ProfilePage(GenericPage):
         - render() function call with the page to be rendered
         """
         context = {}
+
+        tweet_form = Generate_Tweet()
+
         profile_user = get_object_or_404(User,username=username)
         #How many users is the profile user following
         following = Follow.objects.filter(user = profile_user)
@@ -274,11 +281,11 @@ class ProfilePage(GenericPage):
         rand_three = self.getFollowRecommendations(request)
         
         context = {'validSession':False, 'username':request.user.username, 'whoToFollow':rand_three, 
-            'profile_user':profile_user,'auth_follow':auth_follow,
+            'profile_user':profile_user,'auth_follow':auth_follow, 'tweet':tweet_form,
             'isNative':isNative, 'personalscroll':UserTweets}
            
         self.getFollowCounts(profile_user,context)
-
+        self.navbartab(profile_user,context)
 
         if(request.user.is_authenticated):
             context['validSession'] = True
@@ -309,5 +316,10 @@ class ProfilePage(GenericPage):
         if request.POST.get('unfollow'):
             
             return self.removeFollower(request)
+     
+        #Creating a Tweet through the webpage
+        if request.method == "POST":
+            
+            self.createTweet(request)
 
-        return self.get(request)
+        return self.get(request, request.user.username)

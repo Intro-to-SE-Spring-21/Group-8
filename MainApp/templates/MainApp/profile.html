@@ -34,6 +34,34 @@
   </div>
 {% endblock %}
 
+
+{% block TweetAndSearch %}
+  {% if clickedtab == 1 and isNative == True %} <!--Tweets Page-->
+    <form class="tweet" name="generate_tweet" method="POST">
+      {%csrf_token %}
+      {{ tweet }}
+      <div style="border-top-color:rgb(58, 63, 66);
+      border-top-style: solid; 
+      border-top-width: 1px;
+      padding-top: 15px;
+      clear: both;">
+      {% if validSession %}
+        <button class="tweet_button" name="submit_tweet" type="submit">Tweet</button>
+      {% else %}
+        <button class="tweet_button" name="submit_tweet" type="submit" style="background-color: rgb(29,161,242,0.50); border-color: rgb(29,161,242,0.50); color: rgba(248, 248, 255, 0.50); cursor: unset;" disabled>Tweet</button>
+      {% endif %}
+      </div>
+      <div style="clear: both;"></div>
+    </form>
+  {% elif clickedtab == 2 %} <!--Following Page-->
+    <p>doesn't work here</p>
+  {% elif clickedtab == 3 %} <!--Followers Page-->
+  
+  {% elif clickedtab == 4 %} <!--Settings Page (Need to validate if user is the correct user)-->
+  {% endif %}
+{% endblock %}
+
+
 {% block Personal_Scroll %}
 
 

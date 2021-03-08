@@ -233,7 +233,7 @@
           padding: 20px;
         }
         
-        .tweet input[type=text] {
+        .tweet textarea {
           width: 100%;
           height: 100%;
           background-color: black;
@@ -244,7 +244,7 @@
           margin-bottom: 20px;
         }
         
-        .tweet input[type=text]:focus {
+        .tweet textarea:focus, .tweet textarea {
           color: ghostwhite;
         }
         
@@ -342,18 +342,12 @@
       
       <div class="row">
         <div class="leftcolumn">
-          <div class="tweet">
-            <input type="text" placeholder="What's happening?">
-            <div style="border-top-color:rgb(58, 63, 66);
-            border-top-style: solid; 
-            border-top-width: 1px;
-            padding-top: 15px;
-            clear: both;">
-              <button class="tweet_button">Tweet</button>
-            </div>
-            <div style="clear: both;"></div>
-          </div>
+          {% block TweetAndSearch %}
+          <!-- left columen Tweet and Search bar -->
+          {% endblock %}
+
           {% block Personal_Scroll %}
+          <!-- Shows either past post or user followed/following -->
           {% endblock %}
         </div>
         <div class="rightcolumn">
