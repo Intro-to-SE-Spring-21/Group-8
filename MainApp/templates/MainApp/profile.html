@@ -80,10 +80,24 @@
     {% endfor %}
   
   {% elif clickedtab == 2 %} <!-- Followers -->
-    <p> Followers Page </p>
+    {% for account in followers %}
+    {% if forloop.counter0 < 25 %}
+    <div class="post">
+      <div>{{account.user.username}}</div>
+      <div style="clear: both;"></div>
+    </div>
+    {% endif %}
+    {% endfor %}
 
-    {% elif clickedtab == 3 %} <!-- Following  -->
-    <p> Following Page </p>
+  {% elif clickedtab == 3 %} <!-- Following  -->
+    {% for account in following %}
+    {% if forloop.counter0 < 25 %}
+    <div class="post">
+      <div>{{account.following.username}}</div>
+      <div style="clear: both;"></div>
+    </div>
+    {% endif %}
+    {% endfor %} 
 
   {% elif clickedtab == 4 %} <!-- Settings -->
     <p> Settings Page </p>
