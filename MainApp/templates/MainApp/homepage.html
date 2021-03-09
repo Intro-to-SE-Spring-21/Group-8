@@ -6,11 +6,11 @@
 {% block navbar %}
 <div class="topnav">
   {% if validSession %}
-    <a href="#">Followers {{followed_by_len}}</a>
-    <a href="#">Following {{following_len}}</a>
+    <a href="{% url 'MainApp:followerstab' user.username %}">Followers {{followed_by_len}}</a>
+    <a href="{% url 'MainApp:followingtab' user.username %}">Following {{following_len}}</a>
   {% endif %} 
 
-  <a href=".">Refresh</a>  
+  <a href="">Refresh</a>  
 
   {% if validSession %}
   <a href="{% url 'MainApp:logout' %}" style="float:right">Logout</a>

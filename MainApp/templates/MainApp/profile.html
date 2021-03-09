@@ -53,10 +53,6 @@
       </div>
       <div style="clear: both;"></div>
     </form>
-  {% elif clickedtab == 2 %} <!--Following Page-->
-    <p>doesn't work here</p>
-  {% elif clickedtab == 3 %} <!--Followers Page-->
-  
   {% elif clickedtab == 4 %} <!--Settings Page (Need to validate if user is the correct user)-->
   {% endif %}
 {% endblock %}
@@ -64,25 +60,35 @@
 
 {% block Personal_Scroll %}
 
-
-  {% for post in personalscroll %}
-  {% if forloop.counter0 < 25 %}
-  {% load nbsp %}
-    <div class="post">
-      <div class="fakeimg" style="width: 10%; height: 100%; float: left;">Place Holder</div>
-      <div style="float: left; width: 90%; padding-left: 10px;">
-        <span style="font-size: 20px; font-weight: bold;">{{post.tweet_creator.first_name}} {{post.tweet_creator.last_name}}</span>
-        <span style="font-size: 20px; color: rgb(99, 99, 99);">@{{post.tweet_creator.username}}</span>
-        <span style="font-size: 20px; color: rgb(99, 99, 99);"> - {{post.pub_date}}</span>
-        <div style="word-wrap: break-word; padding-top: 5px; line-height: 130%;">{{ post.visible_info | linebreaksbr | nbsp }}</div>
-        <div class="fakeimg" style="height:60px;">Image</div>
+  {% if clickedtab == 1 %}
+    {% for post in personalscroll %}
+    {% if forloop.counter0 < 25 %}
+    {% load nbsp %}
+      <div class="post">
+        <div class="fakeimg" style="width: 10%; height: 100%; float: left;">Place Holder</div>
+        <div style="float: left; width: 90%; padding-left: 10px;">
+          <span style="font-size: 20px; font-weight: bold;">{{post.tweet_creator.first_name}} {{post.tweet_creator.last_name}}</span>
+          <span style="font-size: 20px; color: rgb(99, 99, 99);">@{{post.tweet_creator.username}}</span>
+          <span style="font-size: 20px; color: rgb(99, 99, 99);"> - {{post.pub_date}}</span>
+          <div style="word-wrap: break-word; padding-top: 5px; line-height: 130%;">{{ post.visible_info | linebreaksbr | nbsp }}</div>
+          <div class="fakeimg" style="height:60px;">Image</div>
+        </div>
+        <button class="like">Like</button>
+        <div style="clear: both;"></div>
       </div>
-      <button class="like">Like</button>
-      <div style="clear: both;"></div>
-    </div>
-  {% endif %}
-  {% endfor %}
+    {% endif %}
+    {% endfor %}
+  
+  {% elif clickedtab == 2 %} <!-- Followers -->
+    <p> Followers Page </p>
 
+    {% elif clickedtab == 3 %} <!-- Following  -->
+    <p> Following Page </p>
+
+  {% elif clickedtab == 4 %} <!-- Settings -->
+    <p> Settings Page </p>
+
+  {% endif %}
 
 {% endblock %}
 
@@ -125,14 +131,16 @@
 
       <div class="topnav">
         <a href="{% url 'MainApp:homepage' %}">Home</a>
-        <a href=".">Refresh</a>
-        <form method="POST">
-        <button name="Followers" type="button">Followers {{followed_by_len}}</button>
-        <button name="Following" type="button">Following {{following_len}}</button>
-        {% if isNative %}
-        <button name="Settings" type="button">Settings</button>
+        <a href="">Refresh</a> 
+        {% if clickedtab != 2 %}
+        <a href="{% url 'MainApp:followerstab' user.username %}">Followers {{followed_by_len}}</a>
+        {% endif %}{% if clickedtab != 3 %}
+        <a href="{% url 'MainApp:followingtab' user.username %}">Following {{following_len}}</a>
+        {% endif %}{% if clickedtab != 4 and isNative %}
+        <a href="{% url 'MainApp:settingstab' user.username %}">Settings</a>
+        {% endif %}{% if clickedtab != 1 %}
+        <a href=".">Tweets</a>
         {% endif %}
-        </form>
 
         {% if validSession %}
         <a href="{% url 'MainApp:logout' %}" style="float:right">Logout</a>
