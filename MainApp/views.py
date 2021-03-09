@@ -356,7 +356,7 @@ class ProfileFollowing(GenericPage):
         
         context = {'validSession':False, 'username':request.user.username, 'whoToFollow':rand_three, 
             'profile_user':profile_user,'auth_follow':auth_follow, 'clickedtab':3,
-            'isNative':isNative, 'following':following}
+            'isNative':isNative, 'following':following, 'followers':followed_by}
            
         self.getFollowCounts(profile_user,context)
 
@@ -429,7 +429,7 @@ class ProfileFollowers(GenericPage):
         
         context = {'validSession':False, 'username':request.user.username, 'whoToFollow':rand_three, 
             'profile_user':profile_user,'auth_follow':auth_follow, 'clickedtab':2,
-            'isNative':isNative, 'followers': followed_by}
+            'isNative':isNative, 'followers': followed_by, 'following':following}
            
         self.getFollowCounts(profile_user,context)
 

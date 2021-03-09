@@ -83,7 +83,20 @@
     {% for account in followers %}
     {% if forloop.counter0 < 25 %}
     <div class="post">
-      <div>{{account.user.username}}</div>
+      <a href="/profile/{{account.user.username}}/" style="width: 70%; float: left; text-decoration: none; outline: none; color: ghostwhite;">
+        <h2>{{account.user.first_name}} {{account.user.last_name}}</h2>
+        <h3 style="color: rgb(99, 99, 99);">@{{account.user.username}}</h3>
+      </a>
+      <div style="width: 30%; float: right;"> 
+        <form method="post" action="{% url 'MainApp:followerstab' account.following.username %}">
+          {% csrf_token %}
+            {% if account.user.username not in following.following %}
+              <button name="follow" type="submit" style="float:right" value={{account.user.username}} class="follow_button">Follow</button>
+            {% else %}
+              <button name="unfollow" type="submit" style="float:right" value={{account.user.username}} class="follow_button">UnFollow</button>
+            {% endif %}
+        </form>
+      </div>
       <div style="clear: both;"></div>
     </div>
     {% endif %}
@@ -93,11 +106,20 @@
     {% for account in following %}
     {% if forloop.counter0 < 25 %}
     <div class="post">
-      <div>{{account.following.username}}</div>
+      <a href="/profile/{{account.following.username}}/" style="width: 70%; float: left; text-decoration: none; outline: none; color: ghostwhite;">
+        <h2>{{account.following.first_name}} {{account.following.last_name}}</h2>
+        <h3 style="color: rgb(99, 99, 99);">@{{account.following.username}}</h3>
+      </a>
+      <div style="width: 30%; float: right;"> 
+        <form method="post" action="{% url 'MainApp:followingtab' account.user.username %}">
+          {% csrf_token %}
+          <button name="unfollow" type="submit" style="float:right" value={{account.following.username}} class="follow_button">UnFollow</button>
+        </form>
+      </div>
       <div style="clear: both;"></div>
     </div>
     {% endif %}
-    {% endfor %} 
+    {% endfor %}
 
   {% elif clickedtab == 4 %} <!-- Settings -->
     <p> Settings Page </p>
