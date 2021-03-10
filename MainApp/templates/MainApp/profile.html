@@ -128,7 +128,21 @@
 
 {% endblock %}
 
-
+{% block Profile_Card %}
+  {% if validSession and not isNative %}
+  <a href="{% url 'MainApp:profile' user %}" style="text-decoration: none;
+  outline: none;">
+    <div class="card">
+      <div class="fakeimg" style="width: 30%; float: left;">Profile pic.</div>
+      <div style="text-align: right; width: 70%; float: left;">
+        <h2>{{user.first_name}} {{user.last_name}}</h2>
+        <h3 style="color: rgb(99, 99, 99);">@{{user.username}}</h3>
+      </div>
+      <div style="clear: both;"></div>
+    </div>
+  </a>
+  {% endif %}
+{% endblock %}
 
 {% block Profile_User_List %}
 <div class="card" style="padding-left: 0%; padding-right: 0%;">
