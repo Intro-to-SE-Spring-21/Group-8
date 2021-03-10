@@ -37,7 +37,7 @@
 {% block Personal_Scroll %}
 
 
-  {% for post in personalscroll %}
+  {% for post,isLiked in personalscroll.items %}
   {% if forloop.counter0 < 25 %}
   {% load nbsp %}
     <div class="post">
@@ -50,7 +50,18 @@
         <div style="word-wrap: break-word; padding-top: 5px; line-height: 130%;">{{ post.visible_info | linebreaksbr | nbsp }}</div>
         <div class="fakeimg" style="height:60px;">Image</div>
       </div>
-      <button class="like">Like</button>
+      <!--If the post user equals the authenticated user, do not show like button-->
+      {% ifnotequal user.username post.tweet_creator.username %}
+      <form name="like_tweet" method="POST" action="{% url 'MainApp:homepage' %}">
+        {% csrf_token %}
+        <!--Show either like or unlike depending on whether or not user has liked the tweet-->
+        {% if not isLiked %}
+          <button name="like_button" value="{{user.username}},{{post.pk}}" class="like">Like</button>
+        {% else %}
+          <button name="unlike_button" value="{{user.username}},{{post.pk}}" class="like">Unlike</button>
+        {% endif %}
+      </form>
+    {% endifnotequal %}
       <div style="clear: both;"></div>
     </div>
   {% endif %}
@@ -100,7 +111,7 @@
         <a href="{% url 'MainApp:homepage' %}">Home</a>
         <a href="#">Followers {{followed_by_len}}</a>
         <a href="#">Following {{following_len}}</a>
-        <a href="#">Likes</a>
+        <a href="#">Likes {{liked_tweets_len}}</a>
         <a href=".">Refresh</a>
         <a href="#">Edit</a>
 

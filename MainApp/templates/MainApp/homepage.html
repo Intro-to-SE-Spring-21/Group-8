@@ -40,9 +40,9 @@
   clear: both;">
 
   {% if validSession %}
-    <button class="tweet_button" name="submit_tweet" type="submit">Tweet</button>
+    <button class="tweet_button" value=1 name="submit_tweet" type="submit">Tweet</button>
   {% else %}
-    <button class="tweet_button" name="submit_tweet" type="submit" style="background-color: rgb(29,161,242,0.50); border-color: rgb(29,161,242,0.50); color: rgba(248, 248, 255, 0.50); cursor: unset;" disabled>Tweet</button>
+    <button class="tweet_button" value=1 name="submit_tweet" type="submit" style="background-color: rgb(29,161,242,0.50); border-color: rgb(29,161,242,0.50); color: rgba(248, 248, 255, 0.50); cursor: unset;" disabled>Tweet</button>
   {% endif %}
 
   </div>
@@ -108,7 +108,7 @@
 <!-- Tweets that are being shown to screen -->
 {% block Live_Scroll %}
 
-  {% for post in tweetFeed %}
+  {% for post,isLiked in tweetFeed.items %}
     {% if forloop.counter0 < 25 %}
       {% load nbsp %}
       <div class="post">
@@ -121,7 +121,16 @@
           <div style="word-wrap: break-word; padding-top: 5px; line-height: 130%;">{{ post.visible_info | linebreaksbr | nbsp }}</div>
           <div class="fakeimg" style="height:60px;">Image</div>
         </div>
-        <button class="like">Like</button>
+        {% ifnotequal user.username post.tweet_creator.username %}
+          <form name="like_tweet" method="POST" action="{% url 'MainApp:homepage' %}">
+            {% csrf_token %}
+            {% if not isLiked %}
+              <button name="like_button" value="{{user.username}},{{post.pk}}" class="like">Like</button>
+            {% else %}
+              <button name="unlike_button" value="{{user.username}},{{post.pk}}" class="like">Unlike</button>
+            {% endif %}
+          </form>
+        {% endifnotequal %}
         <div style="clear: both;"></div>
       </div>
     {% endif %}
