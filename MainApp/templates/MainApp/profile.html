@@ -169,9 +169,9 @@
         <a href="{% url 'MainApp:homepage' %}">Home</a>
         <a href="">Refresh</a> 
         {% if clickedtab != 2 %}
-        <a href="{% url 'MainApp:followerstab' user.username %}">Followers {{followed_by_len}}</a>
+        <a href="{% url 'MainApp:followerstab' profile_user.username %}">Followers {{followed_by_len}}</a>
         {% endif %}{% if clickedtab != 3 %}
-        <a href="{% url 'MainApp:followingtab' user.username %}">Following {{following_len}}</a>
+        <a href="{% url 'MainApp:followingtab' profile_user.username %}">Following {{following_len}}</a>
         {% endif %}{% if clickedtab != 4 and isNative %}
         <a href="{% url 'MainApp:settingstab' user.username %}">Settings</a>
         {% endif %}{% if clickedtab != 1 %}
