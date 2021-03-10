@@ -7,12 +7,12 @@ from django.contrib.auth.models import User
 from .models import Tweet
 from .forms import Generate_Tweet
 import random
-from MainApp.models import Follow
+from MainApp.models import Follow, Like
 from django.urls import reverse
 
 ##New includes
 from django.views.generic import TemplateView
-
+import collections
 
 
 def register(request):
@@ -158,7 +158,7 @@ class GenericPage(TemplateView):
         #reload the page and make sure an follow button shows back up
         return HttpResponseRedirect(reverse('MainApp:profile', args=[request.POST['unfollow']]))
 
-    def getFeed(self):
+    def getFeed(self,request):
         """
         This function returns a feed of tweets to display to a page.
         Currently just gets all the tweets and sorts them by publication date.
@@ -166,18 +166,60 @@ class GenericPage(TemplateView):
         Inputs:
         - None
         Returns:
-        - QuerySet of tweets
+        - Dicitonary of Tweet keys and values of whether or not the authenticated user has liked the tweet.
         """
+        #Create a dictionary with each key being a tweet, and each value being whether or not the authetnicated user has liked that tweet.
+        #This is so we can appropriately display either the like or the unlike button with a tweet.
 
-        return Tweet.objects.order_by('-pub_date') 
+        tweet_dict = {}
+
+        for tweet in Tweet.objects.order_by('-pub_date'):
+            #If a user is logged in, and they have liked this specific tweet then set the tweet's value to 1
+            if request.user.is_authenticated and Like.objects.filter(tweet=tweet,user=request.user):
+                tweet_dict[tweet] = 1
+            else:
+                tweet_dict[tweet] = 0
+        
+        #Return the dictionary of tweets, and whether or not it has been liked by the authenticated user
+        return tweet_dict
 
 
-    def addLike(self):
-        #TODO
-        pass
+    def addLike(self,request,button_name):
+        """
+        This function creates and saves a Like object into the database.
+        Inputs:
+        - request: Django request output
+        - button_name: The name of the button that is used in the POST request
+        Returns:
+        - None
+        """    
+        #If the user is not authenticated, then just return since anonymous user is not allowed to add like  
+        if not request.user.is_authenticated:
+            return
+
+        #Passing in the name of the addLike button incase this button is named different things
+        #across different pages.
+
+        #When like button is submitted the value is in the form of: <username>,<postID>
+        #Parse this value to get the appropiate user and post object.
+        values = request.POST.get(button_name)
+
+        #Username is index 0, postID is index 1
+        val_dict = values.split(',') 
+        
+        user = User.objects.get(username=val_dict[0])
+        tweet = Tweet.objects.get(pk=val_dict[1])
+
+        #Check to make sure a Like object does not already exist for this post and user in the database
+        if Like.objects.filter(user=user,tweet=tweet):
+            print("This user has already liked that tweet")
+        else:
+            new_like = Like(user=user,tweet=tweet)
+            new_like.save()
+        
 
     
-    def removeLike(self):
+    def removeLike(self,request,button_name):
         #TODO
         pass
 
@@ -195,7 +237,7 @@ class MainPage(GenericPage):
 
         tweet_form = Generate_Tweet()
         
-        tweetFeed = self.getFeed()
+        tweetFeed = self.getFeed(request)
         rand_three = self.getFollowRecommendations(request)  
         ### Variable declared to pass all information to webpage
         context = {'validSession':False, 'username':request.user.username, 'whoToFollow':rand_three,
@@ -221,15 +263,21 @@ class MainPage(GenericPage):
         - self.get() which renders the rest of the page
         """
         #Creating a Tweet through the webpage
-        if request.method == "POST":
+        if request.POST.get("submit_tweet"):
             self.createTweet(request)
+
+        if request.POST.get("like_button"):
+            self.addLike(request,"like_button")
+
+        if request.POST.get("unlike_button"):
+            self.removeLike(request,"unlike_button")
 
         return self.get(request)
 
 
 class ProfilePage(GenericPage):
 
-    def getUserTweets(self,profile_user):
+    def getUserTweets(self,request,profile_user):
         """ 
         This function grabs all the tweets from a specific user
         Inputs:
@@ -237,7 +285,18 @@ class ProfilePage(GenericPage):
         Returns:
         - QuerySet with all the User's tweets
         """
-        return Tweet.objects.order_by('-pub_date').filter(tweet_creator=profile_user.pk)
+
+        tweet_dict = {}
+
+        for tweet in Tweet.objects.order_by('-pub_date').filter(tweet_creator=profile_user.pk):
+            #If a user is logged in, and they have liked this specific tweet then set the tweet's value to 1
+            if request.user.is_authenticated and Like.objects.filter(tweet=tweet,user=request.user):
+                tweet_dict[tweet] = 1
+            else:
+                tweet_dict[tweet] = 0
+        
+        #Return the dictionary of tweets, and whether or not it has been liked by the authenticated user
+        return tweet_dict
         
 
     def get(self,request,username):
@@ -255,6 +314,10 @@ class ProfilePage(GenericPage):
         #how many people are following the profile user
         followed_by = Follow.objects.filter(following=profile_user)
 
+        #Get likes
+        liked_tweets = Like.objects.filter(user=profile_user)
+        print(liked_tweets)
+
         #if current_user is in followed_by...show unfollow
         #Check to see if we are on the users native profile if they are logged in
         isNative = False
@@ -269,13 +332,13 @@ class ProfilePage(GenericPage):
                 if request.user == followed.user:
                     auth_follow = True
 
-        UserTweets = self.getUserTweets(profile_user)
+        UserTweets = self.getUserTweets(request,profile_user)
 
         rand_three = self.getFollowRecommendations(request)
         
         context = {'validSession':False, 'username':request.user.username, 'whoToFollow':rand_three, 
             'profile_user':profile_user,'auth_follow':auth_follow,
-            'isNative':isNative, 'personalscroll':UserTweets}
+            'isNative':isNative, 'personalscroll':UserTweets,'liked_tweets_len':len(liked_tweets)}
            
         self.getFollowCounts(profile_user,context)
 
