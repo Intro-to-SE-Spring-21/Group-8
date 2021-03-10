@@ -7,8 +7,8 @@
 
 {% block profile_header %}
     <div class="header_pic">
-        <div class="fakeimg" style="height:100%;width:100%;color:white;text-align: center;">Image.</div>
-        
+        <!--<div class="fakeimg" style="height:100%;width:100%;color:white;text-align: center;">Image.</div>-->
+        <div class="defaultimg" style="height:100%;width:100%"> <img src = "https://simplyilm.com/wp-content/uploads/2017/08/temporary-profile-placeholder-1.jpg" alt="DefaultPic" class="center"> </div>
         <!--<img src = "https://simplyilm.com/wp-content/uploads/2017/08/temporary-profile-placeholder-1.jpg" alt="DefaultPic" width = "250" height = "100"-->
 
     </div> 
@@ -41,7 +41,8 @@
   {% if forloop.counter0 < 25 %}
   {% load nbsp %}
     <div class="post">
-      <div class="fakeimg" style="width: 10%; height: 100%; float: left;">Place Holder</div>
+      <!--<div class="fakeimg" style="width: 10%; height: 100%; float: left;">Place Holder</div>-->
+      <div class="defaultimg" style="height:10%;width:10%; float:left;"> <img src = "https://simplyilm.com/wp-content/uploads/2017/08/temporary-profile-placeholder-1.jpg" alt="DefaultPic" width="70" height="70"></div>
       <div style="float: left; width: 90%; padding-left: 10px;">
         <span style="font-size: 20px; font-weight: bold;">{{post.tweet_creator.first_name}} {{post.tweet_creator.last_name}}</span>
         <span style="font-size: 20px; color: rgb(99, 99, 99);">@{{post.tweet_creator.username}}</span>
