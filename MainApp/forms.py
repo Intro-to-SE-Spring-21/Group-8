@@ -9,3 +9,6 @@ class Generate_Tweet(forms.Form):
     def info_return(self):
         data = self.cleaned_data['tweet_text']
         return data
+
+class Account_Settings(forms.Form):
+    Name = forms.CharField(initial='')
