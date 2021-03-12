@@ -220,8 +220,33 @@ class GenericPage(TemplateView):
 
     
     def removeLike(self,request,button_name):
-        #TODO
-        pass
+        """
+        This function removes a like object from the database.
+        Inputs:
+        - request: Django request output
+        - button_name: The name of the button that is used in the POST request
+        Returns:
+        - None
+        """    
+        #If the user is not authenticated, then just return since anonymous user is not allowed to remove like  
+        if not request.user.is_authenticated:
+            return
+             #Passing in the name of the addLike button incase this button is named different things
+        #across different pages.
+
+        #When like button is submitted the value is in the form of: <username>,<postID>
+        #Parse this value to get the appropiate user and post object.
+        values = request.POST.get(button_name)
+
+        #Username is index 0, postID is index 1
+        val_dict = values.split(',') 
+        
+        user = User.objects.get(username=val_dict[0])
+        tweet = Tweet.objects.get(pk=val_dict[1])
+
+        #finding liked tweet and deleting
+        old_like = Like.objects.get(user=user,tweet=tweet)
+        old_like.delete()
 
 
 class MainPage(GenericPage):
