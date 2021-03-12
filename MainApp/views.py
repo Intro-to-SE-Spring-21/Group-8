@@ -5,7 +5,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import Tweet
-from .forms import Generate_Tweet
+from .forms import Generate_Tweet, Account_Settings
 import random
 from MainApp.models import Follow
 from django.urls import reverse
@@ -157,6 +157,21 @@ class GenericPage(TemplateView):
 
         #reload the page and make sure an follow button shows back up
         return HttpResponseRedirect(reverse('MainApp:profile', args=[request.POST['unfollow']]))
+
+    def Edit_Account(self,request):
+        """
+        This function removes a Follower for the given authenticated user
+        Inputs:
+        - request: Django request output
+        Returns:
+        - HttpResponseRedirect with the profile to be rendered
+        """      
+        
+        edit = Account_Settings(request.POST, instance=request.user)
+        edit.save()
+
+        #reload the page and make sure an follow button shows back up
+        return HttpResponseRedirect(reverse('MainApp:profile', args=[request.POST['Save settings']]))
 
     def getFeed(self):
         """
@@ -499,10 +514,18 @@ class ProfileSettings(GenericPage):
                     auth_follow = True
 
         rand_three = self.getFollowRecommendations(request)
+
+        initial_dict = {
+            "first_name" : request.user.first_name,
+            "last_name"  : request.user.last_name,
+            "email" : request.user.email,
+            "username"  : request.user.username,
+        }
+        edit_form = Account_Settings(request.POST or None, initial = initial_dict)
         
         context = {'validSession':False, 'username':request.user.username, 'whoToFollow':rand_three, 
             'profile_user':profile_user,'auth_follow':auth_follow, 'clickedtab':4,
-            'isNative':isNative}
+            'isNative':isNative, 'form':edit_form}
            
         self.getFollowCounts(profile_user,context)
 
@@ -535,5 +558,9 @@ class ProfileSettings(GenericPage):
         if request.POST.get('unfollow'):
             
             return self.removeFollower(request)
-     
+
+        if request.POST.get('Save settings'):
+
+            return self.Edit_Account(request)
+      
         return self.get(request, request.user.username)

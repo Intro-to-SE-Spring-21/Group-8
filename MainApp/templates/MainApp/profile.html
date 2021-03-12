@@ -122,8 +122,13 @@
     {% endfor %}
 
   {% elif clickedtab == 4 %} <!-- Settings -->
-    <p> Settings Page </p>
-
+    <div class="post">
+      <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input name="edit_user" type="submit" value="Save settings" >
+      </form>
+    </div>
   {% endif %}
 
 {% endblock %}

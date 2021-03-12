@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.utils import timezone
 from .models import Tweet
+from django.contrib.auth.forms import UserChangeForm
 
 class Generate_Tweet(forms.Form):
     tweet_text = forms.CharField(max_length=280, label=False, widget=forms.Textarea(attrs={'placeholder': "What's happening?", 'style': 'resize: vertical', 'rows': 2,}))
@@ -10,5 +11,13 @@ class Generate_Tweet(forms.Form):
         data = self.cleaned_data['tweet_text']
         return data
 
-class Account_Settings(forms.Form):
-    Name = forms.CharField(initial='')
+class Account_Settings(UserChangeForm):
+    def __init__(self, *args, **kwargs):
+        super(Account_Settings, self).__init__(*args, **kwargs)
+        del self.fields['password']
+
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'first_name', 'last_name']
+
+
