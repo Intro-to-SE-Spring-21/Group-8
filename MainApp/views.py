@@ -168,7 +168,12 @@ class GenericPage(TemplateView):
         """      
         
         edit = Account_Settings(request.POST, instance=request.user)
-        edit.save()
+        if edit.is_valid():
+            edit.save()
+
+      ## Here are some websites for editing the user information ##
+    #### https://docs.djangoproject.com/en/3.1/topics/auth/default/#using-the-views #### 
+    #### https://docs.djangoproject.com/en/3.1/topics/auth/default/ ####
 
         #reload the page and make sure an follow button shows back up
         return HttpResponseRedirect(reverse('MainApp:profile', args=[request.POST['Save settings']]))
