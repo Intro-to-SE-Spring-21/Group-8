@@ -90,7 +90,7 @@
       <div style="width: 30%; float: right;"> 
         <form method="post" action="{% url 'MainApp:followerstab' account.following.username %}">
           {% csrf_token %}
-            {% if account.user.username not in following.following %}
+            {% if account.user.username not in followingdict %}
               <button name="follow" type="submit" style="float:right" value={{account.user.username}} class="follow_button">Follow</button>
             {% else %}
               <button name="unfollow" type="submit" style="float:right" value={{account.user.username}} class="follow_button">UnFollow</button>

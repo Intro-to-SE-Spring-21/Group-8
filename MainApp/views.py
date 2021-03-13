@@ -410,6 +410,10 @@ class ProfileFollowers(GenericPage):
         following = Follow.objects.filter(user = profile_user)
         #how many people are following the profile user
         followed_by = Follow.objects.filter(following = profile_user)
+
+        followingdict = []
+        for temp in following:
+            followingdict.append(temp.following.username)
  
         #if current_user is in followed_by...show unfollow
         #Check to see if we are on the users native profile if they are logged in
@@ -429,7 +433,8 @@ class ProfileFollowers(GenericPage):
         
         context = {'validSession':False, 'username':request.user.username, 'whoToFollow':rand_three, 
             'profile_user':profile_user,'auth_follow':auth_follow, 'clickedtab':2,
-            'isNative':isNative, 'followers': followed_by, 'following':following}
+            'isNative':isNative, 'followers': followed_by, 'following':following,
+            'followingdict':followingdict}
            
         self.getFollowCounts(profile_user,context)
 
