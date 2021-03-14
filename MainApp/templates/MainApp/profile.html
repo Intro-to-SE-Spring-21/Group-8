@@ -1,0 +1,222 @@
+
+{% extends "MainApp/base_profile.html" %}
+
+{% block title %}
+<title>{{profile_user.first_name}} {{profile_user.last_name}} (@{{profile_user.username}})</title>
+{% endblock %}
+
+{% block profile_header %}
+    <div class="header_pic">
+        <!--<div class="fakeimg" style="height:100%;width:100%;color:white;text-align: center;">Image.</div>-->
+        <div class="defaultimg" style="height:100%;width:100%"> <img src = "https://simplyilm.com/wp-content/uploads/2017/08/temporary-profile-placeholder-1.jpg" alt="DefaultPic" class="center"> </div>
+        <!--<img src = "https://simplyilm.com/wp-content/uploads/2017/08/temporary-profile-placeholder-1.jpg" alt="DefaultPic" width = "250" height = "100"-->
+
+    </div> 
+    <div class="header_name" style = "background-color: black; color: white;  text-align: center;">
+      <div style="width: 70%; float: left;">
+        <h1>{{profile_user.first_name}} {{profile_user.last_name}} </h1>
+        <p>{{profile_user.username}}</p>
+      </div>
+        <form method="post" action="{% url 'MainApp:profile' profile_user.username %}">
+          {% csrf_token %}
+          {% if not isNative %}
+            {% if not auth_follow %}
+              <button name="follow" type="submit" style="float: left; width: 30%; margin-top: 30px;" value={{profile_user.username}} class="follow_button">Follow</button>
+            {% else %}
+              <button name="unfollow" type="submit" style="float: left; width: 30%; margin-top: 30px;" value={{profile_user.username}} class="follow_button">Unfollow</button>
+            {% endif %}
+          {% endif %}
+        </form>
+    </div>
+    <div class="header_bio" style = "background-color: black; color: white; text-align: center;"> 
+      <h1>Bio</h1>
+      <p>Birthdate</p>
+  </div>
+{% endblock %}
+
+
+{% block TweetAndSearch %}
+  {% if clickedtab == 1 and isNative == True %} <!--Tweets Page-->
+    <form class="tweet" name="generate_tweet" method="POST">
+      {%csrf_token %}
+      {{ tweet }}
+      <div style="border-top-color:rgb(58, 63, 66);
+      border-top-style: solid; 
+      border-top-width: 1px;
+      padding-top: 15px;
+      clear: both;">
+      {% if validSession %}
+        <button class="tweet_button" name="submit_tweet" type="submit">Tweet</button>
+      {% else %}
+        <button class="tweet_button" name="submit_tweet" type="submit" style="background-color: rgb(29,161,242,0.50); border-color: rgb(29,161,242,0.50); color: rgba(248, 248, 255, 0.50); cursor: unset;" disabled>Tweet</button>
+      {% endif %}
+      </div>
+      <div style="clear: both;"></div>
+    </form>
+  {% elif clickedtab == 4 %} <!--Settings Page (Need to validate if user is the correct user)-->
+  {% endif %}
+{% endblock %}
+
+
+{% block Personal_Scroll %}
+
+  {% if clickedtab == 1 %}
+    {% for post,isLiked in personalscroll.items %}
+    {% if forloop.counter0 < 25 %}
+    {% load nbsp %}
+      <div class="post">
+       <!--<div class="fakeimg" style="width: 10%; height: 100%; float: left;">Place Holder</div>-->
+       <div class="defaultimg" style="height:10%;width:10%; float:left;"> <img src = "https://simplyilm.com/wp-content/uploads/2017/08/temporary-profile-placeholder-1.jpg" alt="DefaultPic" width="70" height="70"></div>
+       <div style="float: left; width: 90%; padding-left: 10px;">
+         <span style="font-size: 20px; font-weight: bold;">{{post.tweet_creator.first_name}} {{post.tweet_creator.last_name}}</span>
+         <span>
+           <a class="user_link" href="/profile/{{post.tweet_creator.username}}/">@{{post.tweet_creator.username}} </a>
+         </span>
+         <span style="font-size: 20px; color: rgb(99, 99, 99);"> - {{post.pub_date}}</span>
+         <div style="word-wrap: break-word; padding-top: 5px; line-height: 130%;">{{ post.visible_info | linebreaksbr | nbsp }}</div>
+         <div class="fakeimg" style="height:60px;">Image</div>
+       </div>
+       <!--If the post user equals the authenticated user, do not show like button-->
+       {% ifnotequal user.username post.tweet_creator.username %}
+       <form name="like_tweet" method="POST" action="{% url 'MainApp:homepage' %}">
+         {% csrf_token %}
+         <!--Show either like or unlike depending on whether or not user has liked the tweet-->
+         {% if not isLiked %}
+           <button name="like_button" value="{{user.username}},{{post.pk}}" class="like">Like</button>
+          {% else %}
+            <button name="unlike_button" value="{{user.username}},{{post.pk}}" class="like">Unlike</button>
+          {% endif %}
+        </form>
+        {% endifnotequal %}
+        <div style="clear: both;"></div>
+      </div>
+    {% endif %}
+    {% endfor %}
+  
+  {% elif clickedtab == 2 %} <!-- Followers -->
+    {% for account in followers %}
+    {% if forloop.counter0 < 25 %}
+    <div class="post">
+      <a href="/profile/{{account.user.username}}/" style="width: 70%; float: left; text-decoration: none; outline: none; color: ghostwhite;">
+        <h2>{{account.user.first_name}} {{account.user.last_name}}</h2>
+        <h3 style="color: rgb(99, 99, 99);">@{{account.user.username}}</h3>
+      </a>
+      <div style="width: 30%; float: right;"> 
+        <form method="post" action="{% url 'MainApp:followerstab' account.following.username %}">
+          {% csrf_token %}
+            {% if account.user.username not in followingdict %}
+              <button name="follow" type="submit" style="float:right" value={{account.user.username}} class="follow_button">Follow</button>
+            {% else %}
+              <button name="unfollow" type="submit" style="float:right" value={{account.user.username}} class="follow_button">UnFollow</button>
+            {% endif %}
+        </form>
+      </div>
+      <div style="clear: both;"></div>
+    </div>
+    {% endif %}
+    {% endfor %}
+
+  {% elif clickedtab == 3 %} <!-- Following  -->
+    {% for account in following %}
+    {% if forloop.counter0 < 25 %}
+    <div class="post">
+      <a href="/profile/{{account.following.username}}/" style="width: 70%; float: left; text-decoration: none; outline: none; color: ghostwhite;">
+        <h2>{{account.following.first_name}} {{account.following.last_name}}</h2>
+        <h3 style="color: rgb(99, 99, 99);">@{{account.following.username}}</h3>
+      </a>
+      <div style="width: 30%; float: right;"> 
+        <form method="post" action="{% url 'MainApp:followingtab' account.user.username %}">
+          {% csrf_token %}
+          {% if account.following.username not in followingdict %}
+              <button name="follow" type="submit" style="float:right" value={{account.following.username}} class="follow_button">Follow</button>
+            {% else %}
+              <button name="unfollow" type="submit" style="float:right" value={{account.following.username}} class="follow_button">UnFollow</button>
+            {% endif %}
+        </form>
+      </div>
+      <div style="clear: both;"></div>
+    </div>
+    {% endif %}
+    {% endfor %}
+
+  {% elif clickedtab == 4 %} <!-- Settings -->
+    <p> Settings Page </p>
+
+  {% endif %}
+
+{% endblock %}
+
+{% block Profile_Card %}
+  {% if validSession and not isNative %}
+  <a href="{% url 'MainApp:profile' user %}" style="text-decoration: none;
+  outline: none;">
+    <div class="card">
+      <div class="defaultimg" style="height:100%;width:100%;background-color:rgb(21,24,28);"> <img src = "https://simplyilm.com/wp-content/uploads/2017/08/temporary-profile-placeholder-1.jpg" alt="DefaultPic" class="center"> </div>
+      <div style="text-align: right; width: 70%; float: left;">
+        <h2>{{user.first_name}} {{user.last_name}}</h2>
+        <h3 style="color: rgb(99, 99, 99);">@{{user.username}}</h3>
+      </div>
+      <div style="clear: both;"></div>
+    </div>
+  </a>
+  {% endif %}
+{% endblock %}
+
+{% block Profile_User_List %}
+<div class="card" style="padding-left: 0%; padding-right: 0%;">
+  <!--<div class="header" style="text-align: left; padding-left: 20px;"><h3>Who to Follow</h3></div> -->
+  <div class="header" style="text-align: left; padding-left: 20px;"><h3>Other users on the network</h3></div>
+  {% for user_dict in whoToFollow %}
+      {% for user,alreadyFollow in user_dict.items %}
+
+        <div class="foreignaccount">
+          <a href="/profile/{{user.username}}/" style="width: 70%; float: left;">
+            <h2>{{user.first_name}} {{user.last_name}}</h2>
+            <h3 style="color: rgb(99, 99, 99);">@{{user.username}}</h3>
+          </a>
+          <div style="width: 30%; float: right;"> 
+            <form method="post" action="{% url 'MainApp:profile' user.username %}">
+              {% csrf_token %}
+                {% if not alreadyFollow %}
+                  <button name="follow" type="submit" style="float:right" value={{user.username}} class="follow_button">Follow</button>
+                {% else %}
+                  <button name="unfollow" type="submit" style="float:right" value={{user.username}} class="follow_button">UnFollow</button>
+                {% endif %}
+            </form>
+          </div>
+          <div style="clear: both;"></div>
+        </div>
+
+      {% endfor %}
+  {% endfor %}
+
+  <div class="link" style="padding-left: 20px;"><p>Show More</p></div>
+  
+</div>
+{% endblock %}
+
+{% block navbar %}
+
+      <div class="topnav">
+        <a href="{% url 'MainApp:homepage' %}">Home</a>
+        <a href="">Refresh</a> 
+        {% if clickedtab != 2 %}
+        <a href="{% url 'MainApp:followerstab' profile_user.username %}">Followers {{followed_by_len}}</a>
+        {% endif %}{% if clickedtab != 3 %}
+        <a href="{% url 'MainApp:followingtab' profile_user.username %}">Following {{following_len}}</a>
+        {% endif %}{% if clickedtab != 4 and isNative %}
+        <a href="{% url 'MainApp:settingstab' user.username %}">Settings</a>
+        {% endif %}{% if clickedtab != 1 %}
+        <a href=".">Tweets</a>
+        {% endif %}
+
+        {% if validSession %}
+        <a href="{% url 'MainApp:logout' %}" style="float:right">Logout</a>
+        {% else %}
+        <a href="{% url 'MainApp:register' %}" style="float:right">Register</a>
+        <a href="{% url 'MainApp:login' %}" style="float:right">Login</a>
+
+  {% endif %}
+      </div>
+
+{% endblock %}
