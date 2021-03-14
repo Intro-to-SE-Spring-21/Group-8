@@ -333,6 +333,9 @@ class ProfilePage(GenericPage):
         - render() function call with the page to be rendered
         """
         context = {}
+
+        tweet_form = Generate_Tweet()
+
         profile_user = get_object_or_404(User,username=username)
         #How many users is the profile user following
         following = Follow.objects.filter(user = profile_user)
@@ -362,11 +365,11 @@ class ProfilePage(GenericPage):
         rand_three = self.getFollowRecommendations(request)
         
         context = {'validSession':False, 'username':request.user.username, 'whoToFollow':rand_three, 
-            'profile_user':profile_user,'auth_follow':auth_follow,
-            'isNative':isNative, 'personalscroll':UserTweets,'liked_tweets_len':len(liked_tweets)}
+            'profile_user':profile_user,'auth_follow':auth_follow, 'tweet':tweet_form,
+            'isNative':isNative, 'personalscroll':UserTweets, 'clickedtab':1, 
+            'liked_tweets_len':len(liked_tweets)}
            
         self.getFollowCounts(profile_user,context)
-
 
         if(request.user.is_authenticated):
             context['validSession'] = True
@@ -398,4 +401,240 @@ class ProfilePage(GenericPage):
             
             return self.removeFollower(request)
 
-        return self.get(request)
+        #Creating a Tweet through the webpage
+        if request.method == "POST":
+            
+            self.createTweet(request)
+
+        return self.get(request, request.user.username)
+
+
+class ProfileFollowing(GenericPage):
+
+    def get(self,request,username):
+        """
+        This function handles a get request for the profile page
+        Inputs:
+        - request: Django request output
+        Returns:
+        - render() function call with the page to be rendered
+        """
+        context = {}
+
+        profile_user = get_object_or_404(User,username=username)
+        #How many users is the profile user following
+        following = Follow.objects.filter(user = profile_user)
+        #how many people are following the profile user
+        followed_by = Follow.objects.filter(following=profile_user)
+
+        followingdict = []
+        viewer_following = Follow.objects.filter(user = request.user)
+        for temp in viewer_following:
+            followingdict.append(temp.following.username)
+
+        #if current_user is in followed_by...show unfollow
+        #Check to see if we are on the users native profile if they are logged in
+        isNative = False
+        #Stores whether or not the authenticated user is following the current profile user
+        auth_follow = False
+        if request.user.is_authenticated:
+            if request.user.username == profile_user.username:
+                isNative = True
+                
+            #Check to see if the authenticated user is already following the user
+            for followed in followed_by:
+                if request.user == followed.user:
+                    auth_follow = True
+
+        rand_three = self.getFollowRecommendations(request)
+        
+        context = {'validSession':False, 'username':request.user.username, 'whoToFollow':rand_three, 
+            'profile_user':profile_user,'auth_follow':auth_follow, 'clickedtab':3,
+            'isNative':isNative, 'following':following, 'followers':followed_by, 
+            'followingdict':followingdict}
+           
+        self.getFollowCounts(profile_user,context)
+
+        if(request.user.is_authenticated):
+            context['validSession'] = True
+        
+        return render(request,'MainApp/profile.html', context)
+
+
+    def post(self,request,username):
+        """
+        This function handles a post request for the homepage
+        Inputs:
+        - request: Django request output
+        - username: the 'username' found in profile/<username/ in the url
+        Returns:
+        - self.get() which renders the rest of the page
+        """
+        
+        if not request.user.is_authenticated:
+            #If the user tries to POST anything and they are not logged in, redirect them to the login page
+            #at some point look at the thing that will redirect them back to the same page and complete the previous
+            #action once they are logged in
+            return HttpResponseRedirect(reverse('MainApp:login'))
+
+        if request.POST.get('follow'):
+
+            return self.addFollower(request)
+
+        if request.POST.get('unfollow'):
+            
+            return self.removeFollower(request)
+     
+        return self.get(request, request.user.username)
+
+
+class ProfileFollowers(GenericPage):
+
+    def get(self,request,username):
+        """
+        This function handles a get request for the profile page
+        Inputs:
+        - request: Django request output
+        Returns:
+        - render() function call with the page to be rendered
+        """
+        context = {}
+
+        profile_user = get_object_or_404(User,username=username)
+        #How many users is the profile user following
+        following = Follow.objects.filter(user = profile_user)
+        #how many people are following the profile user
+        followed_by = Follow.objects.filter(following = profile_user)
+
+        followingdict = []
+        viewer_following = Follow.objects.filter(user = request.user)
+        for temp in viewer_following:
+            followingdict.append(temp.following.username)
+ 
+        #if current_user is in followed_by...show unfollow
+        #Check to see if we are on the users native profile if they are logged in
+        isNative = False
+        #Stores whether or not the authenticated user is following the current profile user
+        auth_follow = False
+        if request.user.is_authenticated:
+            if request.user.username == profile_user.username:
+                isNative = True
+                
+            #Check to see if the authenticated user is already following the user
+            for followed in followed_by:
+                if request.user == followed.user:
+                    auth_follow = True
+
+        rand_three = self.getFollowRecommendations(request)
+        
+        context = {'validSession':False, 'username':request.user.username, 'whoToFollow':rand_three, 
+            'profile_user':profile_user,'auth_follow':auth_follow, 'clickedtab':2,
+            'isNative':isNative, 'followers': followed_by, 'following':following,
+            'followingdict':followingdict}
+           
+        self.getFollowCounts(profile_user,context)
+
+        if(request.user.is_authenticated):
+            context['validSession'] = True
+        
+        return render(request,'MainApp/profile.html', context)
+
+
+    def post(self,request,username):
+        """
+        This function handles a post request for the homepage
+        Inputs:
+        - request: Django request output
+        - username: the 'username' found in profile/<username/ in the url
+        Returns:
+        - self.get() which renders the rest of the page
+        """
+        
+        if not request.user.is_authenticated:
+            #If the user tries to POST anything and they are not logged in, redirect them to the login page
+            #at some point look at the thing that will redirect them back to the same page and complete the previous
+            #action once they are logged in
+            return HttpResponseRedirect(reverse('MainApp:login'))
+
+        if request.POST.get('follow'):
+
+            return self.addFollower(request)
+
+        if request.POST.get('unfollow'):
+            
+            return self.removeFollower(request)
+     
+        return self.get(request, request.user.username)
+
+
+class ProfileSettings(GenericPage):
+
+    def get(self,request,username):
+        """
+        This function handles a get request for the profile page
+        Inputs:
+        - request: Django request output
+        Returns:
+        - render() function call with the page to be rendered
+        """
+        context = {}
+
+        profile_user = get_object_or_404(User,username=username)
+        #How many users is the profile user following
+        following = Follow.objects.filter(user = profile_user)
+        #how many people are following the profile user
+        followed_by = Follow.objects.filter(following=profile_user)
+
+        #if current_user is in followed_by...show unfollow
+        #Check to see if we are on the users native profile if they are logged in
+        isNative = False
+        #Stores whether or not the authenticated user is following the current profile user
+        auth_follow = False
+        if request.user.is_authenticated:
+            if request.user.username == profile_user.username:
+                isNative = True
+                
+            #Check to see if the authenticated user is already following the user
+            for followed in followed_by:
+                if request.user == followed.user:
+                    auth_follow = True
+
+        rand_three = self.getFollowRecommendations(request)
+        
+        context = {'validSession':False, 'username':request.user.username, 'whoToFollow':rand_three, 
+            'profile_user':profile_user,'auth_follow':auth_follow, 'clickedtab':4,
+            'isNative':isNative}
+           
+        self.getFollowCounts(profile_user,context)
+
+        if(request.user.is_authenticated):
+            context['validSession'] = True
+        
+        return render(request,'MainApp/profile.html', context)
+
+
+    def post(self,request,username):
+        """
+        This function handles a post request for the homepage
+        Inputs:
+        - request: Django request output
+        - username: the 'username' found in profile/<username/ in the url
+        Returns:
+        - self.get() which renders the rest of the page
+        """
+        
+        if not request.user.is_authenticated:
+            #If the user tries to POST anything and they are not logged in, redirect them to the login page
+            #at some point look at the thing that will redirect them back to the same page and complete the previous
+            #action once they are logged in
+            return HttpResponseRedirect(reverse('MainApp:login'))
+
+        if request.POST.get('follow'):
+
+            return self.addFollower(request)
+
+        if request.POST.get('unfollow'):
+            
+            return self.removeFollower(request)
+     
+        return self.get(request, request.user.username)

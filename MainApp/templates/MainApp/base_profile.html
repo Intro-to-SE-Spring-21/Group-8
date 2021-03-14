@@ -68,17 +68,22 @@
         }
         
         /* Style the topnav links */
-        .topnav a {
+        .topnav a, .topnav button {
           float: left;
+          background-color: black;
+          border: none;
           display: block;
           color: ghostwhite;
           text-align: center;
           padding: 14px 16px;
           text-decoration: none;
+          cursor: pointer;
+          outline: none;
+          font-size: 15px;
         }
         
         /* Change color on hover */
-        .topnav a:hover {
+        .topnav a:hover, .topnav button:hover{
           background-color: rgb(29,161,242,0.15);
           color: rgb(29,161,242,1.00);
         }
@@ -262,7 +267,7 @@
           padding: 20px;
         }
         
-        .tweet input[type=text] {
+        .tweet textarea {
           width: 100%;
           height: 100%;
           background-color: black;
@@ -273,7 +278,7 @@
           margin-bottom: 20px;
         }
         
-        .tweet input[type=text]:focus {
+        .tweet textarea:focus, .tweet textarea {
           color: ghostwhite;
         }
         
@@ -358,7 +363,7 @@
         <a href="#">Following ###</a>
         <a href="#">Likes</a>
         <a href="#">Refresh</a>
-        <a href="#">Edit</a>
+        <a href="#">Settings</a>
         {% if validSession %}
         <a href="{% url 'MainApp:logout' %}" style="float:right">Logout</a>
         {% else %}
@@ -371,25 +376,22 @@
       
       <div class="row">
         <div class="leftcolumn">
-          <div class="tweet">
-            <input type="text" placeholder="What's happening?">
-            <div style="border-top-color:rgb(58, 63, 66);
-            border-top-style: solid; 
-            border-top-width: 1px;
-            padding-top: 15px;
-            clear: both;">
-              <button class="tweet_button">Tweet</button>
-            </div>
-            <div style="clear: both;"></div>
-          </div>
+          {% block TweetAndSearch %}
+          <!-- left columen Tweet and Search bar -->
+          {% endblock %}
+
           {% block Personal_Scroll %}
+          <!-- Shows either past post or user followed/following -->
           {% endblock %}
         </div>
         <div class="rightcolumn">
           <div class="search" style="border-radius: 35px;">
             <input type="text" placeholder="Search Twitter">
           </div>
-          
+
+        {% block Profile_Card %}
+        {% endblock %} 
+        
         {% block Profile_User_List %}
         {% endblock %}
           <!--<div class="card">
