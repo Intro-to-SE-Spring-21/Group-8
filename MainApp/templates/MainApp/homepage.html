@@ -55,8 +55,9 @@
   <a href="{% url 'MainApp:profile' user %}" style="text-decoration: none;
   outline: none;">
     <div class="card">
-      <div class="fakeimg" style="width: 30%; float: left;">Profile pic.</div>
-      <div style="text-align: right; width: 70%; float: left;">
+      <!--<div class="fakeimg" style="width: 30%; float: left;">Profile pic.</div>-->
+      <div class="defaultimg" style="height:100%;width:100%"> <img src = "https://simplyilm.com/wp-content/uploads/2017/08/temporary-profile-placeholder-1.jpg" alt="DefaultPic" class="center"> </div>
+      <div style="text-align: center; width: 100%; float: left;">
         <h2>{{user.first_name}} {{user.last_name}}</h2>
         <h3 style="color: rgb(99, 99, 99);">@{{user.username}}</h3>
       </div>
@@ -75,7 +76,8 @@
       {% for user,alreadyFollow in user_dict.items %}
 
         <div class="foreignaccount">
-          <a href="/profile/{{user.username}}/" style="width: 70%; float: left;">
+          <div class="defaultimg" style="height:10%;width:10%; float:left;"> <img src = "https://simplyilm.com/wp-content/uploads/2017/08/temporary-profile-placeholder-1.jpg" alt="DefaultPic" width="70" height="70"></div>
+          <a href="/profile/{{user.username}}/" style="width: 70%; float: left; padding-left: 70px;">
             <h2>{{user.first_name}} {{user.last_name}}</h2>
             <h3 style="color: rgb(99, 99, 99);">@{{user.username}}</h3>
           </a>
@@ -103,19 +105,31 @@
 <!-- Tweets that are being shown to screen -->
 {% block Live_Scroll %}
 
-  {% for post in tweetFeed %}
+  {% for post,isLiked in tweetFeed.items %}
     {% if forloop.counter0 < 25 %}
       {% load nbsp %}
       <div class="post">
-        <div class="fakeimg" style="width: 10%; height: 100%; float: left;">Place Holder</div>
+        <!--<div class="fakeimg" style="width: 10%; height: 100%; float: left;">Place Holder</div>-->
+        <div class="defaultimg" style="height:10%;width:10%; float:left;"> <img src = "https://simplyilm.com/wp-content/uploads/2017/08/temporary-profile-placeholder-1.jpg" alt="DefaultPic" width="70" height="70"></div>
         <div style="float: left; width: 90%; padding-left: 10px;">
           <span style="font-size: 20px; font-weight: bold;">{{post.tweet_creator.first_name}} {{post.tweet_creator.last_name}}</span>
-          <span style="font-size: 20px; color: rgb(99, 99, 99);">@{{post.tweet_creator.username}}</span>
+          <span>
+            <a class="user_link" href="/profile/{{post.tweet_creator.username}}/">@{{post.tweet_creator.username}} </a>
+          </span>
           <span style="font-size: 20px; color: rgb(99, 99, 99);"> - {{post.pub_date}}</span>
           <div style="word-wrap: break-word; padding-top: 5px; line-height: 130%;">{{ post.visible_info | linebreaksbr | nbsp }}</div>
           <div class="fakeimg" style="height:60px;">Image</div>
         </div>
-        <button class="like">Like</button>
+        {% ifnotequal user.username post.tweet_creator.username %}
+          <form name="like_tweet" method="POST" action="{% url 'MainApp:homepage' %}">
+            {% csrf_token %}
+            {% if not isLiked %}
+              <button name="like_button" value="{{user.username}},{{post.pk}}" class="like">Like</button>
+            {% else %}
+              <button name="unlike_button" value="{{user.username}},{{post.pk}}" class="like">Unlike</button>
+            {% endif %}
+          </form>
+        {% endifnotequal %}
         <div style="clear: both;"></div>
       </div>
     {% endif %}
