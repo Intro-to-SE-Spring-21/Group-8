@@ -426,6 +426,7 @@ class ProfileFollowing(GenericPage):
         following = Follow.objects.filter(user = profile_user)
         #how many people are following the profile user
         followed_by = Follow.objects.filter(following=profile_user)
+        liked_tweets = Like.objects.filter(user=profile_user)
 
         followingdict = []
         viewer_following = Follow.objects.filter(user = request.user)
@@ -451,7 +452,7 @@ class ProfileFollowing(GenericPage):
         context = {'validSession':False, 'username':request.user.username, 'whoToFollow':rand_three, 
             'profile_user':profile_user,'auth_follow':auth_follow, 'clickedtab':3,
             'isNative':isNative, 'following':following, 'followers':followed_by, 
-            'followingdict':followingdict}
+            'followingdict':followingdict,"liked_tweets_len":len(liked_tweets)}
            
         self.getFollowCounts(profile_user,context)
 
@@ -505,6 +506,7 @@ class ProfileFollowers(GenericPage):
         following = Follow.objects.filter(user = profile_user)
         #how many people are following the profile user
         followed_by = Follow.objects.filter(following = profile_user)
+        liked_tweets = Like.objects.filter(user=profile_user)
 
         followingdict = []
         viewer_following = Follow.objects.filter(user = request.user)
@@ -530,7 +532,7 @@ class ProfileFollowers(GenericPage):
         context = {'validSession':False, 'username':request.user.username, 'whoToFollow':rand_three, 
             'profile_user':profile_user,'auth_follow':auth_follow, 'clickedtab':2,
             'isNative':isNative, 'followers': followed_by, 'following':following,
-            'followingdict':followingdict}
+            'followingdict':followingdict,"liked_tweets_len":len(liked_tweets)}
            
         self.getFollowCounts(profile_user,context)
 
@@ -584,6 +586,7 @@ class ProfileSettings(GenericPage):
         following = Follow.objects.filter(user = profile_user)
         #how many people are following the profile user
         followed_by = Follow.objects.filter(following=profile_user)
+        liked_tweets = Like.objects.filter(user=profile_user)
 
         #if current_user is in followed_by...show unfollow
         #Check to see if we are on the users native profile if they are logged in
@@ -603,7 +606,7 @@ class ProfileSettings(GenericPage):
         
         context = {'validSession':False, 'username':request.user.username, 'whoToFollow':rand_three, 
             'profile_user':profile_user,'auth_follow':auth_follow, 'clickedtab':4,
-            'isNative':isNative}
+            'isNative':isNative,"liked_tweets_len":len(liked_tweets)}
            
         self.getFollowCounts(profile_user,context)
 

@@ -200,6 +200,7 @@
       <div class="topnav">
         <a href="{% url 'MainApp:homepage' %}">Home</a>
         <a href="">Refresh</a> 
+        <a href="">Likes {{liked_tweets_len}}</a>
         {% if clickedtab != 2 %}
         <a href="{% url 'MainApp:followerstab' profile_user.username %}">Followers {{followed_by_len}}</a>
         {% endif %}{% if clickedtab != 3 %}
