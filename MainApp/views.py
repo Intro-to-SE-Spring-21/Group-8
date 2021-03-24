@@ -641,3 +641,108 @@ class ProfileSettings(GenericPage):
             return self.removeFollower(request)
      
         return self.get(request, request.user.username)
+
+
+class ProfileLikes(GenericPage):
+
+    def getUserTweets(self,request,profile_user):
+        """ 
+        This function grabs all the tweets from a specific user
+        Inputs:
+        - profile_user: The desired User object
+        Returns:
+        - QuerySet with all the User's tweets
+        """
+
+        tweet_dict = {}
+
+        for tweet in Tweet.objects.order_by('-pub_date').filter(tweet_creator=profile_user.pk):
+            #If a user is logged in, and they have liked this specific tweet then set the tweet's value to 1
+            if request.user.is_authenticated and Like.objects.filter(tweet=tweet,user=request.user):
+                tweet_dict[tweet] = 1
+            else:
+                tweet_dict[tweet] = 0
+        
+        #Return the dictionary of tweets, and whether or not it has been liked by the authenticated user
+        return tweet_dict
+        
+
+    def get(self,request,username):
+        """
+        This function handles a get request for the profile page
+        Inputs:
+        - request: Django request output
+        Returns:
+        - render() function call with the page to be rendered
+        """
+        context = {}
+
+        profile_user = get_object_or_404(User,username=username)
+        #How many users is the profile user following
+        following = Follow.objects.filter(user = profile_user)
+        #how many people are following the profile user
+        followed_by = Follow.objects.filter(following=profile_user)
+
+        #Get likes
+        liked_tweets = Like.objects.filter(user=profile_user)
+        print(liked_tweets)
+
+        #if current_user is in followed_by...show unfollow
+        #Check to see if we are on the users native profile if they are logged in
+        isNative = False
+        #Stores whether or not the authenticated user is following the current profile user
+        auth_follow = False
+        if request.user.is_authenticated:
+            if request.user.username == profile_user.username:
+                isNative = True
+                
+            #Check to see if the authenticated user is already following the user
+            for followed in followed_by:
+                if request.user == followed.user:
+                    auth_follow = True
+
+        rand_three = self.getFollowRecommendations(request)
+        
+        context = {'validSession':False, 'username':request.user.username, 'whoToFollow':rand_three, 
+            'profile_user':profile_user,'auth_follow':auth_follow,
+            'isNative':isNative, 'clickedtab':5,'liked_tweets':liked_tweets, 
+            'liked_tweets_len':len(liked_tweets)}
+           
+        self.getFollowCounts(profile_user,context)
+
+        if(request.user.is_authenticated):
+            context['validSession'] = True
+        
+        return render(request,'MainApp/profile.html', context)
+
+
+    def post(self,request,username):
+        """
+        This function handles a post request for the homepage
+        Inputs:
+        - request: Django request output
+        - username: the 'username' found in profile/<username/ in the url
+        Returns:
+        - self.get() which renders the rest of the page
+        """
+        
+        if not request.user.is_authenticated:
+            #If the user tries to POST anything and they are not logged in, redirect them to the login page
+            #at some point look at the thing that will redirect them back to the same page and complete the previous
+            #action once they are logged in
+            return HttpResponseRedirect(reverse('MainApp:login'))
+
+        if request.POST.get('follow'):
+
+            return self.addFollower(request)
+
+        if request.POST.get('unfollow'):
+            
+            return self.removeFollower(request)
+
+        #Creating a Tweet through the webpage
+        if request.method == "POST":
+            
+            self.createTweet(request)
+
+        return self.get(request, request.user.username)
