@@ -189,12 +189,20 @@
         <a href="">Refresh</a> 
         {% if clickedtab != 2 %}
         <a href="{% url 'MainApp:followerstab' profile_user.username %}">Followers {{followed_by_len}}</a>
+        {% else %} 
+        <a href="{% url 'MainApp:followerstab' profile_user.username %}" style="color: rgb(29,161,242);">Followers {{followed_by_len}}</a>
         {% endif %}{% if clickedtab != 3 %}
         <a href="{% url 'MainApp:followingtab' profile_user.username %}">Following {{following_len}}</a>
+        {% else %} 
+        <a href="{% url 'MainApp:followingtab' profile_user.username %}" style="color: rgb(29,161,242);">Following {{following_len}}</a>
         {% endif %}{% if clickedtab != 4 and isNative %}
         <a href="{% url 'MainApp:settingstab' user.username %}">Settings</a>
+        {% elif isNative %}
+        <a href="{% url 'MainApp:settingstab' user.username %}" style="color: rgb(29,161,242);">Settings</a>
         {% endif %}{% if clickedtab != 1 %}
         <a href=".">Tweets</a>
+        {% else %} 
+        <a href="." style="color: rgb(29,161,242);">Tweets</a>
         {% endif %}
 
         {% if validSession %}
