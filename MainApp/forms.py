@@ -15,6 +15,8 @@ class Generate_Tweet(forms.Form):
         return data
 
 class UserUpdateForm(forms.ModelForm):
+    """The Model form for updating user profile settings,
+        Additional attributes to edit can be added in 'fields' dict (must be in User Object)"""
     class Meta:
         model = User
         fields = ['username', 'email', 'first_name', 'last_name','bio']

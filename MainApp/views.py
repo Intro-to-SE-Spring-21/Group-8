@@ -160,11 +160,11 @@ class GenericPage(TemplateView):
 
     def editAccount(self,request):
         """
-        This function removes a Follower for the given authenticated user
+        This function grabs the form data from the Settings tab, validates it, and saves the updates to the database
         Inputs:
         - request: Django request output
         Returns:
-        - HttpResponseRedirect with the profile to be rendered
+        - HttpResponseRedirect with the updated profile to be rendered
         """      
 
         edit = UserUpdateForm(request.POST, instance=request.user)
@@ -520,6 +520,7 @@ class ProfileSettings(GenericPage):
 
         rand_three = self.getFollowRecommendations(request)
 
+        #Grab the initial values to pass to the user form
         initial_dict = {
             "first_name" : request.user.first_name,
             "last_name"  : request.user.last_name,

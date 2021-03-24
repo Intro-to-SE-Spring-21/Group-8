@@ -4,6 +4,11 @@ from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
 
 class User(AbstractUser):
+    """This model extands the base User object...adding a User bio
+        ***This model acts the exact same as the original User, except it now has the additional bio attribute***
+
+        TODO: Add profile pic place to this model
+    """
     bio = models.TextField(max_length=150,blank=True)
 
 
