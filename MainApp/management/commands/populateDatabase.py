@@ -53,17 +53,17 @@ class Command(BaseCommand):
         #admin.save()
 
         follow_dict = {
-            'lmurdock12':[user_10,user_1,user_4,user_6],
-            'bhball22':[user_2,user_7,user_8],
-            'natalie2by4':[user_7,user_2,user_8,user_4,user_3],
+            'lmurdock12':[user_10,user_4,user_6],
+            'bhball22':[user_7,user_8],
+            'natalie2by4':[user_7,user_2,user_8,user_4],
             'kd766':[user_8,user_1,user_5,user_3,user_7,user_6],
             'admin':[user_4,user_1],
-            'bagley':[user_3,user_9,user_5],
+            'bagley':[user_3,user_9],
             'github':[user_3],
             'bobross':[user_2,user_3,user_5,user_9,user_10],
             'drake':[user_6,user_7],
             'oprahwinfrey':[user_5,user_2,user_7,user_4],
-            'billgates':[user_10,user_7,user_3]
+            'billgates':[user_7,user_3]
         }
 
         for key,value in follow_dict.items():
