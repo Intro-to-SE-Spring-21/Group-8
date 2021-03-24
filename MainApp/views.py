@@ -525,6 +525,7 @@ class ProfileSettings(GenericPage):
             "last_name"  : request.user.last_name,
             "email" : request.user.email,
             "username"  : request.user.username,
+            "bio": request.user.bio,
         }
 
         edit_form = UserUpdateForm(initial = initial_dict,instance=request.user)
