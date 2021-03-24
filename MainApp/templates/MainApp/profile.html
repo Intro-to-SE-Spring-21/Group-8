@@ -126,7 +126,7 @@
       <form method="POST">
         {% csrf_token %}
         {{ form.as_p }}
-        <input name="edit_user" type="submit" value="Save settings" >
+        <button name="submit_user_edits" type="submit" value=1 >Save User </button>
       </form>
     </div>
   {% endif %}
