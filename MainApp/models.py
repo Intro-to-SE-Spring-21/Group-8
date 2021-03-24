@@ -1,7 +1,11 @@
 import datetime
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
+
+class User(AbstractUser):
+    bio = models.TextField(max_length=150,blank=True)
+
 
 class Tweet(models.Model):
     tweet_creator = models.ForeignKey(User, on_delete=models.CASCADE)

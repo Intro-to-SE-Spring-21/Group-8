@@ -12,8 +12,8 @@ from django.urls import reverse
 
 ##New includes
 from django.views.generic import TemplateView
-
-
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 def register(request):
 
