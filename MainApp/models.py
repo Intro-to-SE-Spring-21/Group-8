@@ -17,7 +17,7 @@ class Tweet(models.Model):
     tweet_text = models.TextField(max_length=280)
     pub_date = models.DateTimeField('date published')
     def __str__(self):
-        return "{} - Post - {}".format(self.tweet_creator, self.pk)
+        return "Post # {} by {}".format(self.pk, self.tweet_creator)
     def was_published_recently(self):
         return self.pub_date >= timezone.now() - datetime.timedelta(days=1)
 
@@ -34,3 +34,11 @@ class Follow(models.Model):
 
     def __str__(self):
         return "User {} - Following - {} - {} ".format(self.user.username,self.following.username,self.pk)
+
+
+class Like(models.Model):
+    user = models.ForeignKey(User,related_name="liked_user",on_delete=models.CASCADE)
+    tweet = models.ForeignKey(Tweet,related_name="tweet",on_delete=models.CASCADE)
+
+    def __str__(self):
+        return "User {} liked Tweet #: {}".format(self.user.username,self.tweet.pk)

@@ -1,6 +1,8 @@
 from django.contrib import admin
 
-from .models import Follow, Tweet, User
+
+from .models import Follow, Tweet, Like, User
+
 
 #Imports required so we can edit our custom User model that includes bio
 from django.contrib.auth.admin import UserAdmin
@@ -27,3 +29,4 @@ class MyUserAdmin(UserAdmin):
 admin.site.register(User, MyUserAdmin)
 admin.site.register(Tweet)
 admin.site.register(Follow)
+admin.site.register(Like)
