@@ -5,13 +5,16 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import Tweet
-from .forms import Generate_Tweet
+from .forms import Generate_Tweet, UserUpdateForm
 import random
 from MainApp.models import Follow, Like
 from django.urls import reverse
 
 ##New includes
 from django.views.generic import TemplateView
+
+from django.contrib.auth import get_user_model
+User = get_user_model()
 import collections
 
 
@@ -157,6 +160,28 @@ class GenericPage(TemplateView):
 
         #reload the page and make sure an follow button shows back up
         return HttpResponseRedirect(reverse('MainApp:profile', args=[request.POST['unfollow']]))
+
+
+    def editAccount(self,request):
+        """
+        This function grabs the form data from the Settings tab, validates it, and saves the updates to the database
+        Inputs:
+        - request: Django request output
+        Returns:
+        - HttpResponseRedirect with the updated profile to be rendered
+        """      
+
+        edit = UserUpdateForm(request.POST, instance=request.user)
+        if edit.is_valid():
+            edit.save()    
+
+      ## Here are some websites for editing the user information ##
+    #### https://docs.djangoproject.com/en/3.1/topics/auth/default/#using-the-views #### 
+    #### https://docs.djangoproject.com/en/3.1/topics/auth/default/ ####
+
+        #reload the page and make sure an follow button shows back up
+        return HttpResponseRedirect(reverse('MainApp:profile', args=[edit.cleaned_data['username']]))
+
 
     def getFeed(self,request):
         """
@@ -600,10 +625,21 @@ class ProfileSettings(GenericPage):
                     auth_follow = True
 
         rand_three = self.getFollowRecommendations(request)
+
+        #Grab the initial values to pass to the user form
+        initial_dict = {
+            "first_name" : request.user.first_name,
+            "last_name"  : request.user.last_name,
+            "email" : request.user.email,
+            "username"  : request.user.username,
+            "bio": request.user.bio,
+        }
+
+        edit_form = UserUpdateForm(initial = initial_dict,instance=request.user)
         
         context = {'validSession':False, 'username':request.user.username, 'whoToFollow':rand_three, 
             'profile_user':profile_user,'auth_follow':auth_follow, 'clickedtab':4,
-            'isNative':isNative}
+            'isNative':isNative, 'form':edit_form}
            
         self.getFollowCounts(profile_user,context)
 
@@ -636,5 +672,8 @@ class ProfileSettings(GenericPage):
         if request.POST.get('unfollow'):
             
             return self.removeFollower(request)
-     
+
+        if request.POST.get('submit_user_edits'):
+            return self.editAccount(request)
+      
         return self.get(request, request.user.username)
