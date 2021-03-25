@@ -264,9 +264,10 @@ class MainPage(GenericPage):
         
         tweetFeed = self.getFeed(request)
         rand_three = self.getFollowRecommendations(request)  
+        AllUsers = User.objects.all()
         ### Variable declared to pass all information to webpage
         context = {'validSession':False, 'username':request.user.username, 'whoToFollow':rand_three,
-        'tweetFeed':tweetFeed, 'tweet':tweet_form}
+        'tweetFeed':tweetFeed, 'tweet':tweet_form, 'AllUsers':AllUsers}
 
         if request.user.is_authenticated:
             profile_user = get_object_or_404(User,username=request.user.username)
