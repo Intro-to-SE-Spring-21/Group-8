@@ -724,8 +724,8 @@ class ProfileLikes(GenericPage):
 
         #With user I can grab all of the Likes a given user have
         #With each Like I can loop and grab the specific tweet
-        # Is there a better way?
         liked_tweet_obj_dict = {}
+        #".liked_user" grabs all the like objects for the given profile_user
         for like in profile_user.liked_user.all():
             tweet_obj = like.tweet
             #If a user is logged in, and they have liked this specific tweet then set the tweet's value to 1
