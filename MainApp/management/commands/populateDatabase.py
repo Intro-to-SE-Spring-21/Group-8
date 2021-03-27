@@ -3,7 +3,8 @@ from django.contrib.auth.models import User
 from MainApp.models import Follow
 from MainApp.models import Tweet
 import os
-
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 class Command(BaseCommand):
     help = 'Creates and saves several of all of the models in our database (Users, Tweets, and Follows)'
