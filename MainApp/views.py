@@ -142,7 +142,7 @@ class GenericPage(TemplateView):
         return HttpResponseRedirect(reverse('MainApp:profile', args=[request.POST['follow']]))       
 
 
-    def removeFollower(self,request):
+    def removeFollower(self,request,default_reverse='MainApp:profile',arg=None):
         """
         This function removes a Follower for the given authenticated user
         Inputs:
@@ -156,7 +156,11 @@ class GenericPage(TemplateView):
         unfollow.delete()
 
         #reload the page and make sure an follow button shows back up
-        return HttpResponseRedirect(reverse('MainApp:profile', args=[request.POST['unfollow']]))
+        if arg == None:
+            arg = [request.POST['unfollow']]
+
+        return HttpResponseRedirect(reverse(default_reverse, args=arg))
+
 
     def getFeed(self,request):
         """
@@ -218,7 +222,6 @@ class GenericPage(TemplateView):
             new_like.save()
         
 
-    
     def removeLike(self,request,button_name):
         """
         This function removes a like object from the database.
@@ -479,12 +482,16 @@ class ProfileFollowing(GenericPage):
             return HttpResponseRedirect(reverse('MainApp:login'))
 
         if request.POST.get('follow'):
-
             return self.addFollower(request)
 
         if request.POST.get('unfollow'):
-            
-            return self.removeFollower(request)
+            return self.removeFollower(request,'MainApp:followingtab',arg=[request.user])
+
+        if request.POST.get("like_button"):
+            self.removeLike(request,"unlike_button")
+
+        if request.POST.get("unlike_button"):
+            self.removeLike(request,"unlike_button")
      
         return self.get(request, request.user.username)
 
@@ -559,12 +566,16 @@ class ProfileFollowers(GenericPage):
             return HttpResponseRedirect(reverse('MainApp:login'))
 
         if request.POST.get('follow'):
-
             return self.addFollower(request)
 
         if request.POST.get('unfollow'):
-            
-            return self.removeFollower(request)
+            return self.removeFollower(request,'MainApp:followerstab',arg=[request.user])
+
+        if request.POST.get("like_button"):
+            self.removeLike(request,"unlike_button")
+
+        if request.POST.get("unlike_button"):
+            self.removeLike(request,"unlike_button")
      
         return self.get(request, request.user.username)
 
@@ -667,6 +678,25 @@ class ProfileLikes(GenericPage):
         return tweet_dict
         
 
+    def getProfileLikes(self,request,profile_user):
+        
+
+        #With user I can grab all of the Likes a given user have
+        #With each Like I can loop and grab the specific tweet
+        # Is there a better way?
+        liked_tweet_obj_dict = {}
+        for like in profile_user.liked_user.all():
+            tweet_obj = like.tweet
+            #If a user is logged in, and they have liked this specific tweet then set the tweet's value to 1
+            if request.user.is_authenticated and Like.objects.filter(tweet=tweet_obj,user=request.user):
+                liked_tweet_obj_dict[tweet_obj] = 1
+            else:
+                liked_tweet_obj_dict[tweet_obj] = 0
+
+        #Return the dictionary of tweets, and whether or not it has been liked by the authenticated user
+        return liked_tweet_obj_dict
+
+
     def get(self,request,username):
         """
         This function handles a get request for the profile page
@@ -687,6 +717,8 @@ class ProfileLikes(GenericPage):
         liked_tweets = Like.objects.filter(user=profile_user)
         print(liked_tweets)
 
+        liked_tweet_obj_dict = self.getProfileLikes(request,profile_user)
+
         #if current_user is in followed_by...show unfollow
         #Check to see if we are on the users native profile if they are logged in
         isNative = False
@@ -705,7 +737,7 @@ class ProfileLikes(GenericPage):
         
         context = {'validSession':False, 'username':request.user.username, 'whoToFollow':rand_three, 
             'profile_user':profile_user,'auth_follow':auth_follow,
-            'isNative':isNative, 'clickedtab':5,'liked_tweets':liked_tweets, 
+            'isNative':isNative, 'clickedtab':5,'liked_tweet_obj_dict':liked_tweet_obj_dict, 
             'liked_tweets_len':len(liked_tweets)}
            
         self.getFollowCounts(profile_user,context)
@@ -740,6 +772,8 @@ class ProfileLikes(GenericPage):
             
             return self.removeFollower(request)
 
+        if request.POST.get("unlike_button"):
+            self.removeLike(request,"unlike_button")
         #Creating a Tweet through the webpage
         if request.method == "POST":
             
