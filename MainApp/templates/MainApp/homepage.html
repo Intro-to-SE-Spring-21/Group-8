@@ -120,16 +120,14 @@
           <div style="word-wrap: break-word; padding-top: 5px; line-height: 130%;">{{ post.visible_info | linebreaksbr | nbsp }}</div>
           <div class="fakeimg" style="height:60px;">Image</div>
         </div>
-        {% ifnotequal user.username post.tweet_creator.username %}
           <form name="like_tweet" method="POST" action="{% url 'MainApp:homepage' %}">
             {% csrf_token %}
             {% if not isLiked %}
-              <button name="like_button" value="{{user.username}},{{post.pk}}" class="like">Like</button>
+                <button name="like_button" value="{{user.username}},{{post.pk}}" class="like">Like {{post.likes}}</button>
             {% else %}
-              <button name="unlike_button" value="{{user.username}},{{post.pk}}" class="like">Unlike</button>
+              <button name="unlike_button" value="{{user.username}},{{post.pk}}" class="unlike">Unlike {{post.likes}}</button>
             {% endif %}
           </form>
-        {% endifnotequal %}
         <div style="clear: both;"></div>
       </div>
     {% endif %}

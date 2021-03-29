@@ -25,7 +25,11 @@ class Tweet(models.Model):
         if not self.tweet_text:
             return
         return self.tweet_text
-    
+
+    def countLikes(self):
+        return len(Like.objects.filter(tweet=self))
+
+    likes = property(countLikes)    
 
 class Follow(models.Model):
     user = models.ForeignKey(User, related_name = "user", on_delete=models.CASCADE)
