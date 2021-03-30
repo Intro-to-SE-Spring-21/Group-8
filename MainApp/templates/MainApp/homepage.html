@@ -51,7 +51,7 @@
 {% block Seachbar %}
   <div class="search">
     <input type="text" placeholder="Search Users" id="myInput" onkeyup="filterFunction()">
-    <div id="Search Dropdown" class="dropdown-content">
+    <div id="Search Dropdown" style="display: none;" class="dropdown-content">
       {% for name in AllUsers %} 
         <a href="/profile/{{name.username}}/">
           <div class="foreignaccount">
@@ -74,10 +74,10 @@
       input = document.getElementById("myInput");
       filter = input.value.toUpperCase();
       div = document.getElementById("Search Dropdown");
-      if (input != "") {
-        div.style.display = ""; }
-      else {
+      if (input.value.length == 0) {
         div.style.display = "none"; }
+      else {
+        div.style.display = "block"; }
       a = div.getElementsByTagName("a");
       for (i = 0; i < a.length; i++) {
         txtValue = a[i].textContent || a[i].innerText;

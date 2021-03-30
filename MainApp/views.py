@@ -364,11 +364,13 @@ class ProfilePage(GenericPage):
         UserTweets = self.getUserTweets(request,profile_user)
 
         rand_three = self.getFollowRecommendations(request)
+
+        AllUsers = User.objects.all()
         
         context = {'validSession':False, 'username':request.user.username, 'whoToFollow':rand_three, 
             'profile_user':profile_user,'auth_follow':auth_follow, 'tweet':tweet_form,
             'isNative':isNative, 'personalscroll':UserTweets, 'clickedtab':1, 
-            'liked_tweets_len':len(liked_tweets)}
+            'liked_tweets_len':len(liked_tweets), 'AllUsers':AllUsers}
            
         self.getFollowCounts(profile_user,context)
 
@@ -449,10 +451,12 @@ class ProfileFollowing(GenericPage):
 
         rand_three = self.getFollowRecommendations(request)
         
+        AllUsers = User.objects.all()
+        
         context = {'validSession':False, 'username':request.user.username, 'whoToFollow':rand_three, 
             'profile_user':profile_user,'auth_follow':auth_follow, 'clickedtab':3,
             'isNative':isNative, 'following':following, 'followers':followed_by, 
-            'followingdict':followingdict}
+            'followingdict':followingdict, 'AllUsers':AllUsers}
            
         self.getFollowCounts(profile_user,context)
 
@@ -527,11 +531,13 @@ class ProfileFollowers(GenericPage):
                     auth_follow = True
 
         rand_three = self.getFollowRecommendations(request)
+
+        AllUsers = User.objects.all()
         
         context = {'validSession':False, 'username':request.user.username, 'whoToFollow':rand_three, 
             'profile_user':profile_user,'auth_follow':auth_follow, 'clickedtab':2,
             'isNative':isNative, 'followers': followed_by, 'following':following,
-            'followingdict':followingdict}
+            'followingdict':followingdict, 'AllUsers':AllUsers}
            
         self.getFollowCounts(profile_user,context)
 
@@ -602,9 +608,11 @@ class ProfileSettings(GenericPage):
 
         rand_three = self.getFollowRecommendations(request)
         
+        AllUsers = User.objects.all()
+        
         context = {'validSession':False, 'username':request.user.username, 'whoToFollow':rand_three, 
             'profile_user':profile_user,'auth_follow':auth_follow, 'clickedtab':4,
-            'isNative':isNative}
+            'isNative':isNative, 'AllUsers':AllUsers}
            
         self.getFollowCounts(profile_user,context)
 
