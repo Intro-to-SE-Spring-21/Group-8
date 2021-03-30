@@ -121,7 +121,7 @@
         /* Fake image */
         .fakeimg {
           background-color: black;
-          width: 100%;
+          width: 70%;
           padding: 20px;
         }
         
@@ -136,7 +136,7 @@
         /* Default Profile Pic*/
         .defaultimg {
           width: 100%;
-          padding: 20px;
+          padding: 10px;
         }
 
         /* Text display for links */
@@ -263,11 +263,15 @@
           background-color: rgba(3, 3, 3, 0.1);
         }
         
+        #like, #delete {
+          display:inline-block;
+        }
+
         /* Add a like button for each post */
         .like {
           border: none;
           border-radius: 80px;
-          padding: 8px 8px;
+          padding: 6px 6px;
           cursor: pointer;
           font-size: 16px;
           color: ghostwhite;
@@ -302,7 +306,26 @@
           background-color: rgba(179, 10, 80, 0.15);
           color: rgba(138, 5, 5, 0.747);
         }
-        
+        .delete {
+          border: none;
+          border-radius: 80px;
+          padding: 6px 6px;
+          cursor: pointer;
+          font-size: 16px;
+          color: ghostwhite;
+          border-color: rgba(138, 5, 5, 0.747);
+          border-style: solid;
+          border-radius: 32px;
+          background-color: rgba(0,0,0,0);
+          color: rgba(138, 5, 5, 0.747);
+          outline: none
+        }
+
+        .delete:hover {
+          background-color: rgba(179, 10, 80, 0.15);
+          color: rgba(138, 5, 5, 0.747);
+        }
+
         .tweet {
           background-color: black;
           color: ghostwhite;

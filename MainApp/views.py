@@ -165,7 +165,6 @@ class GenericPage(TemplateView):
         return HttpResponseRedirect(reverse(default_reverse, args=arg))
 
 
-
     def editAccount(self,request):
         """
         This function grabs the form data from the Settings tab, validates it, and saves the updates to the database
