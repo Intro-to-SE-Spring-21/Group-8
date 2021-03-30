@@ -48,6 +48,48 @@
   </form>
 {% endblock %}
 
+{% block Seachbar %}
+  <div class="search">
+    <input type="text" placeholder="Search Users" id="myInput" onkeyup="filterFunction()">
+    <div id="Search Dropdown" style="display: none;" class="dropdown-content">
+      {% for name in AllUsers %} 
+        <a href="/profile/{{name.username}}/">
+          <div class="foreignaccount">
+            <div class="defaultimg" style="height:10%;width:10%; float:left;"> <img src = "https://simplyilm.com/wp-content/uploads/2017/08/temporary-profile-placeholder-1.jpg" alt="DefaultPic" width="70" height="70"></div>
+            <div style="border: none;" >
+              <h2 style="float: right;">{{name.first_name}} {{name.last_name}}</h2>
+              <h3 style="clear: left; float: right; color: rgb(99, 99, 99);">@{{name.username}}</h3>
+            </div>
+            <div style="clear: both;"></div>
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+
+  <script>
+
+    function filterFunction() {
+      var input, filter, ul, li, a, i;
+      input = document.getElementById("myInput");
+      filter = input.value.toUpperCase();
+      div = document.getElementById("Search Dropdown");
+      if (input.value.length == 0) {
+        div.style.display = "none"; }
+      else {
+        div.style.display = "block"; }
+      a = div.getElementsByTagName("a");
+      for (i = 0; i < a.length; i++) {
+        txtValue = a[i].textContent || a[i].innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+          a[i].style.display = "";
+        } else {
+          a[i].style.display = "none";
+        }
+      }
+    }
+  </script>
+{% endblock %}
 
 <!-- Card that holds Profile information -->
 {% block Profile_Card %}
