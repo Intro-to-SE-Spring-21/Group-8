@@ -46,7 +46,7 @@
       padding-top: 15px;
       clear: both;">
       {% if validSession %}
-        <button class="tweet_button" name="submit_tweet" type="submit">Tweet</button>
+        <button class="tweet_button" name="submit_tweet" value=1 type="submit">Tweet</button>
       {% else %}
         <button class="tweet_button" name="submit_tweet" type="submit" style="background-color: rgb(29,161,242,0.50); border-color: rgb(29,161,242,0.50); color: rgba(248, 248, 255, 0.50); cursor: unset;" disabled>Tweet</button>
       {% endif %}
@@ -78,7 +78,7 @@
          </div>
        <!--If the post user equals the authenticated user, do not show like button-->
 
-        <form name="like_tweet" method="POST" action="{% url 'MainApp:homepage' %}">
+        <form name="like_tweet" method="POST" action="{% url 'MainApp:profile' user %}">
           {% csrf_token %}
           <!--Show either like or unlike depending on whether or not user has liked the tweet-->
           {% if not isLiked %}

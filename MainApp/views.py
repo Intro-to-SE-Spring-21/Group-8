@@ -234,6 +234,10 @@ class GenericPage(TemplateView):
         values = request.POST.get(button_name)
 
         #Username is index 0, postID is index 1
+        print("###############")
+        print(button_name)
+        print(request.POST)
+        print(values)
         val_dict = values.split(',') 
         
         user = User.objects.get(username=val_dict[0])
@@ -315,6 +319,8 @@ class MainPage(GenericPage):
         Returns:
         - self.get() which renders the rest of the page
         """
+        print(request.POST)
+
         #Creating a Tweet through the webpage
         if request.POST.get("submit_tweet"):
             self.createTweet(request)
@@ -414,7 +420,7 @@ class ProfilePage(GenericPage):
         Returns:
         - self.get() which renders the rest of the page
         """
-        
+        print(request.POST)
         if not request.user.is_authenticated:
             #If the user tries to POST anything and they are not logged in, redirect them to the login page
             #at some point look at the thing that will redirect them back to the same page and complete the previous
@@ -429,9 +435,14 @@ class ProfilePage(GenericPage):
             
             return self.removeFollower(request)
 
+        if request.POST.get("like_button"):
+            self.addLike(request,"like_button")
+
+        if request.POST.get("unlike_button"):
+            self.removeLike(request,"unlike_button")
+
         #Creating a Tweet through the webpage
-        if request.method == "POST":
-            
+        if request.POST.get("submit_tweet"):
             self.createTweet(request)
 
         return self.get(request, request.user.username)
@@ -513,7 +524,7 @@ class ProfileFollowing(GenericPage):
             return self.removeFollower(request,'MainApp:followingtab',arg=[request.user])
 
         if request.POST.get("like_button"):
-            self.removeLike(request,"unlike_button")
+            self.addLike(request,"like_button")
 
         if request.POST.get("unlike_button"):
             self.removeLike(request,"unlike_button")
@@ -583,7 +594,6 @@ class ProfileFollowers(GenericPage):
         Returns:
         - self.get() which renders the rest of the page
         """
-        
         if not request.user.is_authenticated:
             #If the user tries to POST anything and they are not logged in, redirect them to the login page
             #at some point look at the thing that will redirect them back to the same page and complete the previous
@@ -597,7 +607,7 @@ class ProfileFollowers(GenericPage):
             return self.removeFollower(request,'MainApp:followerstab',arg=[request.user])
 
         if request.POST.get("like_button"):
-            self.removeLike(request,"unlike_button")
+            self.addLike(request,"like_button")
 
         if request.POST.get("unlike_button"):
             self.removeLike(request,"unlike_button")
