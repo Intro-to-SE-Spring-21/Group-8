@@ -1,3 +1,7 @@
+# Ignores
 __pycache__/
 db.sqlite3
-migrations/
+MainApp/migrations/*.py
+
+# Allow
+!/MainApp/migrations/__init__.py
