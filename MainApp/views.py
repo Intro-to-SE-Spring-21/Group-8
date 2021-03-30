@@ -296,6 +296,7 @@ class MainPage(GenericPage):
         
         tweetFeed = self.getFeed(request)
         rand_three = self.getFollowRecommendations(request)  
+        
         ### Variable declared to pass all information to webpage
         context = {'validSession':False, 'username':request.user.username, 'whoToFollow':rand_three,
         'tweetFeed':tweetFeed, 'tweet':tweet_form}
