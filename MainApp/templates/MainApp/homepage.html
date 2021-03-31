@@ -145,25 +145,38 @@
     {% if forloop.counter0 < 25 %}
       {% load nbsp %}
       <div class="post">
-        <!--<div class="fakeimg" style="width: 10%; height: 100%; float: left;">Place Holder</div>-->
-        <div class="defaultimg" style="height:10%;width:10%; float:left;"> <img src = "https://simplyilm.com/wp-content/uploads/2017/08/temporary-profile-placeholder-1.jpg" alt="DefaultPic" width="70" height="70"></div>
-        <div style="float: left; width: 90%; padding-left: 10px;">
+        <div class="defaultimg" style="height:10%;width:10%; float:left;"> <img src = "https://simplyilm.com/wp-content/uploads/2017/08/temporary-profile-placeholder-1.jpg" alt="DefaultPic" width="100%" height="100%"></div>
+        
           <span style="font-size: 20px; font-weight: bold;">{{post.tweet_creator.first_name}} {{post.tweet_creator.last_name}}</span>
           <span>
             <a class="user_link" href="/profile/{{post.tweet_creator.username}}/">@{{post.tweet_creator.username}} </a>
           </span>
           <span style="font-size: 20px; color: rgb(99, 99, 99);"> - {{post.pub_date}}</span>
+          <p></p>
           <div style="word-wrap: break-word; padding-top: 5px; line-height: 130%;">{{ post.visible_info | linebreaksbr | nbsp }}</div>
-          <div class="fakeimg" style="height:60px;">Image</div>
-        </div>
-          <form name="like_tweet" method="POST" action="{% url 'MainApp:homepage' %}">
-            {% csrf_token %}
-            {% if not isLiked %}
+          <p></p>
+          
+        <div id="tweet_options">
+          <div id="like" style="float: left">
+            <form name="like_tweet" method="POST" action="{% url 'MainApp:homepage' %}">
+              {% csrf_token %}
+              <!--Show either like or unlike depending on whether or not user has liked the tweet-->
+              {% if not isLiked %}
                 <button name="like_button" value="{{user.username}},{{post.pk}}" class="like">Like {{post.likes}}</button>
-            {% else %}
-              <button name="unlike_button" value="{{user.username}},{{post.pk}}" class="unlike">Unlike {{post.likes}}</button>
-            {% endif %}
-          </form>
+                {% else %}
+                  <button name="unlike_button" value="{{user.username}},{{post.pk}}" class="unlike">Unlike {{post.likes}}</button>
+                {% endif %}
+            </form>
+          </div>
+          <div id="delete" style="float: right">
+            <form name="delete_tweet" method="POST" action="{% url 'MainApp:homepage'  %}">
+              {% csrf_token %}
+              {% if user.username == post.tweet_creator.username %}
+                <button name="delete_button" value="{{post.pk}}" class="delete"> Delete Tweet </button>
+              {% endif %}
+            </form>
+          </div>
+        </div>
         <div style="clear: both;"></div>
       </div>
     {% endif %}
