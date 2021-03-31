@@ -188,6 +188,30 @@ body {
   outline: none;
 }
 
+/* Dropdown information */
+.search {
+  position: relative;
+  border-radius: 35px;
+}
+
+.dropdown-content {
+  position: absolute;
+  z-index: 1;
+  background-color: rgb(12, 13, 14);
+  color: ghostwhite;
+  width: 100%;
+  border-radius: 16px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin-top: 15px;
+}
+
+.dropdown-content a {
+  color: ghostwhite;
+}
+
 /* Following_button */
 .follow_button {
   border-color: rgb(29,161,242,0.50);
@@ -252,17 +276,40 @@ body {
 .like {
   border: none;
   border-radius: 80px;
-  padding: 12px 16px;
+  padding: 8px 8px;
   cursor: pointer;
   font-size: 16px;
   color: ghostwhite;
+  border-color: rgb(29,161,242,0.50);
+  border-style: solid;
+  border-radius: 32px;
   background-color: rgba(0,0,0,0);
+  color: rgb(29,161,242,2.00);
   outline: none
 }
 
 .like:hover {
-  color: rgb(138, 5, 5);
-  background-color: rgba(112, 3, 48, 0.15);
+  background-color: rgba(29, 160, 242, 0.15);
+}
+
+.unlike {
+  border: none;
+  border-radius: 80px;
+  padding: 8px 8px;
+  cursor: pointer;
+  font-size: 16px;
+  color: ghostwhite;
+  border-color: rgba(138, 5, 5, 0.747);
+  border-style: solid;
+  border-radius: 32px;
+  background-color: rgba(0,0,0,0);
+  color: rgba(138, 5, 5, 0.747);
+  outline: none
+}
+
+.unlike:hover {
+  background-color: rgba(179, 10, 80, 0.15);
+  color: rgba(138, 5, 5, 0.747);
 }
 
 .tweet {
@@ -375,9 +422,11 @@ Navbar -->
     {% endblock %}
   </div>
   <div class="rightcolumn" style="position: -webkit-sticky; position: sticky; top:0">
+    {% block Seachbar %}
     <div class="search" style="border-radius: 35px;">
       <input type="text" placeholder="Search Twitter">
     </div>
+    {% endblock %}
     {% block Profile_Card %}
     <!-- Profile_Card
     This holds the personal information of the user that is logged in
@@ -388,9 +437,6 @@ Navbar -->
     The card holding the users that are being displayed to follow
     User_List -->
     {% endblock %}
-    <div class="card">
-      <h3>Popular Hashtags</h3>
-      <p>#Confusion</p>
     </div>
   </div>
 </div>
