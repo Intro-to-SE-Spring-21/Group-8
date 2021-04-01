@@ -2,6 +2,7 @@ import datetime
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
+from django import template
 
 class User(AbstractUser):
     """This model extands the base User object...adding a User bio
@@ -29,7 +30,11 @@ class Tweet(models.Model):
     def countLikes(self):
         return len(Like.objects.filter(tweet=self))
 
-    likes = property(countLikes)    
+    def countRetweets(self):
+        return len(Retweet.objects.filter(tweet=self))
+
+    likes = property(countLikes)   
+    retweets = property(countRetweets) 
 
 class Follow(models.Model):
     user = models.ForeignKey(User, related_name = "user", on_delete=models.CASCADE)
@@ -46,3 +51,11 @@ class Like(models.Model):
 
     def __str__(self):
         return "User {} liked Tweet #: {}".format(self.user.username,self.tweet.pk)
+
+
+class Retweet(models.Model):
+    user = models.ForeignKey(User,related_name="retweetingUser",on_delete=models.CASCADE)
+    tweet = models.ForeignKey(Tweet,related_name="retweetedTweet",on_delete=models.CASCADE)
+
+    def __str__(self):
+        return "User {} retweeted Tweet #: {}".format(self.user.username,self.tweet.pk)
