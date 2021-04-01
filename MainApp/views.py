@@ -454,8 +454,8 @@ class ProfilePage(GenericPage):
 
         #Creating a Tweet through the webpage
 
-        if request.POST.get('submit_tweet'):
 
+        if request.POST.get('submit_tweet'):
             self.createTweet(request)
 
         if request.POST.get('like_button'):
