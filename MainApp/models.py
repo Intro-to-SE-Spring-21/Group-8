@@ -10,6 +10,7 @@ class User(AbstractUser):
         TODO: Add profile pic place to this model
     """
     bio = models.TextField(max_length=150,blank=True)
+    profileImage = models.ImageField(upload_to='profileImages', default = 'media/profileImages/defaultImage.jpg')
 
 
 class Tweet(models.Model):

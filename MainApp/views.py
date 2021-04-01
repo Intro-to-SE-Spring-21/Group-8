@@ -177,8 +177,9 @@ class GenericPage(TemplateView):
         - HttpResponseRedirect with the updated profile to be rendered
         """      
 
-        edit = UserUpdateForm(request.POST, instance=request.user)
+        edit = UserUpdateForm(request.POST, request.FILES, instance=request.user)
         if edit.is_valid():
+            print("Valid")
             edit.save()    
 
       ## Here are some websites for editing the user information ##
@@ -674,6 +675,7 @@ class ProfileSettings(GenericPage):
             "email" : request.user.email,
             "username"  : request.user.username,
             "bio": request.user.bio,
+            "profileImage": request.user.profileImage,
         }
 
         edit_form = UserUpdateForm(initial = initial_dict,instance=request.user)
