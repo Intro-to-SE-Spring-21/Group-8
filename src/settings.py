@@ -120,15 +120,9 @@ AUTH_USER_MODEL = 'MainApp.User'
 
 STATIC_URL = '/static/'
 
-<<<<<<< Updated upstream
 MEDIA_URL ='/media/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
-=======
-MEDIA_URL = '/media/'
-
-MEDIA_ROOT = os.path.join(BASE_DIR,'media/')
->>>>>>> Stashed changes
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
