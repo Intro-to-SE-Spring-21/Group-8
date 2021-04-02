@@ -19,6 +19,6 @@ class UserUpdateForm(forms.ModelForm):
         Additional attributes to edit can be added in 'fields' dict (must be in User Object)"""
     class Meta:
         model = User
-        fields = ['username', 'email', 'first_name', 'last_name','bio']
+        fields = ['username', 'email', 'first_name', 'last_name','bio', 'profileImage']
 
 

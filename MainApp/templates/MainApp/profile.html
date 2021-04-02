@@ -8,8 +8,8 @@
 {% block profile_header %}
     <div class="header_pic">
         <!--<div class="fakeimg" style="height:100%;width:100%;color:white;text-align: center;">Image.</div>-->
-        <div class="defaultimg" style="background-color: black;height:100%;width:100%"> <img src = "https://simplyilm.com/wp-content/uploads/2017/08/temporary-profile-placeholder-1.jpg" alt="DefaultPic" class="center"> </div>
-        <!--<img src = "https://simplyilm.com/wp-content/uploads/2017/08/temporary-profile-placeholder-1.jpg" alt="DefaultPic" width = "250" height = "100"-->
+        <div class="defaultimg" style="background-color: black;height:100%;width:100%"> <img src = "{{profile_user.profileImage.url}}" alt="DefaultPic" class="center"> </div>
+        <!--<img src = "{{user.profileImage.url}}" alt="DefaultPic" width = "250" height = "100"-->
 
     </div> 
     <div class="header_name" style = "background-color: black; color: white;  text-align: center;">
@@ -66,7 +66,7 @@
     {% load nbsp %}
       <div class="post">
 
-        <div class="defaultimg" style="height:10%;width:10%; float:left;"> <img src = "https://simplyilm.com/wp-content/uploads/2017/08/temporary-profile-placeholder-1.jpg" alt="DefaultPic" width="100%" height="100%"></div>
+        <div class="defaultimg" style="height:10%;width:10%; float:left;"> <img src = "{{profile_user.profileImage.url}}" alt="DefaultPic" width="100%" height="100%"></div>
         
           <span style="font-size: 20px; font-weight: bold;">{{post.tweet_creator.first_name}} {{post.tweet_creator.last_name}}</span>
           <span>
@@ -153,7 +153,7 @@
   {% elif clickedtab == 4 %} <!-- Settings -->
 
     <div class="post">
-      <form method="POST">
+      <form method="POST" enctype = "multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
         <button name="submit_user_edits" type="submit" value=1 >Save User </button>
@@ -166,8 +166,9 @@
     {% if forloop.counter0 < 25 %}
     {% load nbsp %}
     <div class="post">
-      <div class="defaultimg" style="height:10%;width:10%; float:left;"> <img src = "https://simplyilm.com/wp-content/uploads/2017/08/temporary-profile-placeholder-1.jpg" alt="DefaultPic" width="100%" height="100%"></div>
-      
+
+      <div class="defaultimg" style="height:10%;width:10%; float:left;"> <img src = "{{ profile_user.profileImage.url}}" alt="DefaultPic" width="100%" height="100%"></div>
+
         <span style="font-size: 20px; font-weight: bold;">{{post.tweet_creator.first_name}} {{post.tweet_creator.last_name}}</span>
         <span>
           <a class="user_link" href="/profile/{{post.tweet_creator.username}}/">@{{post.tweet_creator.username}} </a>
@@ -214,7 +215,7 @@
       {% for name in AllUsers %} 
         <a href="/profile/{{name.username}}/">
           <div class="foreignaccount">
-            <div class="defaultimg" style="height:10%;width:10%; float:left;"> <img src = "https://simplyilm.com/wp-content/uploads/2017/08/temporary-profile-placeholder-1.jpg" alt="DefaultPic" width="70" height="70"></div>
+            <div class="defaultimg" style="height:10%;width:10%; float:left;"> <img src = "{{name.profileImage.url}}" alt="DefaultPic" width="70" height="70"></div>
             <div style="border: none;" >
               <h2 style="float: right;">{{name.first_name}} {{name.last_name}}</h2>
               <h3 style="clear: left; float: right; color: rgb(99, 99, 99);">@{{name.username}}</h3>
@@ -255,7 +256,7 @@
   <a href="{% url 'MainApp:profile' user %}" style="text-decoration: none;
   outline: none;">
     <div class="card">
-      <div class="defaultimg" style="height:100%;width:100%;background-color:rgb(21,24,28);"> <img src = "https://simplyilm.com/wp-content/uploads/2017/08/temporary-profile-placeholder-1.jpg" alt="DefaultPic" class="center"> </div>
+      <div class="defaultimg" style="height:100%;width:100%;background-color:rgb(21,24,28);"> <img src = "{{user.profileImage.url}}" alt="DefaultPic" class="center"> </div>
       <div style="text-align: right; width: 70%; float: left;">
         <h2>{{user.first_name}} {{user.last_name}}</h2>
         <h3 style="color: rgb(99, 99, 99);">@{{user.username}}</h3>
