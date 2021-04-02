@@ -17,13 +17,21 @@ from django.contrib import admin
 from django.urls import include, path
 from django.conf import settings
 from django.conf.urls.static import static
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 urlpatterns = [
     path('adminpanel/', admin.site.urls),
     path('',include('MainApp.urls')),
     path('profile/',include('MainApp.urls')),
-    
 ]
 
+<<<<<<< Updated upstream
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+=======
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
+>>>>>>> Stashed changes
