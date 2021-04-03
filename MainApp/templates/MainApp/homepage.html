@@ -163,6 +163,18 @@
 <!-- Tweets that are being shown to screen -->
 {% block Live_Scroll %}
 
+  <h2 id="feed-title" style="color:white;margin:10px">Global Feed</h2>
+
+  <div id="switch-feed">
+    <form name="like_tweet" method="POST" action="{% url 'MainApp:homepage' %}">
+      {% csrf_token %}
+        <button name="switch-feed" value="1" class="like">Change Feed Type</button>
+    </form>
+  </div>
+
+  <p id="feed-description" style="color:white;margin:10px">Currently seeing network wide user activity</p>
+
+
   {% for post,isLiked in tweetFeed.items %}
     {% if forloop.counter0 < 25 %}
       {% load nbsp %}
