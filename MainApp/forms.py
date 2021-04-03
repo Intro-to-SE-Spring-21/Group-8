@@ -1,7 +1,7 @@
 from django import forms
 from django.utils import timezone
 from .models import Tweet
-from django.contrib.auth.forms import UserChangeForm
+from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 
 #Get the updated user model
 from django.contrib.auth import get_user_model
@@ -21,4 +21,8 @@ class UserUpdateForm(forms.ModelForm):
         model = User
         fields = ['username', 'email', 'first_name', 'last_name','bio']
 
+class RegisterForm(UserCreationForm):
 
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'first_name', 'last_name', 'bio']

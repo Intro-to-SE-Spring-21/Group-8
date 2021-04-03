@@ -2,10 +2,10 @@ import datetime
 from django.utils import timezone
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from .models import Tweet
-from .forms import Generate_Tweet, UserUpdateForm
+from .forms import Generate_Tweet, UserUpdateForm, RegisterForm
 import random
 from MainApp.models import Follow, Like
 from django.urls import reverse
@@ -22,7 +22,7 @@ def register(request):
 
     if request.method == 'POST':
         #Attempt to create account
-        form = UserCreationForm(request.POST)
+        form = RegisterForm(request.POST)
         if form.is_valid():
 
             form.save()
@@ -31,7 +31,7 @@ def register(request):
 
     else:
 
-        form = UserCreationForm()
+        form = RegisterForm()
 
     context = {'form':form}
     return render(request,'registration/register.html',context)  
@@ -51,6 +51,36 @@ class GenericPage(TemplateView):
         if tweet.is_valid():
             new_tweet = Tweet.objects.create(tweet_creator=request.user, tweet_text=tweet.cleaned_data['tweet_text'], pub_date=datetime.datetime.now())
             new_tweet.save()
+
+    def registerForm(self,request,button_name):
+        """
+        This function creates a user with the capability to insert the extra information.
+        Inputs:
+        - request: Django request output
+        Returns:
+        - Home render
+        """
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/')
+        else:
+            form = UserCreationForm()
+
+    def loginForm(self,request,button_name):
+        """
+        This function logs a user into the website.
+        Inputs:
+        - request: Django request output
+        Returns:
+        - Home render
+        """
+        form = AuthenticationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/')
+        else:
+            form = AuthenticationForm()
 
 
     def deleteTweet(self,request,button_name):
@@ -299,9 +329,14 @@ class MainPage(GenericPage):
 
         AllUsers = User.objects.all()
 
+        register_form = RegisterForm()
+
+        login_form = AuthenticationForm()
+
         ### Variable declared to pass all information to webpage
         context = {'validSession':False, 'username':request.user.username, 'whoToFollow':rand_three,
-        'tweetFeed':tweetFeed, 'tweet':tweet_form, 'AllUsers':AllUsers}
+        'tweetFeed':tweetFeed, 'tweet':tweet_form, 'AllUsers':AllUsers, 'register':register_form,
+        'login':login_form}
 
         if request.user.is_authenticated:
             profile_user = get_object_or_404(User,username=request.user.username)
@@ -336,6 +371,12 @@ class MainPage(GenericPage):
 
         if request.POST.get('delete_button'):
             self.deleteTweet(request,'delete_button')
+
+        if request.POST.get('login_button'):
+            self.loginForm(request, 'login_button')
+
+        if request.POST.get('register_button'):
+            self.registerForm(request, 'register_button')
 
         return self.get(request)
 
