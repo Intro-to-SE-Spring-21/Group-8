@@ -37,6 +37,7 @@ class Tweet(models.Model):
 class Follow(models.Model):
     user = models.ForeignKey(User, related_name = "user", on_delete=models.CASCADE)
     following = models.ForeignKey(User, related_name = "following", on_delete=models.CASCADE)
+    creation_date = models.DateTimeField('Date created')
     
 
     def __str__(self):
@@ -46,6 +47,8 @@ class Follow(models.Model):
 class Like(models.Model):
     user = models.ForeignKey(User,related_name="liked_user",on_delete=models.CASCADE)
     tweet = models.ForeignKey(Tweet,related_name="tweet",on_delete=models.CASCADE)
+    creation_date = models.DateTimeField('Date created')
+
 
     def __str__(self):
         return "User {} liked Tweet #: {}".format(self.user.username,self.tweet.pk)
