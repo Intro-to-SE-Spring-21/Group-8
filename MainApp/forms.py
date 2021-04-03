@@ -8,6 +8,10 @@ import datetime
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
+
+from django.forms.widgets import FileInput
+
+
 class Generate_Tweet(forms.Form):
     tweet_text = forms.CharField(max_length=280, label=False, widget=forms.Textarea(attrs={'placeholder': "What's happening?", 'style': 'resize: vertical', 'rows': 2,}))
 
@@ -24,14 +28,11 @@ class TweetForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user')
         super(TweetForm, self).__init__(*args, **kwargs)
-        #if not self.instance:
-            #self.fields['tweet_'].initial = self.organizer.default_location
         self.fields['tweet_text'] = forms.CharField(max_length=280, label=False, widget=forms.Textarea(attrs={'placeholder': "What's happening?", 'style': 'resize: vertical', 'rows': 2,}))
-        #self.fields['required'].widget = CheckboxInput(required=False)
-    #def clean_time(self):
-        #time = self.cleaned_data['time']
-        # do stuff with the time to put it in UTC based on the user's default timezone and data passed into the form.
+        
+
     def save(self, *args, **kwargs):
+        print(self.fields['tweet_image'])
         self.instance.tweet_creator = self.user
         self.instance.pub_date=datetime.datetime.now()
         tweet = super(TweetForm, self).save(*args, **kwargs)

@@ -380,7 +380,7 @@ class ProfilePage(GenericPage):
         """
         context = {}
 
-        tweet_form = Generate_Tweet()
+        tweet_form = TweetForm(user=request.user)
 
         profile_user = get_object_or_404(User,username=username)
         #How many users is the profile user following
