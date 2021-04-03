@@ -29,7 +29,10 @@
           <h4 class="modal-title">Login Page</h4>
         </div>
         <div class="modal-body">
-          <form method="POST" class="modal-form" name="login_form" action="{% url 'MainApp:homepage' %}">
+          {% if login.errors %}
+            <p>Your username and password didn't match. Please try again.</p>
+          {% endif %}
+          <form method="POST" class="modal-form" name="login_form" action="{% url 'MainApp:login' %}">
             {% csrf_token %}
             {% load widget_tweaks %}
             <p>Username: {{ login.username|add_class:"form_login_register" }}</p>
@@ -52,7 +55,7 @@
           <h4 class="modal-title">Welcome To Twitter</h4>
         </div>
         <div class="modal-body">
-          <form method="POST" class="modal-form" name="register_form" action="{% url 'MainApp:homepage' %}">
+          <form method="POST" class="modal-form" name="register_form" action="{% url 'MainApp:register' %}">
             {% csrf_token %}
             <p>Please fill out information below</p>
             <p style="color: rgb(29,161,242);">* Required Fields *</p>
