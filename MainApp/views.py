@@ -208,6 +208,8 @@ class GenericPage(TemplateView):
 
         tweet_dict = {}
 
+        #{tweet_obj: {'type':'retweet',username:lmurdock12}}
+
         for tweet in Tweet.objects.order_by('-pub_date'):
             #If a user is logged in, and they have liked this specific tweet then set the tweet's value to 1
             if request.user.is_authenticated and Like.objects.filter(tweet=tweet,user=request.user):
@@ -218,6 +220,39 @@ class GenericPage(TemplateView):
         #Return the dictionary of tweets, and whether or not it has been liked by the authenticated user
         return tweet_dict
 
+
+    def getPersonalFeed(self,request):
+        """
+        This function returns a feed of tweets to display to a page.
+        Currently just gets all the tweets and sorts them by publication date.
+        Will add more complex capabilities in future.
+        Inputs:
+        - None
+        Returns:
+        - Dicitonary of Tweet keys and values of whether or not the authenticated user has liked the tweet.
+        """
+        #Create a dictionary with each key being a tweet, and each value being whether or not the authetnicated user has liked that tweet.
+        #This is so we can appropriately display either the like or the unlike button with a tweet.
+
+        tweet_dict = {}
+
+        #{tweet_obj: {'type':'retweet',username:lmurdock12}}
+        following = Follow.objects.filter(user=request.user)
+        print(following)
+
+        #for each follower:
+            #grab all 
+
+        for tweet in Tweet.objects.order_by('-pub_date'):
+            #If a user is logged in, and they have liked this specific tweet then set the tweet's value to 1
+            if request.user.is_authenticated and Like.objects.filter(tweet=tweet,user=request.user):
+                tweet_dict[tweet] = 1
+            else:
+                tweet_dict[tweet] = 0
+        
+        #Return the dictionary of tweets, and whether or not it has been liked by the authenticated user
+        #print(tweet_dict)
+        #return tweet_dict
 
     def addLike(self,request,button_name):
         """
@@ -299,6 +334,7 @@ class MainPage(GenericPage):
         tweet_form = TweetForm(user=request.user)
         
         tweetFeed = self.getFeed(request)
+        self.getPersonalFeed(request)
 
         rand_three = self.getFollowRecommendations(request)  
 
