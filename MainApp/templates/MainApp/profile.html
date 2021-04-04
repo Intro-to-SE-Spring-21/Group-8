@@ -119,10 +119,10 @@
             <form name="retweet_tweet" method="POST" action="{% url 'MainApp:profile' profile_user.username %}">
               {% csrf_token %}
 
-              {% if not post|isRetweeted:user %}
-                <button name="retweet_button" value="{{user.username}},{{post.pk}}" class="retweet">Retweet {{post.retweets}}</button>
-              {% else %}
+              {% if validSession and post|isRetweeted:user %}
                 <button name="unretweet_button" value="{{user.username}},{{post.pk}}" class="unretweet"> Remove Retweet {{post.retweets}}</button>
+              {% else %}
+                <button name="retweet_button" value="{{user.username}},{{post.pk}}" class="retweet">Retweet {{post.retweets}}</button>
               {% endif %}
             </form>
 
@@ -146,6 +146,7 @@
   {% elif clickedtab == 2 %} <!-- Followers -->
     {% for account in followers %}
     {% if forloop.counter0 < 25 %}
+    {% load isFollowing %}
     <div class="post">
       <a href="/profile/{{account.user.username}}/" style="width: 70%; float: left; text-decoration: none; outline: none; color: ghostwhite;">
         <h2>{{account.user.first_name}} {{account.user.last_name}}</h2>
@@ -154,10 +155,11 @@
       <div style="width: 30%; float: right;"> 
         <form method="post" action="{% url 'MainApp:followerstab' user %}">
           {% csrf_token %}
-            {% if account.user.username not in followingdict %}
-              <button name="follow" type="submit" style="float:right" value={{account.user.username}} class="follow_button">Follow</button>
-            {% else %}
+          
+            {% if validSession and user|isFollowing:account.following %}
               <button name="unfollow" type="submit" style="float:right" value={{account.user.username}} class="follow_button">UnFollow</button>
+            {% else %}
+              <button name="follow" type="submit" style="float:right" value={{account.user.username}} class="follow_button">Follow</button>
             {% endif %}
         </form>
       </div>
@@ -177,11 +179,11 @@
       <div style="width: 30%; float: right;"> 
         <form method="post" action="{% url 'MainApp:followingtab' user %}">
           {% csrf_token %}
-          {% if account.following.username not in followingdict %}
-              <button name="follow" type="submit" style="float:right" value={{account.following.username}} class="follow_button">Follow</button>
-            {% else %}
-              <button name="unfollow" type="submit" style="float:right" value={{account.following.username}} class="follow_button">UnFollow</button>
-            {% endif %}
+          {% if validSession and user|isFollowing:account.following %}
+            <button name="unfollow" type="submit" style="float:right" value={{account.user.username}} class="follow_button">UnFollow</button>
+          {% else %}
+            <button name="follow" type="submit" style="float:right" value={{account.user.username}} class="follow_button">Follow</button>
+          {% endif %}
         </form>
       </div>
       <div style="clear: both;"></div>

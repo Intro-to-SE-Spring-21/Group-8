@@ -599,10 +599,6 @@ class ProfileFollowing(GenericPage):
         followed_by = Follow.objects.filter(following=profile_user)
         liked_tweets = Like.objects.filter(user=profile_user)
 
-        followingdict = []
-        viewer_following = Follow.objects.filter(user = request.user)
-        for temp in viewer_following:
-            followingdict.append(temp.following.username)
 
         #if current_user is in followed_by...show unfollow
         #Check to see if we are on the users native profile if they are logged in
@@ -629,7 +625,7 @@ class ProfileFollowing(GenericPage):
         context = {'validSession':False, 'username':request.user.username, 'whoToFollow':rand_three, 
             'profile_user':profile_user,'auth_follow':auth_follow, 'clickedtab':3,
             'isNative':isNative, 'following':following, 'followers':followed_by, 
-            'followingdict':followingdict, 'AllUsers':AllUsers,"liked_tweets_len":len(liked_tweets),
+            'AllUsers':AllUsers,"liked_tweets_len":len(liked_tweets),
             'register':register_form, 'login':login_form}
 
            
@@ -696,11 +692,6 @@ class ProfileFollowers(GenericPage):
         #how many people are following the profile user
         followed_by = Follow.objects.filter(following = profile_user)
         liked_tweets = Like.objects.filter(user=profile_user)
-
-        followingdict = []
-        viewer_following = Follow.objects.filter(user = request.user)
-        for temp in viewer_following:
-            followingdict.append(temp.following.username)
  
         #if current_user is in followed_by...show unfollow
         #Check to see if we are on the users native profile if they are logged in
@@ -727,7 +718,7 @@ class ProfileFollowers(GenericPage):
         context = {'validSession':False, 'username':request.user.username, 'whoToFollow':rand_three, 
             'profile_user':profile_user,'auth_follow':auth_follow, 'clickedtab':2,
             'isNative':isNative, 'followers': followed_by, 'following':following,
-            'followingdict':followingdict, 'AllUsers':AllUsers,"liked_tweets_len":len(liked_tweets),
+            'AllUsers':AllUsers,"liked_tweets_len":len(liked_tweets),
             'register':register_form, 'login':login_form}
 
            
