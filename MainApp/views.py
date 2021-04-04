@@ -2,10 +2,10 @@ import datetime
 from django.utils import timezone
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from .models import Tweet
-from .forms import Generate_Tweet, UserUpdateForm, TweetForm
+from .forms import Generate_Tweet, UserUpdateForm, TweetForm, RegisterForm
 import random
 from MainApp.models import Follow, Like, Retweet
 from django.urls import reverse
@@ -23,7 +23,7 @@ def register(request):
 
     if request.method == 'POST':
         #Attempt to create account
-        form = UserCreationForm(request.POST)
+        form = RegisterForm(request.POST)
         if form.is_valid():
 
             form.save()
@@ -32,7 +32,7 @@ def register(request):
 
     else:
 
-        form = UserCreationForm()
+        form = RegisterForm()
 
     context = {'form':form}
     return render(request,'registration/register.html',context)  
@@ -48,13 +48,43 @@ class GenericPage(TemplateView):
         Returns:
         - None
         """
-
         tweet = TweetForm(request.POST,request.FILES,user=request.user)
         
         if tweet.is_valid():
             print("savingggg")
             #new_tweet = Tweet.objects.create(tweet_creator=request.user, tweet_text=tweet.cleaned_data['tweet_text'], pub_date=datetime.datetime.now())
             tweet.save()
+
+
+    def registerForm(self,request,button_name):
+        """
+        This function creates a user with the capability to insert the extra information.
+        Inputs:
+        - request: Django request output
+        Returns:
+        - Home render
+        """
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/')
+        else:
+            form = UserCreationForm()
+
+    def loginForm(self,request,button_name):
+        """
+        This function logs a user into the website.
+        Inputs:
+        - request: Django request output
+        Returns:
+        - Home render
+        """
+        form = AuthenticationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/')
+        else:
+            form = AuthenticationForm()
 
     def deleteTweet(self,request,button_name):
         """
@@ -213,7 +243,6 @@ class GenericPage(TemplateView):
         #Return the dictionary of tweets, and whether or not it has been liked by the authenticated user
         return tweet_dict
 
-
     def getPersonalFeed(self,request):
         """
         This function returns a feed of tweets to display to a page.
@@ -371,6 +400,7 @@ class GenericPage(TemplateView):
             print("This user has already liked that tweet")
         else:
             new_retweet = Retweet(user=user,tweet=tweet,pub_date=datetime.datetime.now())
+
             new_retweet.save()        
 
     def removeRetweet(self,request,button_name):
@@ -428,10 +458,15 @@ class MainPage(GenericPage):
 
         AllUsers = User.objects.all()
 
+        register_form = RegisterForm()
+
+        login_form = AuthenticationForm()
+
         ### Variable declared to pass all information to webpage
         #TODO: rename tweet to tweet_form
         context = {'validSession':False, 'username':request.user.username, 'whoToFollow':rand_three,
-        'tweetFeed':tweetFeed, 'tweet':tweet_form, 'AllUsers':AllUsers}
+        'tweetFeed':tweetFeed, 'tweet':tweet_form, 'AllUsers':AllUsers, 'register':register_form,
+        'login':login_form}
 
         if request.user.is_authenticated:
 
@@ -471,6 +506,12 @@ class MainPage(GenericPage):
 
         if request.POST.get('delete_button'):
             self.deleteTweet(request,'delete_button')
+
+        if request.POST.get('login_button'):
+            self.loginForm(request, 'login_button')
+
+        if request.POST.get('register_button'):
+            self.registerForm(request, 'register_button')
 
         if request.POST.get("retweet_button"):
             self.addRetweet(request,"retweet_button")
@@ -556,11 +597,16 @@ class ProfilePage(GenericPage):
         rand_three = self.getFollowRecommendations(request)
 
         AllUsers = User.objects.all()
+
+        register_form = RegisterForm()
+
+        login_form = AuthenticationForm()
         
         context = {'validSession':False, 'username':request.user.username, 'whoToFollow':rand_three, 
             'profile_user':profile_user,'auth_follow':auth_follow, 'tweet':tweet_form,
             'isNative':isNative, 'personalscroll':UserTweets, 'clickedtab':1, 
-            'liked_tweets_len':len(liked_tweets), 'AllUsers':AllUsers}
+            'liked_tweets_len':len(liked_tweets), 'AllUsers':AllUsers, 'register':register_form,
+            'login':login_form}
            
         self.getFollowCounts(profile_user,context)
 
@@ -613,6 +659,12 @@ class ProfilePage(GenericPage):
         if request.POST.get('delete_button'):
             self.deleteTweet(request,'delete_button')
 
+        if request.POST.get('login_button'):
+            self.loginForm(request, 'login_button')
+
+        if request.POST.get('register_button'):
+            self.registerForm(request, 'register_button')
+
         return self.get(request, request.user.username)
 
 
@@ -635,10 +687,6 @@ class ProfileFollowing(GenericPage):
         followed_by = Follow.objects.filter(following=profile_user)
         liked_tweets = Like.objects.filter(user=profile_user)
 
-        followingdict = []
-        viewer_following = Follow.objects.filter(user = request.user)
-        for temp in viewer_following:
-            followingdict.append(temp.following.username)
 
         #if current_user is in followed_by...show unfollow
         #Check to see if we are on the users native profile if they are logged in
@@ -657,11 +705,16 @@ class ProfileFollowing(GenericPage):
         rand_three = self.getFollowRecommendations(request)
         
         AllUsers = User.objects.all()
+
+        register_form = RegisterForm()
+
+        login_form = AuthenticationForm()
         
         context = {'validSession':False, 'username':request.user.username, 'whoToFollow':rand_three, 
             'profile_user':profile_user,'auth_follow':auth_follow, 'clickedtab':3,
             'isNative':isNative, 'following':following, 'followers':followed_by, 
-            'followingdict':followingdict, 'AllUsers':AllUsers,"liked_tweets_len":len(liked_tweets)}
+            'AllUsers':AllUsers,"liked_tweets_len":len(liked_tweets),
+            'register':register_form, 'login':login_form}
 
            
         self.getFollowCounts(profile_user,context)
@@ -699,6 +752,12 @@ class ProfileFollowing(GenericPage):
 
         if request.POST.get("unlike_button"):
             self.removeLike(request,"unlike_button")
+
+        if request.POST.get('login_button'):
+            self.loginForm(request, 'login_button')
+
+        if request.POST.get('register_button'):
+            self.registerForm(request, 'register_button')
      
         return self.get(request, request.user.username)
 
@@ -721,11 +780,6 @@ class ProfileFollowers(GenericPage):
         #how many people are following the profile user
         followed_by = Follow.objects.filter(following = profile_user)
         liked_tweets = Like.objects.filter(user=profile_user)
-
-        followingdict = []
-        viewer_following = Follow.objects.filter(user = request.user)
-        for temp in viewer_following:
-            followingdict.append(temp.following.username)
  
         #if current_user is in followed_by...show unfollow
         #Check to see if we are on the users native profile if they are logged in
@@ -744,11 +798,16 @@ class ProfileFollowers(GenericPage):
         rand_three = self.getFollowRecommendations(request)
 
         AllUsers = User.objects.all()
+
+        register_form = RegisterForm()
+
+        login_form = AuthenticationForm()
         
         context = {'validSession':False, 'username':request.user.username, 'whoToFollow':rand_three, 
             'profile_user':profile_user,'auth_follow':auth_follow, 'clickedtab':2,
             'isNative':isNative, 'followers': followed_by, 'following':following,
-            'followingdict':followingdict, 'AllUsers':AllUsers,"liked_tweets_len":len(liked_tweets)}
+            'AllUsers':AllUsers,"liked_tweets_len":len(liked_tweets),
+            'register':register_form, 'login':login_form}
 
            
         self.getFollowCounts(profile_user,context)
@@ -785,6 +844,12 @@ class ProfileFollowers(GenericPage):
 
         if request.POST.get("unlike_button"):
             self.removeLike(request,"unlike_button")
+
+        if request.POST.get('login_button'):
+            self.loginForm(request, 'login_button')
+
+        if request.POST.get('register_button'):
+            self.registerForm(request, 'register_button')
      
         return self.get(request, request.user.username)
 
@@ -837,7 +902,7 @@ class ProfileSettings(GenericPage):
         edit_form = UserUpdateForm(initial = initial_dict,instance=request.user)
         
         AllUsers = User.objects.all()
-        
+
         context = {'validSession':False, 'username':request.user.username, 'whoToFollow':rand_three, 
             'profile_user':profile_user,'auth_follow':auth_follow, 'clickedtab':4,
             'isNative':isNative, 'form':edit_form, 'AllUsers':AllUsers}
@@ -878,7 +943,7 @@ class ProfileSettings(GenericPage):
 
         if request.POST.get('submit_user_edits'):
             return self.editAccount(request)
-      
+
         return self.get(request, request.user.username)
       
       
@@ -962,11 +1027,15 @@ class ProfileLikes(GenericPage):
                     auth_follow = True
 
         rand_three = self.getFollowRecommendations(request)
+
+        register_form = RegisterForm()
+
+        login_form = AuthenticationForm()
         
         context = {'validSession':False, 'username':request.user.username, 'whoToFollow':rand_three, 
             'profile_user':profile_user,'auth_follow':auth_follow,
             'isNative':isNative, 'clickedtab':5,'liked_tweet_obj_dict':liked_tweet_obj_dict, 
-            'liked_tweets_len':len(liked_tweets)}
+            'liked_tweets_len':len(liked_tweets), 'register':register_form, 'login':login_form}
            
         self.getFollowCounts(profile_user,context)
 
@@ -1007,6 +1076,12 @@ class ProfileLikes(GenericPage):
         if request.POST.get('delete_button'):
             self.deleteTweet(request,'delete_button')
 
+        if request.POST.get('login_button'):
+            self.loginForm(request, 'login_button')
+
+        if request.POST.get('register_button'):
+            self.registerForm(request, 'register_button')
+            
         if request.POST.get("retweet_button"):
             self.addRetweet(request,"retweet_button")
         
