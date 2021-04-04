@@ -21,7 +21,6 @@ urlpatterns = [
     path('adminpanel/', admin.site.urls),
     path('',include('MainApp.urls')),
     path('profile/',include('MainApp.urls')),
-    
 ]
 
 
