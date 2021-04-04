@@ -50,11 +50,21 @@ This application is initially designed to have three core features:
     * Like a tweet
     * Follow another user
 
-Two additional features will be developed later on.
+Here are the additional features we also developed on this website:
+
+    * Creating a user account on the website
+    * Login/Logout functionality 
+    * Retweet functionality
+    * Delete a tweet functionality
+    * A global tweet feed on the hompage and a personalized custom tweet feed on the homepage
+    * A custom User profile page that can display the user's tweets, likes, retweets, who is following them, and who they are following
+    * The ability to upload a custom profile picture to your account
+    * The ability to add an image to a given tweet
+    * A discover like feature that shows you new accounts to follow
 
 By the end of this project we will developed a functional web app using modern agile principles.
 We hope to learn more about software development practices in a team based agile environment. 
-![Build check](https://travis-ci.com/Intro-to-SE-Spring-21/Group-8.svg?branch=main)
+
 ## Objectives 
 
 The objective of this project is to learn the development methodoligiies of the agile system.
