@@ -16,10 +16,113 @@
   {% if validSession %}
   <a href="{% url 'MainApp:logout' %}" style="float:right">Logout</a>
   {% else %}
-  <a href="{% url 'MainApp:register' %}" style="float:right">Register</a>
-  <a href="{% url 'MainApp:login' %}" style="float:right">Login</a>
+
+  <button id="register-btn" class="modal-btn" href="#register-modal" style="float:right;">Register</button>
+  <button id="login-btn" class="modal-btn" href="#login-modal" style="float:right;">Login</button>
+  
+
+  <div id="login-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+    <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" style="float: right;">&times;</button>
+          <h4 class="modal-title">Login Page</h4>
+        </div>
+        <div class="modal-body">
+          {% if login.errors %}
+            <p>Your username and password didn't match. Please try again.</p>
+          {% endif %}
+          <form method="POST" class="modal-form" name="login_form" action="{% url 'MainApp:login' %}">
+            {% csrf_token %}
+            {% load widget_tweaks %}
+            <p>Username: {{ login.username|add_class:"form_login_register" }}</p>
+            <p>Password: {{ login.password|add_class:"form_login_register" }}</p>
+            <button type="submit" class="btn btn-success" id="login_button" style="border-width: 1px; border-color: rgba(92, 92, 92, 0.39); border-style: solid;">Login</button>
+            <div style="clear: both;"></div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div style="clear: both;"></div>
+  </div>
+
+  <div id="register-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+    <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" style="float: right;">&times;</button>
+          <h4 class="modal-title">Welcome To Twitter</h4>
+        </div>
+        <div class="modal-body">
+          <form method="POST" class="modal-form" name="register_form" action="{% url 'MainApp:register' %}">
+            {% csrf_token %}
+            <p>Please fill out information below</p>
+            <p style="color: rgb(29,161,242);">* Required Fields *</p>
+            <p>* Username: {{ register.username|add_class:"form_login_register" }}</p>
+            <p>First Name: {{ register.first_name|add_class:"form_login_register" }}</p>
+            <p>Last Name: {{ register.last_name|add_class:"form_login_register" }}</p>
+            <p>Email: {{ register.email|add_class:"form_login_register" }}</p>
+            <p>Personal Bio: {{ register.bio|add_class:"form_login_register" }}</p>
+            <p>* Password: {{ register.password1|add_class:"form_login_register" }}</p>
+            <p>* Check Password: {{ register.password2|add_class:"form_login_register" }}</p>
+            <button type="submit" class="btn btn-success" id="register_button" style="border-width: 1px; border-color: rgba(92, 92, 92, 0.39); border-style: solid;">Register</button>
+          </form>
+          <div style="clear: both;"></div>
+        </div>
+      </div>
+    </div>
+    <div style="clear: both;"></div>
+  </div>
+
   <!--Commenting out the modal button for now -->
   <!--<button style="float: right;">Login</button>--><!-- https://www.w3schools.com/howto/howto_css_modals.asp Code for making a modal popup window -->
+
+  <script>
+    // Get the button that opens the modal
+    var btn = document.querySelectorAll("button.modal-btn");
+
+    // All page modals
+    var modals = document.querySelectorAll('.modal');
+
+    // Get the <span> element that closes the modal
+    var spans = document.getElementsByClassName("close");
+
+    // When the user clicks the button, open the modal
+    for (var i = 0; i < btn.length; i++) {
+     btn[i].onclick = function(e) {
+        e.preventDefault();
+        modal = document.querySelector(e.target.getAttribute("href"));
+        modal.style.display = "block";
+     }
+    }
+
+    // When the user clicks on <span> (x), close the modal
+    for (var i = 0; i < spans.length; i++) {
+     spans[i].onclick = function() {
+      for (var index in modals) {
+        if (typeof modals[index].style !== 'undefined') modals[index].style.display = "none";    
+      }
+     }
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+      if (event.target.classList.contains('modal')) {
+       for (var index in modals) {
+        if (typeof modals[index].style !== 'undefined') modals[index].style.display = "none";    
+       }
+      }
+    }
+
+    /*document.formHasErrors = {% if login.errors %}true{% else %}false{% endif %};
+    $( document ).ready(function() {
+       if (document.formHasErrors) {
+           $('#add-agent-modal').modal('toggle');
+       }
+    });*/
+  </script>
 
   {% endif %}
 
@@ -205,10 +308,10 @@
               <form name="retweet_tweet" method="POST" action="{% url 'MainApp:homepage'  %}">
                 {% csrf_token %}
   
-                {% if not post|isRetweeted:user %}
-                  <button name="retweet_button" value="{{user.username}},{{post.pk}}" class="retweet">Retweet {{post.retweets}}</button>
-                {% else %}
+                {% if validSession and post|isRetweeted:user %}
                   <button name="unretweet_button" value="{{user.username}},{{post.pk}}" class="unretweet"> Remove Retweet {{post.retweets}}</button>
+                {% else %}
+                  <button name="retweet_button" value="{{user.username}},{{post.pk}}" class="retweet">Retweet {{post.retweets}}</button>
                 {% endif %}
               </form>
   
