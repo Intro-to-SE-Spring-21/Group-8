@@ -61,6 +61,8 @@ Here are the additional features we also developed on this website:
     * The ability to upload a custom profile picture to your account
     * The ability to add an image to a given tweet
     * A discover like feature that shows you new accounts to follow
+    * Added a search bar to be able to search for different users on the website
+    * Added the ability to create and save a bio to be displayed on your profile page
 
 By the end of this project we will developed a functional web app using modern agile principles.
 We hope to learn more about software development practices in a team based agile environment. 
