@@ -322,12 +322,13 @@
           background-color: rgba(3, 3, 3, 0.1);
         }
         
-        #like, #delete {
+        #like, #delete, #retweet {
           display:inline-block;
         }
 
         /* Add a like button for each post */
-        .like {
+        .like, .retweet {
+          margin:5px;
           border: none;
           border-radius: 80px;
           padding: 6px 6px;
@@ -342,11 +343,12 @@
           outline: none
         }
 
-        .like:hover {
+        .like:hover, .retweet:hover {
           background-color: rgba(29, 160, 242, 0.15);
         }
 
-        .unlike {
+        .unlike, .unretweet {
+          margin:5px;
           border: none;
           border-radius: 80px;
           padding: 8px 8px;
@@ -361,7 +363,7 @@
           outline: none
         }
 
-        .unlike:hover {
+        .unlike:hover, .unretweet:hover {
           background-color: rgba(179, 10, 80, 0.15);
           color: rgba(138, 5, 5, 0.747);
         }
@@ -384,6 +386,26 @@
           background-color: rgba(179, 10, 80, 0.15);
           color: rgba(138, 5, 5, 0.747);
         }
+
+        input[type="file"] {
+            display: none;
+        }
+        .custom-file-upload {
+          margin:5px;
+          border: none;
+          border-radius: 80px;
+          padding: 8px 8px;
+          cursor: pointer;
+          font-size: 16px;
+          color: ghostwhite;
+          border-color: rgb(29,161,242,0.50);
+          border-style: solid;
+          border-radius: 32px;
+          background-color: rgba(0,0,0,0);
+          color: rgb(29,161,242,2.00);
+          outline: none
+        }
+
 
         .tweet {
           background-color: black;
