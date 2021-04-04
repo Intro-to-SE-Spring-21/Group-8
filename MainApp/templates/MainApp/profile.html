@@ -196,9 +196,40 @@
     <div class="post">
       <form method="POST" enctype = "multipart/form-data">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button name="submit_user_edits" type="submit" value=1 >Save User </button>
+        {% load widget_tweaks %}
+        <h3 style="text-align: center;">* Username</h3>
+        <p class="center" style="text-align: center;">{{form.username|add_class:"form_input"}}</p>
+
+        <h3 style="text-align: center;">Email</h3>
+        <p class="center" style="text-align: center;">{{form.email|add_class:"form_input"}}</p>
+
+        <h3 style="text-align: center;">First Name & Last Name</h3>
+        <p class="center" style="text-align: center;">{{form.first_name|add_class:"form_input"}} {{form.last_name|add_class:"form_input"}}</p>
+
+        <h3 style="text-align: center;">Personal Bio</h3>
+        <p class="center" style="text-align: center;">{{form.bio|add_class:"form_input"}}</p>
+
+        <h3 style="text-align: center;">Profile Picture</h3>
+        <div style="text-align: center;">
+          <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+          <label style="margin: auto; text-align: center;">
+            {{form.profileImage}}
+            <span style="background-color: black; color: ghostwhite; border-color: rgb(29,161,242,0.50); border-style: solid; border-radius: 3px;">Add Image/Change Image</span>
+          </label>
+          <span id="file-selected" style="text-align: center;"></span>
+          
+
+          <script>
+            $('#id_tweet_image').bind('change', function() { 
+              var fileName = ''; 
+              fileName = $(this).val().replace(/^.*[\\\/]/, '');
+              $('#file-selected').html(fileName);         
+            })
+          </script><br>
+        </div>
+        <button name="submit_user_edits" type="submit" value=1 class="user_edit">Save User </button>
       </form>
+      <div style="clear: both;"></div>
     </div>
 
   {% elif clickedtab == 5 %} <!-- Likes -->
