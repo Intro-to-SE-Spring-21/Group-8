@@ -295,7 +295,8 @@ input[type="file"] {
 
 
 /* Add a like button for each post */
-.like {
+.like, .retweet {
+  margin:5px;
   border: none;
   border-radius: 80px;
   padding: 8px 8px;
@@ -310,11 +311,12 @@ input[type="file"] {
   outline: none
 }
 
-.like:hover {
+.like:hover, .retweet:hover {
   background-color: rgba(29, 160, 242, 0.15);
 }
 
-.unlike {
+.unlike, .unretweet {
+  margin:5px;
   border: none;
   border-radius: 80px;
   padding: 8px 8px;
@@ -329,7 +331,7 @@ input[type="file"] {
   outline: none
 }
 
-.unlike:hover {
+.unlike:hover, .unretweet:hover {
   background-color: rgba(179, 10, 80, 0.15);
   color: rgba(138, 5, 5, 0.747);
 }

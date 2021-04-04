@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from .models import Tweet
 from .forms import Generate_Tweet, UserUpdateForm, TweetForm
 import random
-from MainApp.models import Follow, Like
+from MainApp.models import Follow, Like, Retweet
 from django.urls import reverse
 
 ##New includes
@@ -17,6 +17,7 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 import collections
 
+from itertools import chain
 
 def register(request):
 
@@ -55,7 +56,6 @@ class GenericPage(TemplateView):
             #new_tweet = Tweet.objects.create(tweet_creator=request.user, tweet_text=tweet.cleaned_data['tweet_text'], pub_date=datetime.datetime.now())
             tweet.save()
 
-
     def deleteTweet(self,request,button_name):
         """
         #TODO
@@ -80,8 +80,6 @@ class GenericPage(TemplateView):
             print("none authenticated deletion")
 
         tweet.delete()
-
-
 
     def getFollowRecommendations(self,request):
         """
@@ -114,7 +112,6 @@ class GenericPage(TemplateView):
 
         return rand_three
 
-
     def getFollowCounts(self,profile_user,context):
 
         #How many users is the profile user following
@@ -123,7 +120,6 @@ class GenericPage(TemplateView):
         #how many people are following the profile user
         followed_by = Follow.objects.filter(following=profile_user)
         context['followed_by_len'] = len(followed_by)
-
 
     def addFollower(self,request):
         """
@@ -144,12 +140,11 @@ class GenericPage(TemplateView):
         #Check to make sure they are not equal
         if(userToFollow.username != request.user.username and not old_follow):
             print("Successfully meet criteria to follow")
-            query = Follow(user=request.user,following=userToFollow)
+            query = Follow(user=request.user,following=userToFollow,pub_date=datetime.datetime.now())
             query.save()
             #save the query
 
         return HttpResponseRedirect(reverse('MainApp:profile', args=[request.POST['follow']]))       
-
 
     def removeFollower(self,request,default_reverse='MainApp:profile',arg=None):
         """
@@ -169,7 +164,6 @@ class GenericPage(TemplateView):
             arg = [request.POST['unfollow']]
 
         return HttpResponseRedirect(reverse(default_reverse, args=arg))
-
 
     def editAccount(self,request):
         """
@@ -191,7 +185,6 @@ class GenericPage(TemplateView):
 
         #reload the page and make sure an follow button shows back up
         return HttpResponseRedirect(reverse('MainApp:profile', args=[edit.cleaned_data['username']]))
-
 
     def getFeed(self,request):
         """
@@ -240,8 +233,25 @@ class GenericPage(TemplateView):
         following = Follow.objects.filter(user=request.user)
         print(following)
 
+        feed_data = []
+
+        for follow in following:
+            likes = Like.objects.filter(user=follow.following)
+            retweets = Retweet.objects.filter(user=follow.following)
+            tweets = Tweet.objects.filter(tweet_creator=follow.following)
+
+            feed_data = feed_data + list(chain(likes,retweets,tweets))
+
+
+        result_list = sorted(
+            feed_data,
+            key=lambda instance: instance.pub_date)
+        print("######################")
+        print(result_list)
+        print("------------------")
+
         #for each follower:
-            #grab all 
+            #grab each followers...tweets, likes, and retweets
 
         for tweet in Tweet.objects.order_by('-pub_date'):
             #If a user is logged in, and they have liked this specific tweet then set the tweet's value to 1
@@ -284,10 +294,9 @@ class GenericPage(TemplateView):
         if Like.objects.filter(user=user,tweet=tweet):
             print("This user has already liked that tweet")
         else:
-            new_like = Like(user=user,tweet=tweet)
+            new_like = Like(user=user,tweet=tweet,pub_date=datetime.datetime.now())
             new_like.save()
         
-
     def removeLike(self,request,button_name):
         """
         This function removes a like object from the database.
@@ -317,6 +326,67 @@ class GenericPage(TemplateView):
         old_like = Like.objects.get(user=user,tweet=tweet)
         old_like.delete()
 
+    def addRetweet(self,request,button_name):
+        """
+        This function creates and saves a Retweet object into the database.
+        Inputs:
+        - request: Django request output
+        - button_name: The name of the button that is used in the POST request
+        Returns:
+        - None
+        """    
+        #If the user is not authenticated, then just return since anonymous user is not allowed to add retweet  
+        if not request.user.is_authenticated:
+            return
+
+        #Passing in the name of the addRetweet button incase this button is named different things
+        #across different pages.
+
+        #When like button is submitted the value is in the form of: <username>,<postID>
+        #Parse this value to get the appropiate user and post object.
+        values = request.POST.get(button_name)
+
+        #Username is index 0, postID is index 1
+        val_dict = values.split(',') 
+        
+        user = User.objects.get(username=val_dict[0])
+        tweet = Tweet.objects.get(pk=val_dict[1])
+
+        #Check to make sure a Like object does not already exist for this post and user in the database
+        if Retweet.objects.filter(user=user,tweet=tweet):
+            print("This user has already liked that tweet")
+        else:
+            new_retweet = Retweet(user=user,tweet=tweet,pub_date=datetime.datetime.now())
+            new_retweet.save()        
+
+    def removeRetweet(self,request,button_name):
+        """
+        This function removes a retweet object from the database.
+        Inputs:
+        - request: Django request output
+        - button_name: The name of the button that is used in the POST request
+        Returns:
+        - None
+        """    
+        #If the user is not authenticated, then just return since anonymous user is not allowed to remove retweet  
+        if not request.user.is_authenticated:
+            return
+             #Passing in the name of the addLike button incase this button is named different things
+        #across different pages.
+
+        #When retweet button is submitted the value is in the form of: <username>,<postID>
+        #Parse this value to get the appropiate user and post object.
+        values = request.POST.get(button_name)
+
+        #Username is index 0, postID is index 1
+        val_dict = values.split(',') 
+        
+        user = User.objects.get(username=val_dict[0])
+        tweet = Tweet.objects.get(pk=val_dict[1])
+
+        #finding retweet and deleting
+        old_retweet = Retweet.objects.get(user=user,tweet=tweet)
+        old_retweet.delete()        
 
 
 class MainPage(GenericPage):
@@ -334,7 +404,7 @@ class MainPage(GenericPage):
         tweet_form = TweetForm(user=request.user)
         
         tweetFeed = self.getFeed(request)
-        self.getPersonalFeed(request)
+        
 
         rand_three = self.getFollowRecommendations(request)  
 
@@ -346,6 +416,7 @@ class MainPage(GenericPage):
         'tweetFeed':tweetFeed, 'tweet':tweet_form, 'AllUsers':AllUsers}
 
         if request.user.is_authenticated:
+            self.getPersonalFeed(request)
             profile_user = get_object_or_404(User,username=request.user.username)
             #How many users is the profile user following
             self.getFollowCounts(profile_user,context)
@@ -378,6 +449,12 @@ class MainPage(GenericPage):
 
         if request.POST.get('delete_button'):
             self.deleteTweet(request,'delete_button')
+
+        if request.POST.get("retweet_button"):
+            self.addRetweet(request,"retweet_button")
+        
+        if request.POST.get("unretweet_button"):
+            self.removeRetweet(request,"unretweet_button")
 
         return self.get(request)
 
@@ -490,6 +567,12 @@ class ProfilePage(GenericPage):
 
         if request.POST.get("unlike_button"):
             self.removeLike(request,"unlike_button")
+
+        if request.POST.get("retweet_button"):
+            self.addRetweet(request,"retweet_button")
+        
+        if request.POST.get("unretweet_button"):
+            self.removeRetweet(request,"unretweet_button")
 
         #Creating a Tweet through the webpage
         if request.POST.get('submit_tweet'):
@@ -891,6 +974,12 @@ class ProfileLikes(GenericPage):
 
         if request.POST.get('delete_button'):
             self.deleteTweet(request,'delete_button')
+
+        if request.POST.get("retweet_button"):
+            self.addRetweet(request,"retweet_button")
+        
+        if request.POST.get("unretweet_button"):
+            self.removeRetweet(request,"unretweet_button")
 
 
         return self.get(request, request.user.username)
