@@ -5,7 +5,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import Tweet
-from .forms import Generate_Tweet, UserUpdateForm
+from .forms import Generate_Tweet, UserUpdateForm, TweetForm
 import random
 from MainApp.models import Follow, Like, Retweet
 from django.urls import reverse
@@ -47,10 +47,13 @@ class GenericPage(TemplateView):
         Returns:
         - None
         """
-        tweet = Generate_Tweet(request.POST)
+
+        tweet = TweetForm(request.POST,request.FILES,user=request.user)
+        
         if tweet.is_valid():
-            new_tweet = Tweet.objects.create(tweet_creator=request.user, tweet_text=tweet.cleaned_data['tweet_text'], pub_date=datetime.datetime.now())
-            new_tweet.save()
+            print("savingggg")
+            #new_tweet = Tweet.objects.create(tweet_creator=request.user, tweet_text=tweet.cleaned_data['tweet_text'], pub_date=datetime.datetime.now())
+            tweet.save()
 
     def deleteTweet(self,request,button_name):
         """
@@ -170,8 +173,9 @@ class GenericPage(TemplateView):
         - HttpResponseRedirect with the updated profile to be rendered
         """      
 
-        edit = UserUpdateForm(request.POST, instance=request.user)
+        edit = UserUpdateForm(request.POST, request.FILES, instance=request.user)
         if edit.is_valid():
+            print("Valid")
             edit.save()    
 
       ## Here are some websites for editing the user information ##
@@ -342,7 +346,8 @@ class MainPage(GenericPage):
         - render() function call with the page to be rendered
         """
 
-        tweet_form = Generate_Tweet()
+        #tweet_form = Generate_Tweet()
+        tweet_form = TweetForm(user=request.user)
         
         tweetFeed = self.getFeed(request)
 
@@ -351,6 +356,7 @@ class MainPage(GenericPage):
         AllUsers = User.objects.all()
 
         ### Variable declared to pass all information to webpage
+        #TODO: rename tweet to tweet_form
         context = {'validSession':False, 'username':request.user.username, 'whoToFollow':rand_three,
         'tweetFeed':tweetFeed, 'tweet':tweet_form, 'AllUsers':AllUsers}
 
@@ -431,7 +437,7 @@ class ProfilePage(GenericPage):
         """
         context = {}
 
-        tweet_form = Generate_Tweet()
+        tweet_form = TweetForm(user=request.user)
 
         profile_user = get_object_or_404(User,username=username)
         #How many users is the profile user following
@@ -737,6 +743,7 @@ class ProfileSettings(GenericPage):
             "email" : request.user.email,
             "username"  : request.user.username,
             "bio": request.user.bio,
+            "profileImage": request.user.profileImage,
         }
 
         edit_form = UserUpdateForm(initial = initial_dict,instance=request.user)

@@ -11,12 +11,15 @@ class User(AbstractUser):
         TODO: Add profile pic place to this model
     """
     bio = models.TextField(max_length=150,blank=True)
+    profileImage = models.ImageField(upload_to='profileImages', default = '/profileImages/defaultImage.jpg')
 
 
 class Tweet(models.Model):
     tweet_creator = models.ForeignKey(User, on_delete=models.CASCADE)
     tweet_text = models.TextField(max_length=280)
     pub_date = models.DateTimeField('date published')
+    tweet_image = models.ImageField(upload_to='tweetImages',blank=True)
+
     def __str__(self):
         return "Post # {} by {}".format(self.pk, self.tweet_creator)
     def was_published_recently(self):
