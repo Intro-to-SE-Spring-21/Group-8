@@ -40,26 +40,47 @@
         }
     </style>
 </head>
-<div>
+<body style="background-color: black; color: ghostwhite;">
 
+    <div class="center" style="
+        border: rgb(29, 161,242) solid 3px; 
+        padding: 10px; width: 25%; 
+        border-radius: 30px;
+        margin: auto;">
+        <h1 style="color: rgb(29, 161,242); text-align: center;">Twitter Account Creation</h1>
+        <form method="post" action="{% url 'MainApp:register' %}">
 
+        {% csrf_token %}
+        {% load widget_tweaks %}
 
-<form method="post" action="{% url 'MainApp:register' %}">
+        {% if form.errors %}
+        <p>There was an issue</p>
+        <p>{{form.errors}}</p>
+        {% endif %}
+        <p><br>* Required Items</p>
 
-    {% csrf_token %}
+        <h3 style="text-align: center;">* Username</h3>
+        <p class="center" style="text-align: center;">{{form.username|add_class:"form_input"}}</p>
 
-    {% if form.errors %}
-    <p>There was an issue</p>
-    <p>{{form.errors}}</p>
-    {% endif %}
+        <h3 style="text-align: center;">Email</h3>
+        <p class="center" style="text-align: center;">{{form.email|add_class:"form_input"}}</p>
 
-    {{form}}
+        <h3 style="text-align: center;">First Name & Last Name</h3>
+        <p class="center" style="text-align: center;">{{form.first_name|add_class:"form_input"}} {{form.last_name|add_class:"form_input"}}</p>
 
-    <input type="Submit" value="Register">
+        <h3 style="text-align: center;">Personal Bio</h3>
+        <p class="center" style="text-align: center;">{{form.bio|add_class:"form_input"}}</p>
 
-</form>
+        <h3 style="text-align: center;">Password</h3>
+        <p class="center" style="text-align: center;">{{form.password1|add_class:"form_input"}}</p>
+        <p style="text-align: center;">Please Confirm Password</p>
+        <p class="center" style="text-align: center;">{{form.password2|add_class:"form_input"}}</p>
 
+        <input type="Submit" value="Register" class="input">
 
-</div>
+        </form>
+        <div style="clear: both;"></div>
+    </div>
+</body
 
 
