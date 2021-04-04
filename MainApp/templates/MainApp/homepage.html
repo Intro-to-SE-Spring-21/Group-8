@@ -233,21 +233,25 @@
               <form name="like_tweet" method="POST" action="{% url 'MainApp:homepage' %}">
                 {% csrf_token %}
                 <!--Show either like or unlike depending on whether or not user has liked the tweet-->
-                {% if not post|isLiked:user %}
-                  <button name="like_button" value="{{user.username}},{{post.pk}}" class="like">Like {{post.likes}}</button>
-                {% else %}
-                    <button name="unlike_button" value="{{user.username}},{{post.pk}}" class="unlike">Unlike {{post.likes}}</button>
-                {% endif %}
+              {% if validSession %}
+                  {% if not post|isLiked:user %}
+                    <button name="like_button" value="{{user.username}},{{post.pk}}" class="like">Like {{post.likes}}</button>
+                  {% else %}
+                      <button name="unlike_button" value="{{user.username}},{{post.pk}}" class="unlike">Unlike {{post.likes}}</button>
+                  {% endif %}
+              {% endif %}
               </form>
             </div>
             <div id="retweet">
               <form name="retweet_tweet" method="POST" action="{% url 'MainApp:homepage'  %}">
                 {% csrf_token %}
-  
-                {% if not post|isRetweeted:user %}
-                  <button name="retweet_button" value="{{user.username}},{{post.pk}}" class="retweet">Retweet {{post.retweets}}</button>
-                {% else %}
-                  <button name="unretweet_button" value="{{user.username}},{{post.pk}}" class="unretweet"> Remove Retweet {{post.retweets}}</button>
+                
+                {% if validSession %} 
+                  {% if not post|isRetweeted:user %}
+                    <button name="retweet_button" value="{{user.username}},{{post.pk}}" class="retweet">Retweet {{post.retweets}}</button>
+                  {% else %}
+                    <button name="unretweet_button" value="{{user.username}},{{post.pk}}" class="unretweet"> Remove Retweet {{post.retweets}}</button>
+                  {% endif %}
                 {% endif %}
               </form>
   
