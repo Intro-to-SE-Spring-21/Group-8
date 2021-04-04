@@ -166,6 +166,7 @@
   {% for post,isLiked in tweetFeed.items %}
     {% if forloop.counter0 < 25 %}
       {% load nbsp %}
+      {% load isRetweeted %}
       <div class="post">
         <div class="defaultimg" style="height:10%;width:10%; float:left;"> <img src = "{{post.tweet_creator.profileImage.url}}" alt="DefaultPic" width="100%" height="100%"></div>
         
@@ -188,27 +189,39 @@
         </div>
 
           
-        <div id="tweet_options">
-          <div id="like" style="float: left">
-            <form name="like_tweet" method="POST" action="{% url 'MainApp:homepage' %}">
-              {% csrf_token %}
-              <!--Show either like or unlike depending on whether or not user has liked the tweet-->
-              {% if not isLiked %}
-                <button name="like_button" value="{{user.username}},{{post.pk}}" class="like">Like {{post.likes}}</button>
+          <div id="tweet_options">
+            <div id="like" style="float: left">
+              <form name="like_tweet" method="POST" action="{% url 'MainApp:homepage' %}">
+                {% csrf_token %}
+                <!--Show either like or unlike depending on whether or not user has liked the tweet-->
+                {% if not isLiked %}
+                  <button name="like_button" value="{{user.username}},{{post.pk}}" class="like">Like {{post.likes}}</button>
                 {% else %}
-                  <button name="unlike_button" value="{{user.username}},{{post.pk}}" class="unlike">Unlike {{post.likes}}</button>
+                    <button name="unlike_button" value="{{user.username}},{{post.pk}}" class="unlike">Unlike {{post.likes}}</button>
                 {% endif %}
-            </form>
+              </form>
+            </div>
+            <div id="retweet">
+              <form name="retweet_tweet" method="POST" action="{% url 'MainApp:homepage'  %}">
+                {% csrf_token %}
+  
+                {% if not post|isRetweeted:user %}
+                  <button name="retweet_button" value="{{user.username}},{{post.pk}}" class="retweet">Retweet {{post.retweets}}</button>
+                {% else %}
+                  <button name="unretweet_button" value="{{user.username}},{{post.pk}}" class="unretweet"> Remove Retweet {{post.retweets}}</button>
+                {% endif %}
+              </form>
+  
+            </div>
+            <div id="delete" style="float: right">
+              <form name="delete_tweet" method="POST" action="{% url 'MainApp:homepage' %}">
+                {% csrf_token %}
+                {% if user.username == post.tweet_creator.username %}
+                  <button name="delete_button" value="{{post.pk}}" class="delete"> Delete Tweet </button>
+                {% endif %}
+              </form>
+            </div>
           </div>
-          <div id="delete" style="float: right">
-            <form name="delete_tweet" method="POST" action="{% url 'MainApp:homepage'  %}">
-              {% csrf_token %}
-              {% if user.username == post.tweet_creator.username %}
-                <button name="delete_button" value="{{post.pk}}" class="delete"> Delete Tweet </button>
-              {% endif %}
-            </form>
-          </div>
-        </div>
         <div style="clear: both;"></div>
       </div>
     {% endif %}
