@@ -119,10 +119,10 @@
             <form name="retweet_tweet" method="POST" action="{% url 'MainApp:profile' profile_user.username %}">
               {% csrf_token %}
 
-              {% if not post|isRetweeted:user %}
-                <button name="retweet_button" value="{{user.username}},{{post.pk}}" class="retweet">Retweet {{post.retweets}}</button>
-              {% else %}
+              {% if validSession and post|isRetweeted:user %}
                 <button name="unretweet_button" value="{{user.username}},{{post.pk}}" class="unretweet"> Remove Retweet {{post.retweets}}</button>
+              {% else %}
+                <button name="retweet_button" value="{{user.username}},{{post.pk}}" class="retweet">Retweet {{post.retweets}}</button>
               {% endif %}
             </form>
 
