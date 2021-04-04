@@ -101,3 +101,12 @@ The develop branch is for experimental new features for the website and is subje
     2. Then migrate using: `python manage.py migrate`
     3. Finally, populate the database using: `python manage.py populateDatabase`
     4. Start the server: `python manage.py runserver`
+
+
+        <!--{% if request.COOKIES.feedType == "personal"}
+        {% if isLiked.type == 'Retweet' %}
+          <p>{{isLiked.username}} retweeted this</p>
+        {% elif isLiked.type == 'Like' %}
+          <p>{{isLiked.username}} liked this</p>
+        {% endif %}
+        {% endif %}-->

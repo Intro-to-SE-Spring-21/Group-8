@@ -9,8 +9,8 @@ from .forms import Generate_Tweet, UserUpdateForm, TweetForm
 import random
 from MainApp.models import Follow, Like, Retweet
 from django.urls import reverse
-
-##New includes
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
 
 from django.contrib.auth import get_user_model
@@ -233,9 +233,12 @@ class GenericPage(TemplateView):
         following = Follow.objects.filter(user=request.user)
         print(following)
 
+        #get random most recent 25 items or use ordered dict
+
         feed_data = []
 
         for follow in following:
+
             likes = Like.objects.filter(user=follow.following)
             retweets = Retweet.objects.filter(user=follow.following)
             tweets = Tweet.objects.filter(tweet_creator=follow.following)
@@ -246,23 +249,34 @@ class GenericPage(TemplateView):
         result_list = sorted(
             feed_data,
             key=lambda instance: instance.pub_date)
+
         print("######################")
         print(result_list)
         print("------------------")
+        result_dict = {}
 
-        #for each follower:
-            #grab each followers...tweets, likes, and retweets
+        for item in result_list:
+            tmp_dict = {}
 
-        for tweet in Tweet.objects.order_by('-pub_date'):
-            #If a user is logged in, and they have liked this specific tweet then set the tweet's value to 1
-            if request.user.is_authenticated and Like.objects.filter(tweet=tweet,user=request.user):
-                tweet_dict[tweet] = 1
-            else:
-                tweet_dict[tweet] = 0
-        
-        #Return the dictionary of tweets, and whether or not it has been liked by the authenticated user
-        #print(tweet_dict)
-        #return tweet_dict
+            if item.__class__.__name__ == "Tweet":
+
+                tmp_dict['type'] = 'Tweet'
+                tmp_dict['username'] = item.tweet_creator.username
+                result_dict[item] = tmp_dict
+
+            elif item.__class__.__name__ == "Like":
+
+                tmp_dict['type'] = 'Like'
+                tmp_dict['username'] = item.user.username
+                result_dict[item.tweet] = tmp_dict
+
+            elif item.__class__.__name__ == "Retweet":
+
+                tmp_dict['type'] = 'Retweet'
+                tmp_dict['username'] = item.user.username
+                result_dict[item.tweet] = tmp_dict
+
+        return result_dict
 
     def addLike(self,request,button_name):
         """
@@ -399,13 +413,17 @@ class MainPage(GenericPage):
         Returns:
         - render() function call with the page to be rendered
         """
+        
+        if "feedType" in request.COOKIES:
+            if request.COOKIES['feedType'] == 'personal' and request.user.is_authenticated:
+                tweetFeed = self.getPersonalFeed(request)
+            else:
+                tweetFeed = self.getFeed(request)
+        else:
+            tweetFeed = self.getFeed(request)
 
-        #tweet_form = Generate_Tweet()
         tweet_form = TweetForm(user=request.user)
         
-        tweetFeed = self.getFeed(request)
-        
-
         rand_three = self.getFollowRecommendations(request)  
 
         AllUsers = User.objects.all()
@@ -416,7 +434,7 @@ class MainPage(GenericPage):
         'tweetFeed':tweetFeed, 'tweet':tweet_form, 'AllUsers':AllUsers}
 
         if request.user.is_authenticated:
-            self.getPersonalFeed(request)
+
             profile_user = get_object_or_404(User,username=request.user.username)
             #How many users is the profile user following
             self.getFollowCounts(profile_user,context)
@@ -424,9 +442,13 @@ class MainPage(GenericPage):
 
 
         ### Render the webpage
-        return render(request,'MainApp/homepage.html', context)
-    
+        page_render = render(request,'MainApp/homepage.html', context)
+        if "feedType" not in request.COOKIES:
+            page_render.set_cookie("feedType","global")
 
+        return page_render
+
+    @method_decorator(login_required)
     def post(self,request):
         """
         This function handles a post request for the homepage
@@ -455,6 +477,16 @@ class MainPage(GenericPage):
         
         if request.POST.get("unretweet_button"):
             self.removeRetweet(request,"unretweet_button")
+
+        if request.POST.get("switch-feed"):
+
+            response = HttpResponseRedirect("/")
+            if request.COOKIES['feedType'] == "global":
+                response.set_cookie("feedType","personal")
+            else:
+                response.set_cookie("feedType","global")
+            
+            return response
 
         return self.get(request)
 
