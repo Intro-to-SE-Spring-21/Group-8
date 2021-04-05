@@ -7,27 +7,80 @@
 
      Todo: This needs to be made much prettier and use a template
 -->
+<head>
+    <style>
+        .form_input {
+            background-color: rgb(0,0,0);
+            color: ghostwhite;
+            border-width: 1.5px;
+            border-style: solid;
+            border-color: rgb(29,161,242,0.50);
+            border-radius: 5px;
+            padding: 10px;
+            outline: none;
+        }
 
-<div>
+        .input {
+            float: left;
+            display: block;
+            color: ghostwhite;
+            background-color: black;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            border: none;
+            font: inherit;
+            outline: none;
+            cursor: pointer;
+            width: 100%;
+        }
 
+        .input:hover {
+            background-color: rgba(92,92,92,0.4);
+        }
+    </style>
+</head>
+<body style="background-color: black; color: ghostwhite;">
 
+    <div class="center" style="
+        border: rgb(29, 161,242) solid 3px; 
+        padding: 10px; width: 25%; 
+        border-radius: 30px;
+        margin: auto;">
+        <h1 style="color: rgb(29, 161,242); text-align: center;">Twitter Account Creation</h1>
+        <form method="post" action="{% url 'MainApp:register' %}">
 
-<form method="post" action="{% url 'MainApp:register' %}">
+        {% csrf_token %}
+        {% load widget_tweaks %}
 
-    {% csrf_token %}
+        {% if form.errors %}
+        <p>There was an issue</p>
+        <p>{{form.errors}}</p>
+        {% endif %}
+        <p><br>* Required Items</p>
 
-    {% if form.errors %}
-    <p>There was an issue</p>
-    <p>{{form.errors}}</p>
-    {% endif %}
+        <h3 style="text-align: center;">* Username</h3>
+        <p class="center" style="text-align: center;">{{form.username|add_class:"form_input"}}</p>
 
-    {{form}}
+        <h3 style="text-align: center;">Email</h3>
+        <p class="center" style="text-align: center;">{{form.email|add_class:"form_input"}}</p>
 
-    <input type="Submit" value="Register">
+        <h3 style="text-align: center;">First Name & Last Name</h3>
+        <p class="center" style="text-align: center;">{{form.first_name|add_class:"form_input"}} {{form.last_name|add_class:"form_input"}}</p>
 
-</form>
+        <h3 style="text-align: center;">Personal Bio</h3>
+        <p class="center" style="text-align: center;">{{form.bio|add_class:"form_input"}}</p>
 
+        <h3 style="text-align: center;">Password</h3>
+        <p class="center" style="text-align: center;">{{form.password1|add_class:"form_input"}}</p>
+        <p style="text-align: center;">Please Confirm Password</p>
+        <p class="center" style="text-align: center;">{{form.password2|add_class:"form_input"}}</p>
 
-</div>
+        <input type="Submit" value="Register" class="input">
+
+        </form>
+        <div style="clear: both;"></div>
+    </div>
+</body
 
 

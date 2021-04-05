@@ -9,51 +9,88 @@
 
 
 -->
+<head>
+    <style>
+        .form_input {
+            background-color: rgb(0,0,0);
+            color: ghostwhite;
+            border-width: 1.5px;
+            border-style: solid;
+            border-color: rgb(29,161,242,0.50);
+            border-radius: 5px;
+            padding: 10px;
+            outline: none;
+        }
 
-{% if form.errors %}
-    {% for error in form.get_invalid_login_error %}
-       <p>{{ error }}</p>
-    {% endfor %}
-{% endif %}
+        .input {
+            float: left;
+            display: block;
+            color: ghostwhite;
+            background-color: black;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            border: none;
+            font: inherit;
+            outline: none;
+            cursor: pointer;
+            width: 100%;
+        }
 
-<!--Throughout Django we can say @login_required before we go into a certain view
-    This means they will get redirected to this page automatically. And the page they
-    were trying to access will get kept in the "next" Django variable. Upon successfully
-    loging in using this page...Djano will redirect them back to were they were originally
-    trying to go instead of taking them to the home url.
--->
-{% if next %}
-<p>Invalid Page Access...please login first</p>
-{% endif %}
+        .input:hover {
+            background-color: rgba(92,92,92,0.4);
+        }
+    </style>
+</head>
 
-<form method="post" action="{% url 'MainApp:login' %}">
+<body style="background-color: black; color: ghostwhite;">
 
-{% csrf_token %}
+    <div class="center" style="
+      border: rgb(29, 161,242) solid 3px; 
+      padding: 10px; width: 25%; 
+      border-radius: 30px;
+      margin: auto;">
+        <h1 style="color: rgb(29, 161,242); text-align: center;">Twitter Login</h1>
+        {% if form.errors %}
+            <p style="text-align: center; color:rgba(29, 160, 242, 0.5);">Your username and password didn't match. Please Try again.</p>
+        {% endif %}
 
-<table>
+        <!--Throughout Django we can say @login_required before we go into a certain view
+            This means they will get redirected to this page automatically. And the page they
+            were trying to access will get kept in the "next" Django variable. Upon successfully
+            loging in using this page...Djano will redirect them back to were they were originally
+            trying to go instead of taking them to the home url.
+        -->
+        {% if next %}
+        <p style="color: rgba(29, 161,242, 0.5); text-align: center;">Invalid Page Access...please login first</p>
+        {% endif %}
 
-<!--
-    Using the built in Django form object ('form') will grab the html django has already generated for the form
-    This is why I do not need to create my own html for username and password inputs
--->
+        <form method="post" action="{% url 'MainApp:login' %}">
 
-<tr>
-    <td>{{form.username.label_tag}}</td>
-    <td>{{form.username}}</td>
-</tr>
+        {% csrf_token %}
+        {% load widget_tweaks %}
+        <!--
+            Using the built in Django form object ('form') will grab the html django has already generated for the form
+            This is why I do not need to create my own html for username and password inputs
+        -->
 
-<tr>
-    <td>{{form.password.label_tag}}</td>
-    <td>{{form.password}}</td>
-</tr>
-</table>
+        <h3 style="text-align: center;">{{form.username.label_tag}}</h3>
+        <p class="center" style="text-align: center;">{{form.username|add_class:"form_input"}}</p>
+
+        <h3 style="text-align: center;">{{form.password.label_tag}}</h3>
+        <p class="center" style="text-align: center;">{{form.password|add_class:"form_input"}}</p>
 
 
-<!--
-    If user is loging in and does not need to be redirect then they will
-    be sent to the URL found in settings.
--->
-<input type="submit" value="login">
-<input type="hidden" name="next" value="{{ next }}">
+        <!--
+            If user is loging in and does not need to be redirect then they will
+            be sent to the URL found in settings.
+        -->
+        <input type="submit" value="login" class="input">
+        <input type="hidden" name="next" value="{{ next }}">
 
-</form>
+        <div style="clear: both;"></div>
+
+        </form>
+    </div>
+</body>
+</html>

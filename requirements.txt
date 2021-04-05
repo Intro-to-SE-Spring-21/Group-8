@@ -1,2 +1,4 @@
 Django==3.1.6
 django-render-partial==0.4
+django-widget-tweaks==1.4.8
+Pillow==8.1.2
