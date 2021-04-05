@@ -400,7 +400,6 @@ class GenericPage(TemplateView):
             print("This user has already liked that tweet")
         else:
             new_retweet = Retweet(user=user,tweet=tweet,pub_date=datetime.datetime.now())
-
             new_retweet.save()        
 
     def removeRetweet(self,request,button_name):

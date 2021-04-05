@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 
-from .models import Follow, Tweet, Like, User
+from .models import Follow, Tweet, Like, User,Retweet
 
 
 #Imports required so we can edit our custom User model that includes bio
@@ -30,3 +30,4 @@ admin.site.register(User, MyUserAdmin)
 admin.site.register(Tweet)
 admin.site.register(Follow)
 admin.site.register(Like)
+admin.site.register(Retweet)

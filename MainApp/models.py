@@ -58,7 +58,6 @@ class Like(models.Model):
     def __str__(self):
         return "User {} liked Tweet #: {}".format(self.user.username,self.tweet.pk)
 
-
 class Retweet(models.Model):
     user = models.ForeignKey(User,related_name="retweetingUser",on_delete=models.CASCADE)
     tweet = models.ForeignKey(Tweet,related_name="retweetedTweet",on_delete=models.CASCADE)
@@ -66,11 +65,3 @@ class Retweet(models.Model):
 
     def __str__(self):
         return "User {} liked Tweet #: {}".format(self.user.username,self.tweet.pk)
-
-
-class Retweet(models.Model):
-    user = models.ForeignKey(User,related_name="retweetingUser",on_delete=models.CASCADE)
-    tweet = models.ForeignKey(Tweet,related_name="retweetedTweet",on_delete=models.CASCADE)
-
-    def __str__(self):
-        return "User {} retweeted Tweet #: {}".format(self.user.username,self.tweet.pk)
