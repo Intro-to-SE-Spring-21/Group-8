@@ -115,11 +115,7 @@ The develop branch is for experimental new features for the website and is subje
     3. Finally, populate the database using: `python manage.py populateDatabase`
     4. Start the server: `python manage.py runserver`
 
+## Coding Convention
 
-        <!--{% if request.COOKIES.feedType == "personal"}
-        {% if isLiked.type == 'Retweet' %}
-          <p>{{isLiked.username}} retweeted this</p>
-        {% elif isLiked.type == 'Like' %}
-          <p>{{isLiked.username}} liked this</p>
-        {% endif %}
-        {% endif %}-->
+This project is following the PEP 8 styling and coding convention. More information can be found at: https://www.python.org/dev/peps/pep-0008/
+We have enforced this style throughout our project.
