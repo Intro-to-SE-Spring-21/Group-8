@@ -1,9 +1,5 @@
 # Ignores
 __pycache__/
-db.sqlite3
-MainApp/migrations/*.py
-/media/profileImages
-/media/tweetImages
 
 # Allow
 !/MainApp/migrations/__init__.py
