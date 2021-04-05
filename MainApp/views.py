@@ -494,14 +494,15 @@ class MainPage(GenericPage):
 
 
         #Creating a Tweet through the webpage
-        if request.POST.get("submit_tweet"):
-            self.createTweet(request)
-
+        
         if request.POST.get("like_button"):
             self.addLike(request,"like_button")
 
         if request.POST.get("unlike_button"):
             self.removeLike(request,"unlike_button")
+        
+        if request.method == "POST":
+            self.createTweet(request)
 
         if request.POST.get('delete_button'):
             self.deleteTweet(request,'delete_button')
