@@ -8,3 +8,6 @@ MainApp/migrations/*.py
 # Allow
 !/MainApp/migrations/__init__.py
 !/media/profileImages/defaultImage.jpg
+
+__pycache__/
+
