@@ -155,8 +155,8 @@
       <div style="width: 30%; float: right;"> 
         <form method="post" action="{% url 'MainApp:followerstab' user %}">
           {% csrf_token %}
-          
-            {% if validSession and user|isFollowing:account.following %}
+
+            {% if validSession and user|isFollowing:account.user %}
               <button name="unfollow" type="submit" style="float:right" value={{account.user.username}} class="follow_button">UnFollow</button>
             {% else %}
               <button name="follow" type="submit" style="float:right" value={{account.user.username}} class="follow_button">Follow</button>
@@ -180,9 +180,9 @@
         <form method="post" action="{% url 'MainApp:followingtab' user %}">
           {% csrf_token %}
           {% if validSession and user|isFollowing:account.following %}
-            <button name="unfollow" type="submit" style="float:right" value={{account.user.username}} class="follow_button">UnFollow</button>
+            <button name="unfollow" type="submit" style="float:right" value={{account.following.username}} class="follow_button">UnFollow</button>
           {% else %}
-            <button name="follow" type="submit" style="float:right" value={{account.user.username}} class="follow_button">Follow</button>
+            <button name="follow" type="submit" style="float:right" value={{account.following.username}} class="follow_button">Follow</button>
           {% endif %}
         </form>
       </div>
