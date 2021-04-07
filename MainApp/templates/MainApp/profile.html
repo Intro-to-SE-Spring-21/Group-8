@@ -239,8 +239,7 @@
     {% load nbsp %}
     {% load isRetweeted %}
     <div class="post">
-
-      <div class="defaultimg" style="height:10%;width:10%; float:left;"> <img src = "{{ profile_user.profileImage.url}}" alt="DefaultPic" width="100%" height="100%"></div>
+      <div class="defaultimg" style="height:10%;width:10%; float:left;"> <img src = "{{ post.tweet_creator.profileImage.url}}" alt="DefaultPic" width="100%" height="100%"></div>
 
         <span style="font-size: 20px; font-weight: bold;">{{post.tweet_creator.first_name}} {{post.tweet_creator.last_name}}</span>
         <span>
